@@ -34,4 +34,8 @@ mixin (applications : List.List<Types.Application>) {
   public query func getApplications() : async [Types.Application] {
     AppLib.getAll(applications);
   };
+
+  public func deleteApplication(id : Nat) : async Bool {
+    AppLib.delete(applications, id);
+  };
 };

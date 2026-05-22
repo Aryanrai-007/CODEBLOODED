@@ -27,6 +27,7 @@ export interface Application {
     yearOfStudy: string;
 }
 export interface backendInterface {
+    deleteApplication(id: bigint): Promise<boolean>;
     getApplications(): Promise<Array<Application>>;
     submitApplication(name: string, email: string, phone: string, yearOfStudy: string, department: string, reasonForJoining: string, priorExperience: string): Promise<SubmitResult>;
 }

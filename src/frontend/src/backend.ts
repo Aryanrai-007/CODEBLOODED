@@ -109,12 +109,27 @@ export interface Application {
     yearOfStudy: string;
 }
 export interface backendInterface {
+    deleteApplication(id: bigint): Promise<boolean>;
     getApplications(): Promise<Array<Application>>;
     submitApplication(name: string, email: string, phone: string, yearOfStudy: string, department: string, reasonForJoining: string, priorExperience: string): Promise<SubmitResult>;
 }
 import type { SubmitResult as _SubmitResult } from "./declarations/backend.did.d.ts";
 export class Backend implements backendInterface {
     constructor(private actor: ActorSubclass<_SERVICE>, private _uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, private _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, private processError?: (error: unknown) => never){}
+    async deleteApplication(arg0: bigint): Promise<boolean> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.deleteApplication(arg0);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.deleteApplication(arg0);
+            return result;
+        }
+    }
     async getApplications(): Promise<Array<Application>> {
         if (this.processError) {
             try {

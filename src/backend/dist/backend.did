@@ -17,6 +17,7 @@ type Application =
    yearOfStudy: text;
  };
 service : {
+  deleteApplication: (id: nat) -> (bool);
   getApplications: () -> (vec Application) query;
   submitApplication: (name: text, email: text, phone: text, yearOfStudy:
    text, department: text, reasonForJoining: text, priorExperience: text) ->

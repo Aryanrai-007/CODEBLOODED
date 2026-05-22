@@ -32769,19 +32769,30 @@ const createLucideIcon = (iconName, iconNode) => {
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$h = [
+const __iconNode$i = [
   ["path", { d: "M5 12h14", key: "1ays0h" }],
   ["path", { d: "m12 5 7 7-7 7", key: "xquz4c" }]
 ];
-const ArrowRight = createLucideIcon("arrow-right", __iconNode$h);
+const ArrowRight = createLucideIcon("arrow-right", __iconNode$i);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$g = [["path", { d: "m6 9 6 6 6-6", key: "qrunsl" }]];
-const ChevronDown = createLucideIcon("chevron-down", __iconNode$g);
+const __iconNode$h = [["path", { d: "m6 9 6 6 6-6", key: "qrunsl" }]];
+const ChevronDown = createLucideIcon("chevron-down", __iconNode$h);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$g = [
+  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
+  ["path", { d: "m9 12 2 2 4-4", key: "dzmm74" }]
+];
+const CircleCheck = createLucideIcon("circle-check", __iconNode$g);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -32789,10 +32800,11 @@ const ChevronDown = createLucideIcon("chevron-down", __iconNode$g);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$f = [
-  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
-  ["path", { d: "m9 12 2 2 4-4", key: "dzmm74" }]
+  ["path", { d: "m18 16 4-4-4-4", key: "1inbqp" }],
+  ["path", { d: "m6 8-4 4 4 4", key: "15zrgr" }],
+  ["path", { d: "m14.5 4-5 16", key: "e7oirm" }]
 ];
-const CircleCheck = createLucideIcon("circle-check", __iconNode$f);
+const CodeXml = createLucideIcon("code-xml", __iconNode$f);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -32800,31 +32812,30 @@ const CircleCheck = createLucideIcon("circle-check", __iconNode$f);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$e = [
-  ["path", { d: "m18 16 4-4-4-4", key: "1inbqp" }],
-  ["path", { d: "m6 8-4 4 4 4", key: "15zrgr" }],
-  ["path", { d: "m14.5 4-5 16", key: "e7oirm" }]
-];
-const CodeXml = createLucideIcon("code-xml", __iconNode$e);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$d = [
   ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
   ["path", { d: "M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20", key: "13o1zl" }],
   ["path", { d: "M2 12h20", key: "9i4pu4" }]
 ];
-const Globe = createLucideIcon("globe", __iconNode$d);
+const Globe = createLucideIcon("globe", __iconNode$e);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$c = [["path", { d: "M21 12a9 9 0 1 1-6.219-8.56", key: "13zald" }]];
-const LoaderCircle = createLucideIcon("loader-circle", __iconNode$c);
+const __iconNode$d = [["path", { d: "M21 12a9 9 0 1 1-6.219-8.56", key: "13zald" }]];
+const LoaderCircle = createLucideIcon("loader-circle", __iconNode$d);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$c = [
+  ["rect", { width: "18", height: "11", x: "3", y: "11", rx: "2", ry: "2", key: "1w4ew1" }],
+  ["path", { d: "M7 11V7a5 5 0 0 1 9.9-1", key: "1mm8w8" }]
+];
+const LockOpen = createLucideIcon("lock-open", __iconNode$c);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -32833,9 +32844,9 @@ const LoaderCircle = createLucideIcon("loader-circle", __iconNode$c);
  */
 const __iconNode$b = [
   ["rect", { width: "18", height: "11", x: "3", y: "11", rx: "2", ry: "2", key: "1w4ew1" }],
-  ["path", { d: "M7 11V7a5 5 0 0 1 9.9-1", key: "1mm8w8" }]
+  ["path", { d: "M7 11V7a5 5 0 0 1 10 0v4", key: "fwvmzm" }]
 ];
-const LockOpen = createLucideIcon("lock-open", __iconNode$b);
+const Lock = createLucideIcon("lock", __iconNode$b);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -32843,10 +32854,10 @@ const LockOpen = createLucideIcon("lock-open", __iconNode$b);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$a = [
-  ["rect", { width: "18", height: "11", x: "3", y: "11", rx: "2", ry: "2", key: "1w4ew1" }],
-  ["path", { d: "M7 11V7a5 5 0 0 1 10 0v4", key: "fwvmzm" }]
+  ["path", { d: "m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7", key: "132q7q" }],
+  ["rect", { x: "2", y: "4", width: "20", height: "16", rx: "2", key: "izxlao" }]
 ];
-const Lock = createLucideIcon("lock", __iconNode$a);
+const Mail = createLucideIcon("mail", __iconNode$a);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -32854,10 +32865,11 @@ const Lock = createLucideIcon("lock", __iconNode$a);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$9 = [
-  ["path", { d: "m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7", key: "132q7q" }],
-  ["rect", { x: "2", y: "4", width: "20", height: "16", rx: "2", key: "izxlao" }]
+  ["path", { d: "M4 12h16", key: "1lakjw" }],
+  ["path", { d: "M4 18h16", key: "19g7jn" }],
+  ["path", { d: "M4 6h16", key: "1o0s65" }]
 ];
-const Mail = createLucideIcon("mail", __iconNode$9);
+const Menu = createLucideIcon("menu", __iconNode$9);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -32865,18 +32877,6 @@ const Mail = createLucideIcon("mail", __iconNode$9);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$8 = [
-  ["path", { d: "M4 12h16", key: "1lakjw" }],
-  ["path", { d: "M4 18h16", key: "19g7jn" }],
-  ["path", { d: "M4 6h16", key: "1o0s65" }]
-];
-const Menu = createLucideIcon("menu", __iconNode$8);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$7 = [
   [
     "path",
     {
@@ -32894,7 +32894,18 @@ const __iconNode$7 = [
   ["path", { d: "M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0", key: "1f8sc4" }],
   ["path", { d: "M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5", key: "qeys4" }]
 ];
-const Rocket = createLucideIcon("rocket", __iconNode$7);
+const Rocket = createLucideIcon("rocket", __iconNode$8);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$7 = [
+  ["path", { d: "m21 21-4.34-4.34", key: "14j7rj" }],
+  ["circle", { cx: "11", cy: "11", r: "8", key: "4ej97u" }]
+];
+const Search = createLucideIcon("search", __iconNode$7);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -32902,17 +32913,6 @@ const Rocket = createLucideIcon("rocket", __iconNode$7);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$6 = [
-  ["path", { d: "m21 21-4.34-4.34", key: "14j7rj" }],
-  ["circle", { cx: "11", cy: "11", r: "8", key: "4ej97u" }]
-];
-const Search = createLucideIcon("search", __iconNode$6);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$5 = [
   [
     "path",
     {
@@ -32922,7 +32922,18 @@ const __iconNode$5 = [
   ],
   ["path", { d: "m9 12 2 2 4-4", key: "dzmm74" }]
 ];
-const ShieldCheck = createLucideIcon("shield-check", __iconNode$5);
+const ShieldCheck = createLucideIcon("shield-check", __iconNode$6);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$5 = [
+  ["path", { d: "M12 19h8", key: "baeox8" }],
+  ["path", { d: "m4 17 6-6-6-6", key: "1yngyt" }]
+];
+const Terminal = createLucideIcon("terminal", __iconNode$5);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -32930,10 +32941,13 @@ const ShieldCheck = createLucideIcon("shield-check", __iconNode$5);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$4 = [
-  ["path", { d: "M12 19h8", key: "baeox8" }],
-  ["path", { d: "m4 17 6-6-6-6", key: "1yngyt" }]
+  ["path", { d: "M3 6h18", key: "d0wm0j" }],
+  ["path", { d: "M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6", key: "4alrt4" }],
+  ["path", { d: "M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2", key: "v07s0e" }],
+  ["line", { x1: "10", x2: "10", y1: "11", y2: "17", key: "1uufr5" }],
+  ["line", { x1: "14", x2: "14", y1: "11", y2: "17", key: "xtxkd" }]
 ];
-const Terminal = createLucideIcon("terminal", __iconNode$4);
+const Trash2 = createLucideIcon("trash-2", __iconNode$4);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -32991,30 +33005,68 @@ const __iconNode = [
 const Zap = createLucideIcon("zap", __iconNode);
 function Layout({ children }) {
   const [menuOpen, setMenuOpen] = reactExports.useState(false);
+  const [theme, setTheme] = reactExports.useState("light");
   const location2 = useLocation();
   const isAdmin = location2.pathname === "/admin";
+  reactExports.useEffect(() => {
+    const stored = localStorage.getItem("theme");
+    if (stored === "dark" || stored === "light") {
+      applyTheme(stored);
+      setTheme(stored);
+    } else {
+      const prefersDark = window.matchMedia(
+        "(prefers-color-scheme: dark)"
+      ).matches;
+      const initial = prefersDark ? "dark" : "light";
+      applyTheme(initial);
+      setTheme(initial);
+    }
+  }, []);
+  function applyTheme(t) {
+    if (t === "dark") {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  }
+  function toggleTheme() {
+    const next = theme === "dark" ? "light" : "dark";
+    applyTheme(next);
+    setTheme(next);
+    localStorage.setItem("theme", next);
+  }
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "min-h-screen flex flex-col bg-background text-foreground", children: [
     /* @__PURE__ */ jsxRuntimeExports.jsxs("header", { className: "sticky top-0 z-50 bg-card border-b border-border shadow-sm", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between h-16", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsxs(
-          Link,
-          {
-            to: "/",
-            className: "flex items-center gap-2 group",
-            "data-ocid": "nav-logo",
-            children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex items-center justify-center", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            Link,
+            {
+              to: "/",
+              className: "flex items-center justify-center",
+              "data-ocid": "nav-logo",
+              children: /* @__PURE__ */ jsxRuntimeExports.jsx(
                 "img",
                 {
                   src: "/assets/images/logo.png",
                   alt: "CodeBlooded logo",
                   className: "h-10 w-auto object-contain"
                 }
-              ) }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-display font-bold text-lg tracking-tight", children: "CODEX_LETHALIS" })
-            ]
-          }
-        ),
+              )
+            }
+          ),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "button",
+            {
+              type: "button",
+              onClick: toggleTheme,
+              className: "font-display font-bold text-lg tracking-tight cursor-pointer select-none transition-opacity duration-200 hover:opacity-70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-sm px-1",
+              "aria-label": `Switch to ${theme === "dark" ? "light" : "dark"} mode`,
+              "data-ocid": "theme-toggle",
+              children: "ज्ञानता परिवर्तनम्"
+            }
+          )
+        ] }),
         /* @__PURE__ */ jsxRuntimeExports.jsxs(
           "nav",
           {
@@ -35971,6 +36023,7 @@ const Application = Record({
 });
 const SubmitResult = Variant({ "ok": Nat, "err": Text });
 Service({
+  "deleteApplication": Func([Nat], [Bool], []),
   "getApplications": Func([], [Vec(Application)], ["query"]),
   "submitApplication": Func(
     [Text, Text, Text, Text, Text, Text, Text],
@@ -35993,6 +36046,7 @@ const idlFactory = ({ IDL: IDL2 }) => {
   });
   const SubmitResult2 = IDL2.Variant({ "ok": IDL2.Nat, "err": IDL2.Text });
   return IDL2.Service({
+    "deleteApplication": IDL2.Func([IDL2.Nat], [IDL2.Bool], []),
     "getApplications": IDL2.Func([], [IDL2.Vec(Application2)], ["query"]),
     "submitApplication": IDL2.Func(
       [IDL2.Text, IDL2.Text, IDL2.Text, IDL2.Text, IDL2.Text, IDL2.Text, IDL2.Text],
@@ -36007,6 +36061,20 @@ class Backend {
     this._uploadFile = _uploadFile;
     this._downloadFile = _downloadFile;
     this.processError = processError2;
+  }
+  async deleteApplication(arg0) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.deleteApplication(arg0);
+        return result;
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.deleteApplication(arg0);
+      return result;
+    }
   }
   async getApplications() {
     if (this.processError) {
@@ -36073,6 +36141,19 @@ function useApplications() {
       return result;
     },
     enabled: !!actor && !isFetching
+  });
+}
+function useDeleteApplication() {
+  const { actor } = useActor(createActor);
+  const queryClient2 = useQueryClient();
+  return useMutation({
+    mutationFn: async (id2) => {
+      if (!actor) throw new Error("Actor not ready");
+      await actor.deleteApplication(id2);
+    },
+    onSuccess: () => {
+      queryClient2.invalidateQueries({ queryKey: ["applications"] });
+    }
   });
 }
 function formatTimestamp(ns) {
@@ -36176,12 +36257,18 @@ const SKELETON_COL_IDS = ["c1", "c2", "c3", "c4", "c5", "c6", "c7", "c8", "c9"];
 function TableSkeleton() {
   return /* @__PURE__ */ jsxRuntimeExports.jsx(jsxRuntimeExports.Fragment, { children: SKELETON_ROW_IDS.map((rowId) => /* @__PURE__ */ jsxRuntimeExports.jsx(TableRow, { className: "border-border/40", children: SKELETON_COL_IDS.map((colId) => /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-4 w-full" }) }, `${rowId}-${colId}`)) }, rowId)) });
 }
-function AppRow({ app, index: index2 }) {
+function AppRow({
+  app,
+  index: index2,
+  onClick,
+  onDelete
+}) {
   return /* @__PURE__ */ jsxRuntimeExports.jsxs(
     TableRow,
     {
-      className: "border-border/40 hover:bg-muted/20 transition-colors",
-      "data-ocid": "table-row",
+      className: "border-border/40 hover:bg-muted/20 transition-colors cursor-pointer",
+      "data-ocid": `application.item.${index2 + 1}`,
+      onClick,
       children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "text-muted-foreground font-mono text-xs w-10", children: index2 + 1 }),
         /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "text-muted-foreground text-xs whitespace-nowrap", children: formatTimestamp(app.submittedAt) }),
@@ -36191,6 +36278,7 @@ function AppRow({ app, index: index2 }) {
           {
             href: `mailto:${app.email}`,
             className: "text-primary transition-colors hover:opacity-80 text-sm",
+            onClick: (e) => e.stopPropagation(),
             children: app.email
           }
         ) }),
@@ -36205,14 +36293,37 @@ function AppRow({ app, index: index2 }) {
         ) }),
         /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "text-foreground whitespace-nowrap text-sm", children: app.department }),
         /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "max-w-[220px]", children: /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-foreground text-sm line-clamp-2 leading-relaxed", children: app.reasonForJoining }) }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "max-w-[180px]", children: app.priorExperience ? /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-muted-foreground text-sm line-clamp-2 leading-relaxed", children: app.priorExperience }) : /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "italic text-muted-foreground/50 text-sm", children: "None" }) })
+        /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "max-w-[180px]", children: app.priorExperience ? /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-muted-foreground text-sm line-clamp-2 leading-relaxed", children: app.priorExperience }) : /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "italic text-muted-foreground/50 text-sm", children: "None" }) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "button",
+          {
+            type: "button",
+            "data-ocid": `application.delete_button.${index2 + 1}`,
+            "aria-label": `Delete application from ${app.name}`,
+            onClick: onDelete,
+            className: "p-1.5 rounded-md text-muted-foreground/50 hover:text-destructive hover:bg-destructive/10 transition-colors",
+            children: /* @__PURE__ */ jsxRuntimeExports.jsx(Trash2, { className: "w-3.5 h-3.5" })
+          }
+        ) })
       ]
     }
   );
 }
 function Dashboard({ onLock }) {
   const { data: applications = [], isLoading } = useApplications();
+  const { mutate: deleteApplication, isPending: isDeleting } = useDeleteApplication();
   const [search, setSearch] = reactExports.useState("");
+  const [selectedApplication, setSelectedApplication] = reactExports.useState(null);
+  const [confirmDeleteId, setConfirmDeleteId] = reactExports.useState(null);
+  reactExports.useEffect(() => {
+    function handleKeyDown(e) {
+      if (e.key === "Escape") setSelectedApplication(null);
+    }
+    if (selectedApplication) {
+      document.addEventListener("keydown", handleKeyDown);
+      return () => document.removeEventListener("keydown", handleKeyDown);
+    }
+  }, [selectedApplication]);
   const filtered = reactExports.useMemo(() => {
     const q2 = search.trim().toLowerCase();
     const sorted = [...applications].sort(
@@ -36223,6 +36334,10 @@ function Dashboard({ onLock }) {
       (app) => app.name.toLowerCase().includes(q2) || app.email.toLowerCase().includes(q2)
     );
   }, [applications, search]);
+  function handleRowDelete(app, e) {
+    e.stopPropagation();
+    deleteApplication(app.id);
+  }
   const TABLE_HEADERS = [
     "#",
     "Date Submitted",
@@ -36232,7 +36347,8 @@ function Dashboard({ onLock }) {
     "Year",
     "Department",
     "Why They Want to Join",
-    "Prior Experience"
+    "Prior Experience",
+    ""
   ];
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "min-h-screen bg-background", children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx("header", { className: "bg-card border-b border-primary/20 sticky top-0 z-10", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "max-w-screen-xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4", children: [
@@ -36310,7 +36426,16 @@ function Dashboard({ onLock }) {
               ] })
             ] })
           }
-        ) }) : filtered.map((app, i) => /* @__PURE__ */ jsxRuntimeExports.jsx(AppRow, { app, index: i }, String(app.id))) })
+        ) }) : filtered.map((app, i) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+          AppRow,
+          {
+            app,
+            index: i,
+            onClick: () => setSelectedApplication(app),
+            onDelete: (e) => handleRowDelete(app, e)
+          },
+          String(app.id)
+        )) })
       ] }) }) }),
       !isLoading && applications.length > 0 && /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-muted-foreground text-xs text-center mt-4 sm:hidden", children: [
         filtered.length,
@@ -36318,7 +36443,171 @@ function Dashboard({ onLock }) {
         applications.length,
         " applications"
       ] })
-    ] })
+    ] }),
+    selectedApplication && /* @__PURE__ */ jsxRuntimeExports.jsxs(
+      "div",
+      {
+        className: "fixed inset-0 z-50 flex items-start sm:items-center justify-center p-4 sm:p-6",
+        "data-ocid": "application-detail.dialog",
+        children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "button",
+            {
+              type: "button",
+              className: "absolute inset-0 bg-black/50 backdrop-blur-sm",
+              onClick: () => setSelectedApplication(null),
+              "aria-label": "Close modal"
+            }
+          ),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs(
+            "div",
+            {
+              className: "relative w-full max-w-2xl max-h-[90vh] overflow-y-auto bg-card border border-border rounded-2xl shadow-2xl card-elevated",
+              onClick: (e) => e.stopPropagation(),
+              onKeyDown: (e) => e.stopPropagation(),
+              children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sticky top-0 z-10 flex items-center justify-between px-6 py-4 border-b border-border bg-card/95 backdrop-blur-sm", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "font-display font-bold text-lg text-foreground tracking-wide", children: "Application Details" }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-muted-foreground text-xs mt-0.5 font-mono", children: [
+                      "Submitted ",
+                      formatTimestamp(selectedApplication.submittedAt)
+                    ] })
+                  ] }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(
+                    "button",
+                    {
+                      type: "button",
+                      "data-ocid": "application-detail.close_button",
+                      onClick: () => setSelectedApplication(null),
+                      className: "p-2 rounded-lg hover:bg-muted/60 transition-colors text-muted-foreground hover:text-foreground",
+                      "aria-label": "Close modal",
+                      children: /* @__PURE__ */ jsxRuntimeExports.jsx(X, { className: "w-5 h-5" })
+                    }
+                  )
+                ] }),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "px-6 py-6 space-y-6", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-1 sm:grid-cols-2 gap-4", children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-1", children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs font-display uppercase tracking-wider text-muted-foreground", children: "Full Name" }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-foreground font-medium", children: selectedApplication.name })
+                    ] }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-1", children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs font-display uppercase tracking-wider text-muted-foreground", children: "Email" }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx(
+                        "a",
+                        {
+                          href: `mailto:${selectedApplication.email}`,
+                          className: "text-primary hover:opacity-80 transition-colors font-medium",
+                          children: selectedApplication.email
+                        }
+                      )
+                    ] }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-1", children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs font-display uppercase tracking-wider text-muted-foreground", children: "Phone" }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-foreground font-mono text-sm", children: selectedApplication.phone })
+                    ] }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-1", children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs font-display uppercase tracking-wider text-muted-foreground", children: "Year of Study" }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx(
+                        Badge,
+                        {
+                          variant: "outline",
+                          className: "border-border text-muted-foreground font-mono text-xs",
+                          children: selectedApplication.yearOfStudy
+                        }
+                      )
+                    ] }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-1 sm:col-span-2", children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs font-display uppercase tracking-wider text-muted-foreground", children: "Department" }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-foreground", children: selectedApplication.department })
+                    ] })
+                  ] }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "h-px bg-border" }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-5", children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-2", children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs font-display uppercase tracking-wider text-muted-foreground", children: "Why They Want to Join" }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "bg-muted/30 border border-border/50 rounded-lg p-4", children: /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-foreground text-sm leading-relaxed whitespace-pre-wrap", children: selectedApplication.reasonForJoining }) })
+                    ] }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-2", children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs font-display uppercase tracking-wider text-muted-foreground", children: "Prior Experience" }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "bg-muted/30 border border-border/50 rounded-lg p-4", children: selectedApplication.priorExperience ? /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-foreground text-sm leading-relaxed whitespace-pre-wrap", children: selectedApplication.priorExperience }) : /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "italic text-muted-foreground/60 text-sm", children: "No prior experience provided." }) })
+                    ] })
+                  ] })
+                ] }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sticky bottom-0 z-10 px-6 py-4 border-t border-border bg-card/95 backdrop-blur-sm flex items-center justify-between gap-3", children: confirmDeleteId === selectedApplication.id ? /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-xs text-destructive font-mono", children: "Confirm delete? This cannot be undone." }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2", children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsx(
+                      Button,
+                      {
+                        type: "button",
+                        "data-ocid": "application-detail.cancel_button",
+                        variant: "outline",
+                        size: "sm",
+                        onClick: () => setConfirmDeleteId(null),
+                        className: "border-border text-muted-foreground hover:text-foreground text-xs",
+                        children: "Cancel"
+                      }
+                    ),
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                      Button,
+                      {
+                        type: "button",
+                        "data-ocid": "application-detail.confirm_button",
+                        size: "sm",
+                        disabled: isDeleting,
+                        onClick: () => {
+                          deleteApplication(selectedApplication.id, {
+                            onSuccess: () => {
+                              setSelectedApplication(null);
+                              setConfirmDeleteId(null);
+                            }
+                          });
+                        },
+                        className: "bg-destructive text-destructive-foreground hover:bg-destructive/90 text-xs flex items-center gap-1.5",
+                        children: [
+                          /* @__PURE__ */ jsxRuntimeExports.jsx(Trash2, { className: "w-3.5 h-3.5" }),
+                          isDeleting ? "Deleting…" : "Delete"
+                        ]
+                      }
+                    )
+                  ] })
+                ] }) : /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                    Button,
+                    {
+                      type: "button",
+                      "data-ocid": "application-detail.delete_button",
+                      variant: "outline",
+                      size: "sm",
+                      onClick: () => setConfirmDeleteId(selectedApplication.id),
+                      className: "border-destructive/40 text-destructive hover:bg-destructive/10 hover:border-destructive/60 transition-smooth text-xs flex items-center gap-1.5",
+                      children: [
+                        /* @__PURE__ */ jsxRuntimeExports.jsx(Trash2, { className: "w-3.5 h-3.5" }),
+                        "Delete Application"
+                      ]
+                    }
+                  ),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(
+                    Button,
+                    {
+                      type: "button",
+                      "data-ocid": "application-detail.close_button",
+                      variant: "outline",
+                      size: "sm",
+                      onClick: () => setSelectedApplication(null),
+                      className: "border-border text-muted-foreground hover:text-foreground hover:border-primary/40 transition-smooth text-xs",
+                      children: "Close"
+                    }
+                  )
+                ] }) })
+              ]
+            }
+          )
+        ]
+      }
+    )
   ] });
 }
 function AdminPage() {

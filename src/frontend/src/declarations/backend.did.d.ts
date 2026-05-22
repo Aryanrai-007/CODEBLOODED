@@ -25,6 +25,7 @@ export type SubmitResult = { 'ok' : bigint } |
   { 'err' : string };
 export type Timestamp = bigint;
 export interface _SERVICE {
+  'deleteApplication' : ActorMethod<[bigint], boolean>,
   'getApplications' : ActorMethod<[], Array<Application>>,
   'submitApplication' : ActorMethod<
     [string, string, string, string, string, string, string],

@@ -16,10 +16,13 @@ import {
   Search,
   ShieldCheck,
   Terminal,
+  Trash2,
   Users,
+  X,
 } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useApplications } from "../hooks/useApplications";
+import { useDeleteApplication } from "../hooks/useDeleteApplication";
 import type { Application } from "../types";
 
 // ─── Utilities ───────────────────────────────────────────────────────────────
@@ -159,11 +162,22 @@ function TableSkeleton() {
 
 // ─── Application Row ─────────────────────────────────────────────────────────
 
-function AppRow({ app, index }: { app: Application; index: number }) {
+function AppRow({
+  app,
+  index,
+  onClick,
+  onDelete,
+}: {
+  app: Application;
+  index: number;
+  onClick: () => void;
+  onDelete: (e: React.MouseEvent) => void;
+}) {
   return (
     <TableRow
-      className="border-border/40 hover:bg-muted/20 transition-colors"
-      data-ocid="table-row"
+      className="border-border/40 hover:bg-muted/20 transition-colors cursor-pointer"
+      data-ocid={`application.item.${index + 1}`}
+      onClick={onClick}
     >
       <TableCell className="text-muted-foreground font-mono text-xs w-10">
         {index + 1}
@@ -178,6 +192,7 @@ function AppRow({ app, index }: { app: Application; index: number }) {
         <a
           href={`mailto:${app.email}`}
           className="text-primary transition-colors hover:opacity-80 text-sm"
+          onClick={(e) => e.stopPropagation()}
         >
           {app.email}
         </a>
@@ -210,6 +225,17 @@ function AppRow({ app, index }: { app: Application; index: number }) {
           <span className="italic text-muted-foreground/50 text-sm">None</span>
         )}
       </TableCell>
+      <TableCell>
+        <button
+          type="button"
+          data-ocid={`application.delete_button.${index + 1}`}
+          aria-label={`Delete application from ${app.name}`}
+          onClick={onDelete}
+          className="p-1.5 rounded-md text-muted-foreground/50 hover:text-destructive hover:bg-destructive/10 transition-colors"
+        >
+          <Trash2 className="w-3.5 h-3.5" />
+        </button>
+      </TableCell>
     </TableRow>
   );
 }
@@ -218,7 +244,22 @@ function AppRow({ app, index }: { app: Application; index: number }) {
 
 function Dashboard({ onLock }: { onLock: () => void }) {
   const { data: applications = [], isLoading } = useApplications();
+  const { mutate: deleteApplication, isPending: isDeleting } =
+    useDeleteApplication();
   const [search, setSearch] = useState("");
+  const [selectedApplication, setSelectedApplication] =
+    useState<Application | null>(null);
+  const [confirmDeleteId, setConfirmDeleteId] = useState<bigint | null>(null);
+
+  useEffect(() => {
+    function handleKeyDown(e: KeyboardEvent) {
+      if (e.key === "Escape") setSelectedApplication(null);
+    }
+    if (selectedApplication) {
+      document.addEventListener("keydown", handleKeyDown);
+      return () => document.removeEventListener("keydown", handleKeyDown);
+    }
+  }, [selectedApplication]);
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
@@ -233,6 +274,11 @@ function Dashboard({ onLock }: { onLock: () => void }) {
     );
   }, [applications, search]);
 
+  function handleRowDelete(app: Application, e: React.MouseEvent) {
+    e.stopPropagation();
+    deleteApplication(app.id);
+  }
+
   const TABLE_HEADERS = [
     "#",
     "Date Submitted",
@@ -243,6 +289,7 @@ function Dashboard({ onLock }: { onLock: () => void }) {
     "Department",
     "Why They Want to Join",
     "Prior Experience",
+    "",
   ];
 
   return (
@@ -352,7 +399,13 @@ function Dashboard({ onLock }: { onLock: () => void }) {
                   </TableRow>
                 ) : (
                   filtered.map((app, i) => (
-                    <AppRow key={String(app.id)} app={app} index={i} />
+                    <AppRow
+                      key={String(app.id)}
+                      app={app}
+                      index={i}
+                      onClick={() => setSelectedApplication(app)}
+                      onDelete={(e) => handleRowDelete(app, e)}
+                    />
                   ))
                 )}
               </TableBody>
@@ -367,6 +420,202 @@ function Dashboard({ onLock }: { onLock: () => void }) {
           </p>
         )}
       </main>
+
+      {/* Application Detail Modal */}
+      {selectedApplication && (
+        <div
+          className="fixed inset-0 z-50 flex items-start sm:items-center justify-center p-4 sm:p-6"
+          data-ocid="application-detail.dialog"
+        >
+          {/* Backdrop */}
+          <button
+            type="button"
+            className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+            onClick={() => setSelectedApplication(null)}
+            aria-label="Close modal"
+          />
+
+          {/* Modal card */}
+          <div
+            className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto bg-card border border-border rounded-2xl shadow-2xl card-elevated"
+            onClick={(e) => e.stopPropagation()}
+            onKeyDown={(e) => e.stopPropagation()}
+          >
+            {/* Header */}
+            <div className="sticky top-0 z-10 flex items-center justify-between px-6 py-4 border-b border-border bg-card/95 backdrop-blur-sm">
+              <div>
+                <h3 className="font-display font-bold text-lg text-foreground tracking-wide">
+                  Application Details
+                </h3>
+                <p className="text-muted-foreground text-xs mt-0.5 font-mono">
+                  Submitted {formatTimestamp(selectedApplication.submittedAt)}
+                </p>
+              </div>
+              <button
+                type="button"
+                data-ocid="application-detail.close_button"
+                onClick={() => setSelectedApplication(null)}
+                className="p-2 rounded-lg hover:bg-muted/60 transition-colors text-muted-foreground hover:text-foreground"
+                aria-label="Close modal"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Body */}
+            <div className="px-6 py-6 space-y-6">
+              {/* Short fields grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="space-y-1">
+                  <p className="text-xs font-display uppercase tracking-wider text-muted-foreground">
+                    Full Name
+                  </p>
+                  <p className="text-foreground font-medium">
+                    {selectedApplication.name}
+                  </p>
+                </div>
+                <div className="space-y-1">
+                  <p className="text-xs font-display uppercase tracking-wider text-muted-foreground">
+                    Email
+                  </p>
+                  <a
+                    href={`mailto:${selectedApplication.email}`}
+                    className="text-primary hover:opacity-80 transition-colors font-medium"
+                  >
+                    {selectedApplication.email}
+                  </a>
+                </div>
+                <div className="space-y-1">
+                  <p className="text-xs font-display uppercase tracking-wider text-muted-foreground">
+                    Phone
+                  </p>
+                  <p className="text-foreground font-mono text-sm">
+                    {selectedApplication.phone}
+                  </p>
+                </div>
+                <div className="space-y-1">
+                  <p className="text-xs font-display uppercase tracking-wider text-muted-foreground">
+                    Year of Study
+                  </p>
+                  <Badge
+                    variant="outline"
+                    className="border-border text-muted-foreground font-mono text-xs"
+                  >
+                    {selectedApplication.yearOfStudy}
+                  </Badge>
+                </div>
+                <div className="space-y-1 sm:col-span-2">
+                  <p className="text-xs font-display uppercase tracking-wider text-muted-foreground">
+                    Department
+                  </p>
+                  <p className="text-foreground">
+                    {selectedApplication.department}
+                  </p>
+                </div>
+              </div>
+
+              {/* Divider */}
+              <div className="h-px bg-border" />
+
+              {/* Long text fields */}
+              <div className="space-y-5">
+                <div className="space-y-2">
+                  <p className="text-xs font-display uppercase tracking-wider text-muted-foreground">
+                    Why They Want to Join
+                  </p>
+                  <div className="bg-muted/30 border border-border/50 rounded-lg p-4">
+                    <p className="text-foreground text-sm leading-relaxed whitespace-pre-wrap">
+                      {selectedApplication.reasonForJoining}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <p className="text-xs font-display uppercase tracking-wider text-muted-foreground">
+                    Prior Experience
+                  </p>
+                  <div className="bg-muted/30 border border-border/50 rounded-lg p-4">
+                    {selectedApplication.priorExperience ? (
+                      <p className="text-foreground text-sm leading-relaxed whitespace-pre-wrap">
+                        {selectedApplication.priorExperience}
+                      </p>
+                    ) : (
+                      <p className="italic text-muted-foreground/60 text-sm">
+                        No prior experience provided.
+                      </p>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Footer */}
+            <div className="sticky bottom-0 z-10 px-6 py-4 border-t border-border bg-card/95 backdrop-blur-sm flex items-center justify-between gap-3">
+              {confirmDeleteId === selectedApplication.id ? (
+                <>
+                  <span className="text-xs text-destructive font-mono">
+                    Confirm delete? This cannot be undone.
+                  </span>
+                  <div className="flex items-center gap-2">
+                    <Button
+                      type="button"
+                      data-ocid="application-detail.cancel_button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setConfirmDeleteId(null)}
+                      className="border-border text-muted-foreground hover:text-foreground text-xs"
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      type="button"
+                      data-ocid="application-detail.confirm_button"
+                      size="sm"
+                      disabled={isDeleting}
+                      onClick={() => {
+                        deleteApplication(selectedApplication.id, {
+                          onSuccess: () => {
+                            setSelectedApplication(null);
+                            setConfirmDeleteId(null);
+                          },
+                        });
+                      }}
+                      className="bg-destructive text-destructive-foreground hover:bg-destructive/90 text-xs flex items-center gap-1.5"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                      {isDeleting ? "Deleting…" : "Delete"}
+                    </Button>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <Button
+                    type="button"
+                    data-ocid="application-detail.delete_button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setConfirmDeleteId(selectedApplication.id)}
+                    className="border-destructive/40 text-destructive hover:bg-destructive/10 hover:border-destructive/60 transition-smooth text-xs flex items-center gap-1.5"
+                  >
+                    <Trash2 className="w-3.5 h-3.5" />
+                    Delete Application
+                  </Button>
+                  <Button
+                    type="button"
+                    data-ocid="application-detail.close_button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setSelectedApplication(null)}
+                    className="border-border text-muted-foreground hover:text-foreground hover:border-primary/40 transition-smooth text-xs"
+                  >
+                    Close
+                  </Button>
+                </>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

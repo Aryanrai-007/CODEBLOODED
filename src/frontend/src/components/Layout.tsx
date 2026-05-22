@@ -1,11 +1,43 @@
 import { Link, useLocation } from "@tanstack/react-router";
 import { Menu, X } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [theme, setTheme] = useState<"light" | "dark">("light");
   const location = useLocation();
   const isAdmin = location.pathname === "/admin";
+
+  // Initialise theme from localStorage / system preference
+  useEffect(() => {
+    const stored = localStorage.getItem("theme");
+    if (stored === "dark" || stored === "light") {
+      applyTheme(stored);
+      setTheme(stored);
+    } else {
+      const prefersDark = window.matchMedia(
+        "(prefers-color-scheme: dark)",
+      ).matches;
+      const initial = prefersDark ? "dark" : "light";
+      applyTheme(initial);
+      setTheme(initial);
+    }
+  }, []);
+
+  function applyTheme(t: "light" | "dark") {
+    if (t === "dark") {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  }
+
+  function toggleTheme() {
+    const next = theme === "dark" ? "light" : "dark";
+    applyTheme(next);
+    setTheme(next);
+    localStorage.setItem("theme", next);
+  }
 
   return (
     <div className="min-h-screen flex flex-col bg-background text-foreground">
@@ -13,23 +45,29 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <header className="sticky top-0 z-50 bg-card border-b border-border shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
-            {/* Logo */}
-            <Link
-              to="/"
-              className="flex items-center gap-2 group"
-              data-ocid="nav-logo"
-            >
-              <div className="flex items-center justify-center">
+            {/* Logo + Brand text */}
+            <div className="flex items-center gap-2">
+              <Link
+                to="/"
+                className="flex items-center justify-center"
+                data-ocid="nav-logo"
+              >
                 <img
                   src="/assets/images/logo.png"
                   alt="CodeBlooded logo"
                   className="h-10 w-auto object-contain"
                 />
-              </div>
-              <span className="font-display font-bold text-lg tracking-tight">
-                CODEX_LETHALIS
-              </span>
-            </Link>
+              </Link>
+              <button
+                type="button"
+                onClick={toggleTheme}
+                className="font-display font-bold text-lg tracking-tight cursor-pointer select-none transition-opacity duration-200 hover:opacity-70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-sm px-1"
+                aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
+                data-ocid="theme-toggle"
+              >
+                ज्ञानता परिवर्तनम्
+              </button>
+            </div>
 
             {/* Desktop Nav */}
             <nav

@@ -23,6 +23,7 @@ export const Application = IDL.Record({
 export const SubmitResult = IDL.Variant({ 'ok' : IDL.Nat, 'err' : IDL.Text });
 
 export const idlService = IDL.Service({
+  'deleteApplication' : IDL.Func([IDL.Nat], [IDL.Bool], []),
   'getApplications' : IDL.Func([], [IDL.Vec(Application)], ['query']),
   'submitApplication' : IDL.Func(
       [IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Text],
@@ -49,6 +50,7 @@ export const idlFactory = ({ IDL }) => {
   const SubmitResult = IDL.Variant({ 'ok' : IDL.Nat, 'err' : IDL.Text });
   
   return IDL.Service({
+    'deleteApplication' : IDL.Func([IDL.Nat], [IDL.Bool], []),
     'getApplications' : IDL.Func([], [IDL.Vec(Application)], ['query']),
     'submitApplication' : IDL.Func(
         [IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Text],
