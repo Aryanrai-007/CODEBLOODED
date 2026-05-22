@@ -1,0 +1,24 @@
+type Timestamp = int;
+type SubmitResult = 
+ variant {
+   err: text;
+   ok: nat;
+ };
+type Application = 
+ record {
+   department: text;
+   email: text;
+   id: nat;
+   name: text;
+   phone: text;
+   priorExperience: text;
+   reasonForJoining: text;
+   submittedAt: Timestamp;
+   yearOfStudy: text;
+ };
+service : {
+  getApplications: () -> (vec Application) query;
+  submitApplication: (name: text, email: text, phone: text, yearOfStudy:
+   text, department: text, reasonForJoining: text, priorExperience: text) ->
+   (SubmitResult);
+}

@@ -1,0 +1,26 @@
+// Version: 1.0.0
+type Application__670275444 =
+  {
+    department : Text;
+    email : Text;
+    id : Nat;
+    name : Text;
+    phone : Text;
+    priorExperience : Text;
+    reasonForJoining : Text;
+    submittedAt : Timestamp__281302580;
+    yearOfStudy : Text
+  };
+type Nat__490723111 = Nat__920180692;
+type Nat__920180692 = Nat;
+type Timestamp__281302580 = Timestamp__301639476;
+type Timestamp__301639476 = Int;
+actor {
+  stable applications :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?Application__670275444]];
+      var elementIndex : Nat__490723111
+    };
+  stable var nextId : Nat
+};

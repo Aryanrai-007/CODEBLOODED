@@ -1,0 +1,19 @@
+{
+  "overview": "A hackathon club website with a public landing page, a Join Now registration form, and a protected admin dashboard to view all member applications.",
+  "features": [
+    "Home landing page with club info and Join Now CTA",
+    "Registration form collecting name, email, phone, year of study, department, motivation, and experience",
+    "Backend storage of all form submissions with timestamps",
+    "Admin dashboard protected by Internet Identity login",
+    "Searchable and sortable submissions table for admin"
+  ],
+  "category": "productivity",
+  "tags": [
+    "hackathon",
+    "club",
+    "registration",
+    "admin",
+    "internet-identity"
+  ],
+  "last_updated": "2026-04-11T05:09:48.119Z"
+}
