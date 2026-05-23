@@ -1,0 +1,167 @@
+import type { backendInterface } from "../backend";
+import { ApplicationStatus } from "../backend";
+
+export const mockBackend: backendInterface = {
+  approveApplication: async (_id: bigint) => true,
+  createEvent: async (_input) => BigInt(1),
+  deleteApplication: async (_id: bigint) => true,
+  deleteEvent: async (_id: bigint) => true,
+  deleteGamePlayer: async (_playerId: string) => true,
+  deleteGameScore: async (_scoreId: string) => true,
+  getAllGameScores: async () => [
+    {
+      playerId: "player-001",
+      achievedAt: BigInt(Date.now()) * BigInt(1000000),
+      gameId: "space-shooter",
+      wavesCleared: BigInt(5),
+      scoreId: "score-001",
+      score: BigInt(15000),
+      killedEnemies: BigInt(42),
+    },
+    {
+      playerId: "player-002",
+      achievedAt: BigInt(Date.now()) * BigInt(1000000),
+      gameId: "space-shooter",
+      wavesCleared: BigInt(3),
+      scoreId: "score-002",
+      score: BigInt(8500),
+      killedEnemies: BigInt(28),
+    },
+  ],
+  getApplications: async () => [
+    {
+      id: BigInt(1),
+      status: ApplicationStatus.pending,
+      reasonForJoining: "I love hackathons and building innovative projects.",
+      name: "Aryan Rai",
+      submittedAt: BigInt(Date.now()) * BigInt(1000000),
+      email: "aryan@example.com",
+      phone: "9876543210",
+      department: "Computer Science",
+      priorExperience: "2 years of React and Node.js development.",
+      yearOfStudy: "3rd Year",
+    },
+    {
+      id: BigInt(2),
+      status: ApplicationStatus.approved,
+      reasonForJoining: "Want to learn and collaborate with talented devs.",
+      name: "Priya Sharma",
+      submittedAt: BigInt(Date.now()) * BigInt(1000000),
+      email: "priya@example.com",
+      phone: "9123456789",
+      department: "Information Technology",
+      priorExperience: "Python, ML basics.",
+      yearOfStudy: "2nd Year",
+    },
+  ],
+  getEvents: async () => [
+    {
+      id: BigInt(1),
+      subject: "Hackathon Kickoff 2026",
+      date: "2026-06-15",
+      createdAt: BigInt(Date.now()) * BigInt(1000000),
+      time: "10:00 AM",
+      description: "Annual hackathon kickoff with team formation and problem statements.",
+      category: "Hackathon",
+    },
+    {
+      id: BigInt(2),
+      subject: "AI/ML Workshop",
+      date: "2026-06-22",
+      createdAt: BigInt(Date.now()) * BigInt(1000000),
+      time: "2:00 PM",
+      description: "Hands-on workshop on machine learning fundamentals.",
+      category: "Workshop",
+    },
+  ],
+  getGamePlayers: async () => [
+    {
+      username: "CyberNova",
+      playerId: "player-001",
+      createdAt: BigInt(Date.now()) * BigInt(1000000),
+      passwordHash: "hashed",
+    },
+    {
+      username: "NeonViper",
+      playerId: "player-002",
+      createdAt: BigInt(Date.now()) * BigInt(1000000),
+      passwordHash: "hashed",
+    },
+  ],
+  getGrandLeaderboard: async (_limit: bigint) => [
+    {
+      username: "CyberNova",
+      playerId: "player-001",
+      rank: BigInt(1),
+      score: BigInt(15000),
+    },
+    {
+      username: "NeonViper",
+      playerId: "player-002",
+      rank: BigInt(2),
+      score: BigInt(8500),
+    },
+  ],
+  getPlayerRank: async (_gameId: string, _playerId: string) => ({
+    username: "CyberNova",
+    playerId: "player-001",
+    rank: BigInt(1),
+    score: BigInt(15000),
+  }),
+  getTopScores: async (_gameId: string, _limit: bigint) => [
+    {
+      playerId: "player-001",
+      achievedAt: BigInt(Date.now()) * BigInt(1000000),
+      gameId: "space-shooter",
+      wavesCleared: BigInt(5),
+      scoreId: "score-001",
+      score: BigInt(15000),
+      killedEnemies: BigInt(42),
+    },
+    {
+      playerId: "player-002",
+      achievedAt: BigInt(Date.now()) * BigInt(1000000),
+      gameId: "space-shooter",
+      wavesCleared: BigInt(3),
+      scoreId: "score-002",
+      score: BigInt(8500),
+      killedEnemies: BigInt(28),
+    },
+  ],
+  loginGamePlayer: async (_username: string, _password: string) => ({
+    __kind__: "ok",
+    ok: {
+      username: "CyberNova",
+      playerId: "player-001",
+      createdAt: BigInt(Date.now()) * BigInt(1000000),
+      passwordHash: "hashed",
+    },
+  }),
+  registerGamePlayer: async (_username: string, _password: string) => ({
+    __kind__: "ok",
+    ok: "player-001",
+  }),
+  submitApplication: async (
+    _name: string,
+    _email: string,
+    _phone: string,
+    _yearOfStudy: string,
+    _department: string,
+    _reasonForJoining: string,
+    _priorExperience: string
+  ) => ({
+    __kind__: "ok",
+    ok: BigInt(3),
+  }),
+  submitGameScore: async (
+    _playerId: string,
+    _gameId: string,
+    _score: bigint,
+    _kills: bigint,
+    _waves: bigint
+  ) => ({
+    __kind__: "ok",
+    ok: "score-003",
+  }),
+  updateEvent: async (_id: bigint, _input) => true,
+};

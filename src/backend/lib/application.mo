@@ -11,4 +11,19 @@ module {
     applications.retain(func(app) { app.id != id });
     applications.size() < sizeBefore;
   };
+
+  public func approve(applications : List.List<Types.Application>, id : Nat) : Bool {
+    var found = false;
+    applications.mapInPlace(
+      func(app) {
+        if (app.id == id) {
+          found := true;
+          { app with status = #approved };
+        } else {
+          app;
+        };
+      }
+    );
+    found;
+  };
 };

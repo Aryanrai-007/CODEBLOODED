@@ -4322,10 +4322,10 @@ class w extends Error {
 }
 const m = 55799, L = Symbol("CBOR_STOP_CODE");
 var g = /* @__PURE__ */ ((t) => (t[t.False = 20] = "False", t[t.True = 21] = "True", t[t.Null = 22] = "Null", t[t.Undefined = 23] = "Undefined", t[t.Break = 31] = "Break", t))(g || {}), c = /* @__PURE__ */ ((t) => (t[t.UnsignedInteger = 0] = "UnsignedInteger", t[t.NegativeInteger = 1] = "NegativeInteger", t[t.ByteString = 2] = "ByteString", t[t.TextString = 3] = "TextString", t[t.Array = 4] = "Array", t[t.Map = 5] = "Map", t[t.Tag = 6] = "Tag", t[t.Simple = 7] = "Simple", t))(c || {});
-const z = 23, Y = 255, G = 65535, P = 4294967295, H = BigInt("0xffffffffffffffff");
+const z = 23, Y = 255, G = 65535, P = 4294967295, H$1 = BigInt("0xffffffffffffffff");
 var d = /* @__PURE__ */ ((t) => (t[t.Value = 23] = "Value", t[t.OneByte = 24] = "OneByte", t[t.TwoBytes = 25] = "TwoBytes", t[t.FourBytes = 26] = "FourBytes", t[t.EightBytes = 27] = "EightBytes", t[t.Indefinite = 31] = "Indefinite", t))(d || {});
 const h = false;
-function W(t) {
+function W$1(t) {
   return t == null;
 }
 function R(t, n) {
@@ -4369,7 +4369,7 @@ function B(t) {
 }
 function N() {
   const t = A.at(a);
-  if (W(t))
+  if (W$1(t))
     throw new w("Provided CBOR data is empty");
   const n = Z(t), e = q(t);
   return a++, [n, e];
@@ -4548,7 +4548,7 @@ function I(t, n) {
     ), r$1.setUint32(s, Number(n), h), s += 4;
     return;
   }
-  if (n <= H) {
+  if (n <= H$1) {
     r$1.setUint8(
       s++,
       S(t) | d.EightBytes
@@ -29542,12 +29542,12 @@ const executeBeforeLoad = (inner, matchId, index2, route) => {
   }
   match._nonReactive.beforeLoadPromise = createControlledPromise();
   const { search, params, cause } = match;
-  const preload2 = resolvePreload(inner, matchId);
+  const preload3 = resolvePreload(inner, matchId);
   const beforeLoadFnContext = {
     search,
     abortController,
     params,
-    preload: preload2,
+    preload: preload3,
     context,
     location: inner.location,
     navigate: (opts) => inner.router.navigate({
@@ -29555,7 +29555,7 @@ const executeBeforeLoad = (inner, matchId, index2, route) => {
       _fromLocation: inner.location
     }),
     buildLocation: inner.router.buildLocation,
-    cause: preload2 ? "preload" : cause,
+    cause: preload3 ? "preload" : cause,
     matches: inner.matches
   };
   const updateContext = (beforeLoadContext2) => {
@@ -29654,11 +29654,11 @@ const executeHead = (inner, matchId, route) => {
 const getLoaderContext = (inner, matchId, index2, route) => {
   const parentMatchPromise = inner.matchPromises[index2 - 1];
   const { params, loaderDeps, abortController, context, cause } = inner.router.getMatch(matchId);
-  const preload2 = resolvePreload(inner, matchId);
+  const preload3 = resolvePreload(inner, matchId);
   return {
     params,
     deps: loaderDeps,
-    preload: !!preload2,
+    preload: !!preload3,
     parentMatchPromise,
     abortController,
     context,
@@ -29667,7 +29667,7 @@ const getLoaderContext = (inner, matchId, index2, route) => {
       ...opts,
       _fromLocation: inner.location
     }),
-    cause: preload2 ? "preload" : cause,
+    cause: preload3 ? "preload" : cause,
     route
   };
 };
@@ -29791,11 +29791,11 @@ const loadRouteMatch = async (inner, index2) => {
       }
     } else {
       const age = Date.now() - prevMatch.updatedAt;
-      const preload2 = resolvePreload(inner, matchId);
-      const staleAge = preload2 ? route.options.preloadStaleTime ?? inner.router.options.defaultPreloadStaleTime ?? 3e4 : route.options.staleTime ?? inner.router.options.defaultStaleTime ?? 0;
+      const preload3 = resolvePreload(inner, matchId);
+      const staleAge = preload3 ? route.options.preloadStaleTime ?? inner.router.options.defaultPreloadStaleTime ?? 3e4 : route.options.staleTime ?? inner.router.options.defaultStaleTime ?? 0;
       const shouldReloadOption = route.options.shouldReload;
       const shouldReload = typeof shouldReloadOption === "function" ? shouldReloadOption(getLoaderContext(inner, matchId, index2, route)) : shouldReloadOption;
-      const nextPreload = !!preload2 && !inner.router.state.matches.some((d2) => d2.id === matchId);
+      const nextPreload = !!preload3 && !inner.router.state.matches.some((d2) => d2.id === matchId);
       const match2 = inner.router.getMatch(matchId);
       match2._nonReactive.loaderPromise = createControlledPromise();
       if (nextPreload !== match2.preload) {
@@ -29806,7 +29806,7 @@ const loadRouteMatch = async (inner, index2) => {
       }
       const { status, invalid } = match2;
       loaderShouldRunAsync = status === "success" && (invalid || (shouldReload ?? age > staleAge));
-      if (preload2 && route.options.preload === false) ;
+      if (preload3 && route.options.preload === false) ;
       else if (loaderShouldRunAsync && !inner.sync) {
         loaderIsRunningAsync = true;
         (async () => {
@@ -29907,8 +29907,8 @@ async function loadRouteChunk(route) {
       var _a3;
       const preloads = [];
       for (const type of componentTypes) {
-        const preload2 = (_a3 = route.options[type]) == null ? void 0 : _a3.preload;
-        if (preload2) preloads.push(preload2());
+        const preload3 = (_a3 = route.options[type]) == null ? void 0 : _a3.preload;
+        if (preload3) preloads.push(preload3());
       }
       if (preloads.length)
         return Promise.all(preloads).then(() => {
@@ -31787,7 +31787,7 @@ function useLinkProps(options, forwardedRef) {
     [router2, _options2]
   );
   const isExternal = type === "external";
-  const preload2 = options.reloadDocument || isExternal ? false : userPreload ?? router2.options.defaultPreload;
+  const preload3 = options.reloadDocument || isExternal ? false : userPreload ?? router2.options.defaultPreload;
   const preloadDelay = userPreloadDelay ?? router2.options.defaultPreloadDelay ?? 0;
   const isActive = useRouterState({
     select: (s2) => {
@@ -31848,17 +31848,17 @@ function useLinkProps(options, forwardedRef) {
     innerRef,
     preloadViewportIoCallback,
     intersectionObserverOptions,
-    { disabled: !!disabled || !(preload2 === "viewport") }
+    { disabled: !!disabled || !(preload3 === "viewport") }
   );
   reactExports.useEffect(() => {
     if (hasRenderFetched.current) {
       return;
     }
-    if (!disabled && preload2 === "render") {
+    if (!disabled && preload3 === "render") {
       doPreload();
       hasRenderFetched.current = true;
     }
-  }, [disabled, doPreload, preload2]);
+  }, [disabled, doPreload, preload3]);
   const handleClick = (e) => {
     const elementTarget = e.currentTarget.target;
     const effectiveTarget = target !== void 0 ? target : elementTarget;
@@ -31902,13 +31902,13 @@ function useLinkProps(options, forwardedRef) {
   }
   const handleFocus = (_2) => {
     if (disabled) return;
-    if (preload2) {
+    if (preload3) {
       doPreload();
     }
   };
   const handleTouchStart = handleFocus;
   const handleEnter = (e) => {
-    if (disabled || !preload2) return;
+    if (disabled || !preload3) return;
     if (!preloadDelay) {
       doPreload();
     } else {
@@ -31924,7 +31924,7 @@ function useLinkProps(options, forwardedRef) {
     }
   };
   const handleLeave = (e) => {
-    if (disabled || !preload2 || !preloadDelay) return;
+    if (disabled || !preload3 || !preloadDelay) return;
     const eventTarget = e.target;
     const id2 = timeoutMap.get(eventTarget);
     if (id2) {
@@ -32007,7 +32007,7 @@ const Link = reactExports.forwardRef(
 function isCtrlEvent(e) {
   return !!(e.metaKey || e.altKey || e.ctrlKey || e.shiftKey);
 }
-let Route$4 = class Route extends BaseRoute {
+let Route$7 = class Route extends BaseRoute {
   /**
    * @deprecated Use the `createRoute` function instead.
    */
@@ -32059,7 +32059,7 @@ let Route$4 = class Route extends BaseRoute {
   }
 };
 function createRoute(options) {
-  return new Route$4(options);
+  return new Route$7(options);
 }
 class RootRoute extends BaseRootRoute {
   /**
@@ -32769,19 +32769,221 @@ const createLucideIcon = (iconName, iconNode) => {
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$i = [
-  ["path", { d: "M5 12h14", key: "1ays0h" }],
-  ["path", { d: "m12 5 7 7-7 7", key: "xquz4c" }]
+const __iconNode$x = [
+  ["path", { d: "m12 19-7-7 7-7", key: "1l729n" }],
+  ["path", { d: "M19 12H5", key: "x3x0zl" }]
 ];
-const ArrowRight = createLucideIcon("arrow-right", __iconNode$i);
+const ArrowLeft = createLucideIcon("arrow-left", __iconNode$x);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$h = [["path", { d: "m6 9 6 6 6-6", key: "qrunsl" }]];
-const ChevronDown = createLucideIcon("chevron-down", __iconNode$h);
+const __iconNode$w = [
+  ["path", { d: "M5 12h14", key: "1ays0h" }],
+  ["path", { d: "m12 5 7 7-7 7", key: "xquz4c" }]
+];
+const ArrowRight = createLucideIcon("arrow-right", __iconNode$w);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$v = [
+  ["path", { d: "M8 2v4", key: "1cmpym" }],
+  ["path", { d: "M16 2v4", key: "4m81vk" }],
+  ["rect", { width: "18", height: "18", x: "3", y: "4", rx: "2", key: "1hopcy" }],
+  ["path", { d: "M3 10h18", key: "8toen8" }],
+  ["path", { d: "M8 14h.01", key: "6423bh" }],
+  ["path", { d: "M12 14h.01", key: "1etili" }],
+  ["path", { d: "M16 14h.01", key: "1gbofw" }],
+  ["path", { d: "M8 18h.01", key: "lrp35t" }],
+  ["path", { d: "M12 18h.01", key: "mhygvu" }],
+  ["path", { d: "M16 18h.01", key: "kzsmim" }]
+];
+const CalendarDays = createLucideIcon("calendar-days", __iconNode$v);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$u = [
+  ["path", { d: "M8 2v4", key: "1cmpym" }],
+  ["path", { d: "M16 2v4", key: "4m81vk" }],
+  ["rect", { width: "18", height: "18", x: "3", y: "4", rx: "2", key: "1hopcy" }],
+  ["path", { d: "M3 10h18", key: "8toen8" }]
+];
+const Calendar = createLucideIcon("calendar", __iconNode$u);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$t = [["path", { d: "m6 9 6 6 6-6", key: "qrunsl" }]];
+const ChevronDown = createLucideIcon("chevron-down", __iconNode$t);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$s = [["path", { d: "m15 18-6-6 6-6", key: "1wnfg3" }]];
+const ChevronLeft = createLucideIcon("chevron-left", __iconNode$s);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$r = [["path", { d: "m9 18 6-6-6-6", key: "mthhwq" }]];
+const ChevronRight = createLucideIcon("chevron-right", __iconNode$r);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$q = [
+  ["path", { d: "M21.801 10A10 10 0 1 1 17 3.335", key: "yps3ct" }],
+  ["path", { d: "m9 11 3 3L22 4", key: "1pflzl" }]
+];
+const CircleCheckBig = createLucideIcon("circle-check-big", __iconNode$q);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$p = [
+  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
+  ["path", { d: "m9 12 2 2 4-4", key: "dzmm74" }]
+];
+const CircleCheck = createLucideIcon("circle-check", __iconNode$p);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$o = [
+  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
+  ["polyline", { points: "12 6 12 12 16 14", key: "68esgv" }]
+];
+const Clock = createLucideIcon("clock", __iconNode$o);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$n = [
+  ["path", { d: "m18 16 4-4-4-4", key: "1inbqp" }],
+  ["path", { d: "m6 8-4 4 4 4", key: "15zrgr" }],
+  ["path", { d: "m14.5 4-5 16", key: "e7oirm" }]
+];
+const CodeXml = createLucideIcon("code-xml", __iconNode$n);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$m = [
+  [
+    "path",
+    {
+      d: "M10.733 5.076a10.744 10.744 0 0 1 11.205 6.575 1 1 0 0 1 0 .696 10.747 10.747 0 0 1-1.444 2.49",
+      key: "ct8e1f"
+    }
+  ],
+  ["path", { d: "M14.084 14.158a3 3 0 0 1-4.242-4.242", key: "151rxh" }],
+  [
+    "path",
+    {
+      d: "M17.479 17.499a10.75 10.75 0 0 1-15.417-5.151 1 1 0 0 1 0-.696 10.75 10.75 0 0 1 4.446-5.143",
+      key: "13bj9a"
+    }
+  ],
+  ["path", { d: "m2 2 20 20", key: "1ooewy" }]
+];
+const EyeOff = createLucideIcon("eye-off", __iconNode$m);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$l = [
+  [
+    "path",
+    {
+      d: "M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0",
+      key: "1nclc0"
+    }
+  ],
+  ["circle", { cx: "12", cy: "12", r: "3", key: "1v7zrd" }]
+];
+const Eye = createLucideIcon("eye", __iconNode$l);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$k = [
+  ["line", { x1: "6", x2: "10", y1: "11", y2: "11", key: "1gktln" }],
+  ["line", { x1: "8", x2: "8", y1: "9", y2: "13", key: "qnk9ow" }],
+  ["line", { x1: "15", x2: "15.01", y1: "12", y2: "12", key: "krot7o" }],
+  ["line", { x1: "18", x2: "18.01", y1: "10", y2: "10", key: "1lcuu1" }],
+  [
+    "path",
+    {
+      d: "M17.32 5H6.68a4 4 0 0 0-3.978 3.59c-.006.052-.01.101-.017.152C2.604 9.416 2 14.456 2 16a3 3 0 0 0 3 3c1 0 1.5-.5 2-1l1.414-1.414A2 2 0 0 1 9.828 16h4.344a2 2 0 0 1 1.414.586L17 18c.5.5 1 1 2 1a3 3 0 0 0 3-3c0-1.545-.604-6.584-.685-7.258-.007-.05-.011-.1-.017-.151A4 4 0 0 0 17.32 5z",
+      key: "mfqc10"
+    }
+  ]
+];
+const Gamepad2 = createLucideIcon("gamepad-2", __iconNode$k);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$j = [
+  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
+  ["path", { d: "M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20", key: "13o1zl" }],
+  ["path", { d: "M2 12h20", key: "9i4pu4" }]
+];
+const Globe = createLucideIcon("globe", __iconNode$j);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$i = [
+  [
+    "path",
+    {
+      d: "M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z",
+      key: "c3ymky"
+    }
+  ]
+];
+const Heart = createLucideIcon("heart", __iconNode$i);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$h = [["path", { d: "M21 12a9 9 0 1 1-6.219-8.56", key: "13zald" }]];
+const LoaderCircle = createLucideIcon("loader-circle", __iconNode$h);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -32789,10 +32991,10 @@ const ChevronDown = createLucideIcon("chevron-down", __iconNode$h);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$g = [
-  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
-  ["path", { d: "m9 12 2 2 4-4", key: "dzmm74" }]
+  ["rect", { width: "18", height: "11", x: "3", y: "11", rx: "2", ry: "2", key: "1w4ew1" }],
+  ["path", { d: "M7 11V7a5 5 0 0 1 9.9-1", key: "1mm8w8" }]
 ];
-const CircleCheck = createLucideIcon("circle-check", __iconNode$g);
+const LockOpen = createLucideIcon("lock-open", __iconNode$g);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -32800,11 +33002,10 @@ const CircleCheck = createLucideIcon("circle-check", __iconNode$g);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$f = [
-  ["path", { d: "m18 16 4-4-4-4", key: "1inbqp" }],
-  ["path", { d: "m6 8-4 4 4 4", key: "15zrgr" }],
-  ["path", { d: "m14.5 4-5 16", key: "e7oirm" }]
+  ["rect", { width: "18", height: "11", x: "3", y: "11", rx: "2", ry: "2", key: "1w4ew1" }],
+  ["path", { d: "M7 11V7a5 5 0 0 1 10 0v4", key: "fwvmzm" }]
 ];
-const CodeXml = createLucideIcon("code-xml", __iconNode$f);
+const Lock = createLucideIcon("lock", __iconNode$f);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -32812,19 +33013,22 @@ const CodeXml = createLucideIcon("code-xml", __iconNode$f);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$e = [
-  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
-  ["path", { d: "M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20", key: "13o1zl" }],
-  ["path", { d: "M2 12h20", key: "9i4pu4" }]
+  ["path", { d: "m16 17 5-5-5-5", key: "1bji2h" }],
+  ["path", { d: "M21 12H9", key: "dn1m92" }],
+  ["path", { d: "M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4", key: "1uf3rs" }]
 ];
-const Globe = createLucideIcon("globe", __iconNode$e);
+const LogOut = createLucideIcon("log-out", __iconNode$e);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$d = [["path", { d: "M21 12a9 9 0 1 1-6.219-8.56", key: "13zald" }]];
-const LoaderCircle = createLucideIcon("loader-circle", __iconNode$d);
+const __iconNode$d = [
+  ["path", { d: "m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7", key: "132q7q" }],
+  ["rect", { x: "2", y: "4", width: "20", height: "16", rx: "2", key: "izxlao" }]
+];
+const Mail = createLucideIcon("mail", __iconNode$d);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -32832,10 +33036,11 @@ const LoaderCircle = createLucideIcon("loader-circle", __iconNode$d);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$c = [
-  ["rect", { width: "18", height: "11", x: "3", y: "11", rx: "2", ry: "2", key: "1w4ew1" }],
-  ["path", { d: "M7 11V7a5 5 0 0 1 9.9-1", key: "1mm8w8" }]
+  ["path", { d: "M4 12h16", key: "1lakjw" }],
+  ["path", { d: "M4 18h16", key: "19g7jn" }],
+  ["path", { d: "M4 6h16", key: "1o0s65" }]
 ];
-const LockOpen = createLucideIcon("lock-open", __iconNode$c);
+const Menu = createLucideIcon("menu", __iconNode$c);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -32843,10 +33048,15 @@ const LockOpen = createLucideIcon("lock-open", __iconNode$c);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$b = [
-  ["rect", { width: "18", height: "11", x: "3", y: "11", rx: "2", ry: "2", key: "1w4ew1" }],
-  ["path", { d: "M7 11V7a5 5 0 0 1 10 0v4", key: "fwvmzm" }]
+  [
+    "path",
+    {
+      d: "M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z",
+      key: "1a8usu"
+    }
+  ]
 ];
-const Lock = createLucideIcon("lock", __iconNode$b);
+const Pen = createLucideIcon("pen", __iconNode$b);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -32854,10 +33064,10 @@ const Lock = createLucideIcon("lock", __iconNode$b);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$a = [
-  ["path", { d: "m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7", key: "132q7q" }],
-  ["rect", { x: "2", y: "4", width: "20", height: "16", rx: "2", key: "izxlao" }]
+  ["path", { d: "M5 12h14", key: "1ays0h" }],
+  ["path", { d: "M12 5v14", key: "s699le" }]
 ];
-const Mail = createLucideIcon("mail", __iconNode$a);
+const Plus = createLucideIcon("plus", __iconNode$a);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -32865,18 +33075,6 @@ const Mail = createLucideIcon("mail", __iconNode$a);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$9 = [
-  ["path", { d: "M4 12h16", key: "1lakjw" }],
-  ["path", { d: "M4 18h16", key: "19g7jn" }],
-  ["path", { d: "M4 6h16", key: "1o0s65" }]
-];
-const Menu = createLucideIcon("menu", __iconNode$9);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$8 = [
   [
     "path",
     {
@@ -32894,7 +33092,18 @@ const __iconNode$8 = [
   ["path", { d: "M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0", key: "1f8sc4" }],
   ["path", { d: "M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5", key: "qeys4" }]
 ];
-const Rocket = createLucideIcon("rocket", __iconNode$8);
+const Rocket = createLucideIcon("rocket", __iconNode$9);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$8 = [
+  ["path", { d: "m21 21-4.34-4.34", key: "14j7rj" }],
+  ["circle", { cx: "11", cy: "11", r: "8", key: "4ej97u" }]
+];
+const Search = createLucideIcon("search", __iconNode$8);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -32902,10 +33111,16 @@ const Rocket = createLucideIcon("rocket", __iconNode$8);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$7 = [
-  ["path", { d: "m21 21-4.34-4.34", key: "14j7rj" }],
-  ["circle", { cx: "11", cy: "11", r: "8", key: "4ej97u" }]
+  [
+    "path",
+    {
+      d: "M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z",
+      key: "oel41y"
+    }
+  ],
+  ["path", { d: "m9 12 2 2 4-4", key: "dzmm74" }]
 ];
-const Search = createLucideIcon("search", __iconNode$7);
+const ShieldCheck = createLucideIcon("shield-check", __iconNode$7);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -32916,13 +33131,13 @@ const __iconNode$6 = [
   [
     "path",
     {
-      d: "M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z",
-      key: "oel41y"
+      d: "M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z",
+      key: "vktsd0"
     }
   ],
-  ["path", { d: "m9 12 2 2 4-4", key: "dzmm74" }]
+  ["circle", { cx: "7.5", cy: "7.5", r: ".5", fill: "currentColor", key: "kqv944" }]
 ];
-const ShieldCheck = createLucideIcon("shield-check", __iconNode$6);
+const Tag = createLucideIcon("tag", __iconNode$6);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -33078,6 +33293,24 @@ function Layout({ children }) {
               /* @__PURE__ */ jsxRuntimeExports.jsx(
                 Link,
                 {
+                  to: "/calendar",
+                  className: `text-sm font-medium transition-colors duration-200 ${location2.pathname === "/calendar" ? "text-primary" : "text-muted-foreground hover:text-foreground"}`,
+                  "data-ocid": "nav-calendar-link",
+                  children: "Calendar"
+                }
+              ),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                Link,
+                {
+                  to: "/games",
+                  className: `text-sm font-medium transition-colors duration-200 ${location2.pathname.startsWith("/games") ? "text-primary" : "text-muted-foreground hover:text-foreground"}`,
+                  "data-ocid": "nav-games-link",
+                  children: "NEXUS ARENA"
+                }
+              ),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                Link,
+                {
                   to: "/admin",
                   className: `text-xs transition-colors duration-200 ml-2 ${isAdmin ? "text-primary" : "text-muted-foreground hover:text-foreground"}`,
                   "data-ocid": "nav-admin-link",
@@ -33119,6 +33352,26 @@ function Layout({ children }) {
                 to: "/join",
                 label: "Join Now",
                 onClick: () => setMenuOpen(false)
+              }
+            ),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              Link,
+              {
+                to: "/calendar",
+                className: "text-sm font-medium py-2 text-foreground hover:text-primary transition-colors",
+                onClick: () => setMenuOpen(false),
+                "data-ocid": "nav-mobile-calendar-link",
+                children: "Calendar"
+              }
+            ),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              Link,
+              {
+                to: "/games",
+                className: "text-sm font-medium py-2 text-foreground hover:text-primary transition-colors",
+                onClick: () => setMenuOpen(false),
+                "data-ocid": "nav-mobile-games-link",
+                children: "NEXUS ARENA"
               }
             ),
             /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -33186,7 +33439,7 @@ function MobileNavLink({
     }
   );
 }
-const Route$3 = createRootRoute({
+const Route$6 = createRootRoute({
   component: () => /* @__PURE__ */ jsxRuntimeExports.jsx(Layout, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(Outlet, {}) })
 });
 function setRef(ref, value) {
@@ -36009,9 +36262,110 @@ function TableCell({ className, ...props }) {
     }
   );
 }
+var NODES = [
+  "a",
+  "button",
+  "div",
+  "form",
+  "h2",
+  "h3",
+  "img",
+  "input",
+  "label",
+  "li",
+  "nav",
+  "ol",
+  "p",
+  "select",
+  "span",
+  "svg",
+  "ul"
+];
+var Primitive = NODES.reduce((primitive, node) => {
+  const Slot2 = /* @__PURE__ */ createSlot(`Primitive.${node}`);
+  const Node = reactExports.forwardRef((props, forwardedRef) => {
+    const { asChild, ...primitiveProps } = props;
+    const Comp = asChild ? Slot2 : node;
+    if (typeof window !== "undefined") {
+      window[Symbol.for("radix-ui")] = true;
+    }
+    return /* @__PURE__ */ jsxRuntimeExports.jsx(Comp, { ...primitiveProps, ref: forwardedRef });
+  });
+  Node.displayName = `Primitive.${node}`;
+  return { ...primitive, [node]: Node };
+}, {});
+var NAME = "Label";
+var Label$1 = reactExports.forwardRef((props, forwardedRef) => {
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(
+    Primitive.label,
+    {
+      ...props,
+      ref: forwardedRef,
+      onMouseDown: (event) => {
+        var _a3;
+        const target = event.target;
+        if (target.closest("button, input, select, textarea")) return;
+        (_a3 = props.onMouseDown) == null ? void 0 : _a3.call(props, event);
+        if (!event.defaultPrevented && event.detail > 1) event.preventDefault();
+      }
+    }
+  );
+});
+Label$1.displayName = NAME;
+var Root = Label$1;
+function Label({
+  className,
+  ...props
+}) {
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(
+    Root,
+    {
+      "data-slot": "label",
+      className: cn(
+        "flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50",
+        className
+      ),
+      ...props
+    }
+  );
+}
+function Textarea({ className, ...props }) {
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(
+    "textarea",
+    {
+      "data-slot": "textarea",
+      className: cn(
+        "border-input placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:bg-input/30 flex field-sizing-content min-h-16 w-full rounded-md border bg-transparent px-3 py-2 text-base shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
+        className
+      ),
+      ...props
+    }
+  );
+}
+const CreateEventInput = Record({
+  "subject": Text,
+  "date": Text,
+  "time": Text,
+  "description": Text,
+  "category": Text
+});
 const Timestamp = Int;
+const GameScore = Record({
+  "playerId": Text,
+  "achievedAt": Timestamp,
+  "gameId": Text,
+  "wavesCleared": Nat,
+  "scoreId": Text,
+  "score": Nat,
+  "killedEnemies": Nat
+});
+const ApplicationStatus$1 = Variant({
+  "pending": Null,
+  "approved": Null
+});
 const Application = Record({
   "id": Nat,
+  "status": ApplicationStatus$1,
   "reasonForJoining": Text,
   "name": Text,
   "submittedAt": Timestamp,
@@ -36021,20 +36375,98 @@ const Application = Record({
   "priorExperience": Text,
   "yearOfStudy": Text
 });
+const CalendarEvent = Record({
+  "id": Nat,
+  "subject": Text,
+  "date": Text,
+  "createdAt": Timestamp,
+  "time": Text,
+  "description": Text,
+  "category": Text
+});
+const GamePlayer = Record({
+  "username": Text,
+  "playerId": Text,
+  "createdAt": Timestamp,
+  "passwordHash": Text
+});
+const PlayerRank = Record({
+  "username": Text,
+  "playerId": Text,
+  "rank": Nat,
+  "score": Nat
+});
+const LoginResult = Variant({ "ok": GamePlayer, "err": Text });
+const RegisterResult = Variant({
+  "ok": Text,
+  "err": Text
+});
 const SubmitResult = Variant({ "ok": Nat, "err": Text });
+const SubmitScoreResult = Variant({
+  "ok": Text,
+  "err": Text
+});
 Service({
+  "approveApplication": Func([Nat], [Bool], []),
+  "createEvent": Func([CreateEventInput], [Nat], []),
   "deleteApplication": Func([Nat], [Bool], []),
+  "deleteEvent": Func([Nat], [Bool], []),
+  "deleteGamePlayer": Func([Text], [Bool], []),
+  "deleteGameScore": Func([Text], [Bool], []),
+  "getAllGameScores": Func([], [Vec(GameScore)], ["query"]),
   "getApplications": Func([], [Vec(Application)], ["query"]),
+  "getEvents": Func([], [Vec(CalendarEvent)], ["query"]),
+  "getGamePlayers": Func([], [Vec(GamePlayer)], ["query"]),
+  "getGrandLeaderboard": Func([Nat], [Vec(PlayerRank)], ["query"]),
+  "getPlayerRank": Func(
+    [Text, Text],
+    [Opt(PlayerRank)],
+    ["query"]
+  ),
+  "getTopScores": Func(
+    [Text, Nat],
+    [Vec(GameScore)],
+    ["query"]
+  ),
+  "loginGamePlayer": Func([Text, Text], [LoginResult], []),
+  "registerGamePlayer": Func([Text, Text], [RegisterResult], []),
   "submitApplication": Func(
     [Text, Text, Text, Text, Text, Text, Text],
     [SubmitResult],
     []
-  )
+  ),
+  "submitGameScore": Func(
+    [Text, Text, Nat, Nat, Nat],
+    [SubmitScoreResult],
+    []
+  ),
+  "updateEvent": Func([Nat, CreateEventInput], [Bool], [])
 });
 const idlFactory = ({ IDL: IDL2 }) => {
+  const CreateEventInput2 = IDL2.Record({
+    "subject": IDL2.Text,
+    "date": IDL2.Text,
+    "time": IDL2.Text,
+    "description": IDL2.Text,
+    "category": IDL2.Text
+  });
   const Timestamp2 = IDL2.Int;
+  const GameScore2 = IDL2.Record({
+    "playerId": IDL2.Text,
+    "achievedAt": Timestamp2,
+    "gameId": IDL2.Text,
+    "wavesCleared": IDL2.Nat,
+    "scoreId": IDL2.Text,
+    "score": IDL2.Nat,
+    "killedEnemies": IDL2.Nat
+  });
+  const ApplicationStatus2 = IDL2.Variant({
+    "pending": IDL2.Null,
+    "approved": IDL2.Null
+  });
   const Application2 = IDL2.Record({
     "id": IDL2.Nat,
+    "status": ApplicationStatus2,
     "reasonForJoining": IDL2.Text,
     "name": IDL2.Text,
     "submittedAt": Timestamp2,
@@ -36044,23 +36476,111 @@ const idlFactory = ({ IDL: IDL2 }) => {
     "priorExperience": IDL2.Text,
     "yearOfStudy": IDL2.Text
   });
+  const CalendarEvent2 = IDL2.Record({
+    "id": IDL2.Nat,
+    "subject": IDL2.Text,
+    "date": IDL2.Text,
+    "createdAt": Timestamp2,
+    "time": IDL2.Text,
+    "description": IDL2.Text,
+    "category": IDL2.Text
+  });
+  const GamePlayer2 = IDL2.Record({
+    "username": IDL2.Text,
+    "playerId": IDL2.Text,
+    "createdAt": Timestamp2,
+    "passwordHash": IDL2.Text
+  });
+  const PlayerRank2 = IDL2.Record({
+    "username": IDL2.Text,
+    "playerId": IDL2.Text,
+    "rank": IDL2.Nat,
+    "score": IDL2.Nat
+  });
+  const LoginResult2 = IDL2.Variant({ "ok": GamePlayer2, "err": IDL2.Text });
+  const RegisterResult2 = IDL2.Variant({ "ok": IDL2.Text, "err": IDL2.Text });
   const SubmitResult2 = IDL2.Variant({ "ok": IDL2.Nat, "err": IDL2.Text });
+  const SubmitScoreResult2 = IDL2.Variant({ "ok": IDL2.Text, "err": IDL2.Text });
   return IDL2.Service({
+    "approveApplication": IDL2.Func([IDL2.Nat], [IDL2.Bool], []),
+    "createEvent": IDL2.Func([CreateEventInput2], [IDL2.Nat], []),
     "deleteApplication": IDL2.Func([IDL2.Nat], [IDL2.Bool], []),
+    "deleteEvent": IDL2.Func([IDL2.Nat], [IDL2.Bool], []),
+    "deleteGamePlayer": IDL2.Func([IDL2.Text], [IDL2.Bool], []),
+    "deleteGameScore": IDL2.Func([IDL2.Text], [IDL2.Bool], []),
+    "getAllGameScores": IDL2.Func([], [IDL2.Vec(GameScore2)], ["query"]),
     "getApplications": IDL2.Func([], [IDL2.Vec(Application2)], ["query"]),
+    "getEvents": IDL2.Func([], [IDL2.Vec(CalendarEvent2)], ["query"]),
+    "getGamePlayers": IDL2.Func([], [IDL2.Vec(GamePlayer2)], ["query"]),
+    "getGrandLeaderboard": IDL2.Func(
+      [IDL2.Nat],
+      [IDL2.Vec(PlayerRank2)],
+      ["query"]
+    ),
+    "getPlayerRank": IDL2.Func(
+      [IDL2.Text, IDL2.Text],
+      [IDL2.Opt(PlayerRank2)],
+      ["query"]
+    ),
+    "getTopScores": IDL2.Func(
+      [IDL2.Text, IDL2.Nat],
+      [IDL2.Vec(GameScore2)],
+      ["query"]
+    ),
+    "loginGamePlayer": IDL2.Func([IDL2.Text, IDL2.Text], [LoginResult2], []),
+    "registerGamePlayer": IDL2.Func([IDL2.Text, IDL2.Text], [RegisterResult2], []),
     "submitApplication": IDL2.Func(
       [IDL2.Text, IDL2.Text, IDL2.Text, IDL2.Text, IDL2.Text, IDL2.Text, IDL2.Text],
       [SubmitResult2],
       []
-    )
+    ),
+    "submitGameScore": IDL2.Func(
+      [IDL2.Text, IDL2.Text, IDL2.Nat, IDL2.Nat, IDL2.Nat],
+      [SubmitScoreResult2],
+      []
+    ),
+    "updateEvent": IDL2.Func([IDL2.Nat, CreateEventInput2], [IDL2.Bool], [])
   });
 };
+var ApplicationStatus = /* @__PURE__ */ ((ApplicationStatus2) => {
+  ApplicationStatus2["pending"] = "pending";
+  ApplicationStatus2["approved"] = "approved";
+  return ApplicationStatus2;
+})(ApplicationStatus || {});
 class Backend {
   constructor(actor, _uploadFile, _downloadFile, processError2) {
     this.actor = actor;
     this._uploadFile = _uploadFile;
     this._downloadFile = _downloadFile;
     this.processError = processError2;
+  }
+  async approveApplication(arg0) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.approveApplication(arg0);
+        return result;
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.approveApplication(arg0);
+      return result;
+    }
+  }
+  async createEvent(arg0) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.createEvent(arg0);
+        return result;
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.createEvent(arg0);
+      return result;
+    }
   }
   async deleteApplication(arg0) {
     if (this.processError) {
@@ -36076,39 +36596,253 @@ class Backend {
       return result;
     }
   }
-  async getApplications() {
+  async deleteEvent(arg0) {
     if (this.processError) {
       try {
-        const result = await this.actor.getApplications();
+        const result = await this.actor.deleteEvent(arg0);
         return result;
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
-      const result = await this.actor.getApplications();
+      const result = await this.actor.deleteEvent(arg0);
       return result;
+    }
+  }
+  async deleteGamePlayer(arg0) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.deleteGamePlayer(arg0);
+        return result;
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.deleteGamePlayer(arg0);
+      return result;
+    }
+  }
+  async deleteGameScore(arg0) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.deleteGameScore(arg0);
+        return result;
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.deleteGameScore(arg0);
+      return result;
+    }
+  }
+  async getAllGameScores() {
+    if (this.processError) {
+      try {
+        const result = await this.actor.getAllGameScores();
+        return result;
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.getAllGameScores();
+      return result;
+    }
+  }
+  async getApplications() {
+    if (this.processError) {
+      try {
+        const result = await this.actor.getApplications();
+        return from_candid_vec_n1(this._uploadFile, this._downloadFile, result);
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.getApplications();
+      return from_candid_vec_n1(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async getEvents() {
+    if (this.processError) {
+      try {
+        const result = await this.actor.getEvents();
+        return result;
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.getEvents();
+      return result;
+    }
+  }
+  async getGamePlayers() {
+    if (this.processError) {
+      try {
+        const result = await this.actor.getGamePlayers();
+        return result;
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.getGamePlayers();
+      return result;
+    }
+  }
+  async getGrandLeaderboard(arg0) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.getGrandLeaderboard(arg0);
+        return result;
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.getGrandLeaderboard(arg0);
+      return result;
+    }
+  }
+  async getPlayerRank(arg0, arg1) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.getPlayerRank(arg0, arg1);
+        return from_candid_opt_n6(this._uploadFile, this._downloadFile, result);
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.getPlayerRank(arg0, arg1);
+      return from_candid_opt_n6(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async getTopScores(arg0, arg1) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.getTopScores(arg0, arg1);
+        return result;
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.getTopScores(arg0, arg1);
+      return result;
+    }
+  }
+  async loginGamePlayer(arg0, arg1) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.loginGamePlayer(arg0, arg1);
+        return from_candid_LoginResult_n7(this._uploadFile, this._downloadFile, result);
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.loginGamePlayer(arg0, arg1);
+      return from_candid_LoginResult_n7(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async registerGamePlayer(arg0, arg1) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.registerGamePlayer(arg0, arg1);
+        return from_candid_RegisterResult_n9(this._uploadFile, this._downloadFile, result);
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.registerGamePlayer(arg0, arg1);
+      return from_candid_RegisterResult_n9(this._uploadFile, this._downloadFile, result);
     }
   }
   async submitApplication(arg0, arg1, arg2, arg3, arg4, arg5, arg6) {
     if (this.processError) {
       try {
         const result = await this.actor.submitApplication(arg0, arg1, arg2, arg3, arg4, arg5, arg6);
-        return from_candid_SubmitResult_n1(this._uploadFile, this._downloadFile, result);
+        return from_candid_SubmitResult_n11(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.submitApplication(arg0, arg1, arg2, arg3, arg4, arg5, arg6);
-      return from_candid_SubmitResult_n1(this._uploadFile, this._downloadFile, result);
+      return from_candid_SubmitResult_n11(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async submitGameScore(arg0, arg1, arg2, arg3, arg4) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.submitGameScore(arg0, arg1, arg2, arg3, arg4);
+        return from_candid_SubmitScoreResult_n13(this._uploadFile, this._downloadFile, result);
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.submitGameScore(arg0, arg1, arg2, arg3, arg4);
+      return from_candid_SubmitScoreResult_n13(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async updateEvent(arg0, arg1) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.updateEvent(arg0, arg1);
+        return result;
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.updateEvent(arg0, arg1);
+      return result;
     }
   }
 }
-function from_candid_SubmitResult_n1(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n2(_uploadFile, _downloadFile, value);
+function from_candid_ApplicationStatus_n4(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n5(_uploadFile, _downloadFile, value);
 }
-function from_candid_variant_n2(_uploadFile, _downloadFile, value) {
+function from_candid_Application_n2(_uploadFile, _downloadFile, value) {
+  return from_candid_record_n3(_uploadFile, _downloadFile, value);
+}
+function from_candid_LoginResult_n7(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n8(_uploadFile, _downloadFile, value);
+}
+function from_candid_RegisterResult_n9(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n10(_uploadFile, _downloadFile, value);
+}
+function from_candid_SubmitResult_n11(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n12(_uploadFile, _downloadFile, value);
+}
+function from_candid_SubmitScoreResult_n13(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n10(_uploadFile, _downloadFile, value);
+}
+function from_candid_opt_n6(_uploadFile, _downloadFile, value) {
+  return value.length === 0 ? null : value[0];
+}
+function from_candid_record_n3(_uploadFile, _downloadFile, value) {
+  return {
+    id: value.id,
+    status: from_candid_ApplicationStatus_n4(_uploadFile, _downloadFile, value.status),
+    reasonForJoining: value.reasonForJoining,
+    name: value.name,
+    submittedAt: value.submittedAt,
+    email: value.email,
+    phone: value.phone,
+    department: value.department,
+    priorExperience: value.priorExperience,
+    yearOfStudy: value.yearOfStudy
+  };
+}
+function from_candid_variant_n10(_uploadFile, _downloadFile, value) {
   return "ok" in value ? {
     __kind__: "ok",
     ok: value.ok
@@ -36116,6 +36850,30 @@ function from_candid_variant_n2(_uploadFile, _downloadFile, value) {
     __kind__: "err",
     err: value.err
   } : value;
+}
+function from_candid_variant_n12(_uploadFile, _downloadFile, value) {
+  return "ok" in value ? {
+    __kind__: "ok",
+    ok: value.ok
+  } : "err" in value ? {
+    __kind__: "err",
+    err: value.err
+  } : value;
+}
+function from_candid_variant_n5(_uploadFile, _downloadFile, value) {
+  return "pending" in value ? "pending" : "approved" in value ? "approved" : value;
+}
+function from_candid_variant_n8(_uploadFile, _downloadFile, value) {
+  return "ok" in value ? {
+    __kind__: "ok",
+    ok: value.ok
+  } : "err" in value ? {
+    __kind__: "err",
+    err: value.err
+  } : value;
+}
+function from_candid_vec_n1(_uploadFile, _downloadFile, value) {
+  return value.map((x2) => from_candid_Application_n2(_uploadFile, _downloadFile, x2));
 }
 function createActor(canisterId, _uploadFile, _downloadFile, options = {}) {
   const agent = options.agent || HttpAgent.createSync({
@@ -36131,16 +36889,516 @@ function createActor(canisterId, _uploadFile, _downloadFile, options = {}) {
   });
   return new Backend(actor, _uploadFile, _downloadFile, options.processError);
 }
+function useCalendarEvents() {
+  const { actor, isFetching } = useActor(createActor);
+  return useQuery({
+    queryKey: ["calendarEvents"],
+    queryFn: async () => {
+      if (!actor) return [];
+      return actor.getEvents();
+    },
+    enabled: !!actor && !isFetching
+  });
+}
+function useCreateEvent() {
+  const { actor } = useActor(createActor);
+  const queryClient2 = useQueryClient();
+  return useMutation({
+    mutationFn: async (input) => {
+      if (!actor) throw new Error("Actor not ready");
+      return actor.createEvent(input);
+    },
+    onSuccess: () => {
+      queryClient2.invalidateQueries({ queryKey: ["calendarEvents"] });
+    }
+  });
+}
+function useDeleteEvent() {
+  const { actor } = useActor(createActor);
+  const queryClient2 = useQueryClient();
+  return useMutation({
+    mutationFn: async (id2) => {
+      if (!actor) throw new Error("Actor not ready");
+      return actor.deleteEvent(id2);
+    },
+    onSuccess: () => {
+      queryClient2.invalidateQueries({ queryKey: ["calendarEvents"] });
+    }
+  });
+}
+function useUpdateEvent() {
+  const { actor } = useActor(createActor);
+  const queryClient2 = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      id: id2,
+      input
+    }) => {
+      if (!actor) throw new Error("Actor not ready");
+      return actor.updateEvent(id2, input);
+    },
+    onSuccess: () => {
+      queryClient2.invalidateQueries({ queryKey: ["calendarEvents"] });
+    }
+  });
+}
+const CATEGORIES = ["Hackathon", "Workshop", "Meeting", "Social", "Other"];
+const EMPTY_FORM = {
+  subject: "",
+  description: "",
+  date: "",
+  time: "",
+  category: "Other"
+};
+function EventForm({
+  initial,
+  onSubmit,
+  onCancel,
+  isPending,
+  title
+}) {
+  const [form, setForm] = reactExports.useState(initial);
+  reactExports.useEffect(() => {
+    setForm(initial);
+  }, [initial]);
+  function handleChange(field, value) {
+    setForm((prev) => ({ ...prev, [field]: value }));
+  }
+  function handleSubmit(e) {
+    e.preventDefault();
+    if (!form.subject.trim() || !form.date) return;
+    onSubmit(form);
+  }
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+    "form",
+    {
+      onSubmit: handleSubmit,
+      className: "bg-card border border-border rounded-xl p-5 space-y-4",
+      children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "font-display font-bold text-sm uppercase tracking-widest text-muted-foreground", children: title }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-1 sm:grid-cols-2 gap-4", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sm:col-span-2 space-y-1.5", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs(
+              Label,
+              {
+                htmlFor: "ev-subject",
+                className: "text-xs font-display uppercase tracking-wider text-muted-foreground",
+                children: [
+                  "Subject ",
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-destructive", children: "*" })
+                ]
+              }
+            ),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              Input,
+              {
+                id: "ev-subject",
+                value: form.subject,
+                onChange: (e) => handleChange("subject", e.target.value),
+                placeholder: "e.g. Hackathon Kickoff",
+                className: "bg-muted/40 border-border text-foreground placeholder:text-muted-foreground focus-visible:ring-primary/40 text-sm",
+                "data-ocid": "calendar-form.subject_input",
+                required: true
+              }
+            )
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-1.5", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs(
+              Label,
+              {
+                htmlFor: "ev-date",
+                className: "text-xs font-display uppercase tracking-wider text-muted-foreground",
+                children: [
+                  "Date ",
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-destructive", children: "*" })
+                ]
+              }
+            ),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(Calendar, { className: "absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground pointer-events-none" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                Input,
+                {
+                  id: "ev-date",
+                  type: "date",
+                  value: form.date,
+                  onChange: (e) => handleChange("date", e.target.value),
+                  className: "pl-9 bg-muted/40 border-border text-foreground focus-visible:ring-primary/40 text-sm",
+                  "data-ocid": "calendar-form.date_input",
+                  required: true
+                }
+              )
+            ] })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-1.5", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              Label,
+              {
+                htmlFor: "ev-time",
+                className: "text-xs font-display uppercase tracking-wider text-muted-foreground",
+                children: "Time"
+              }
+            ),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(Clock, { className: "absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground pointer-events-none" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                Input,
+                {
+                  id: "ev-time",
+                  type: "time",
+                  value: form.time,
+                  onChange: (e) => handleChange("time", e.target.value),
+                  className: "pl-9 bg-muted/40 border-border text-foreground focus-visible:ring-primary/40 text-sm",
+                  "data-ocid": "calendar-form.time_input"
+                }
+              )
+            ] })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sm:col-span-2 space-y-1.5", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs(
+              Label,
+              {
+                htmlFor: "ev-category",
+                className: "text-xs font-display uppercase tracking-wider text-muted-foreground",
+                children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(Tag, { className: "inline w-3 h-3 mr-1" }),
+                  "Category"
+                ]
+              }
+            ),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "select",
+              {
+                id: "ev-category",
+                value: form.category,
+                onChange: (e) => handleChange("category", e.target.value),
+                className: "w-full h-9 rounded-md border border-border bg-muted/40 text-foreground px-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 font-mono",
+                "data-ocid": "calendar-form.category_select",
+                children: CATEGORIES.map((c2) => /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: c2, children: c2 }, c2))
+              }
+            )
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sm:col-span-2 space-y-1.5", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              Label,
+              {
+                htmlFor: "ev-description",
+                className: "text-xs font-display uppercase tracking-wider text-muted-foreground",
+                children: "Description"
+              }
+            ),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              Textarea,
+              {
+                id: "ev-description",
+                value: form.description,
+                onChange: (e) => handleChange("description", e.target.value),
+                placeholder: "Brief description of the event…",
+                rows: 3,
+                className: "bg-muted/40 border-border text-foreground placeholder:text-muted-foreground focus-visible:ring-primary/40 text-sm resize-none",
+                "data-ocid": "calendar-form.description_textarea"
+              }
+            )
+          ] })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 pt-1", children: [
+          onCancel && /* @__PURE__ */ jsxRuntimeExports.jsxs(
+            Button,
+            {
+              type: "button",
+              variant: "outline",
+              size: "sm",
+              onClick: onCancel,
+              className: "border-border text-muted-foreground hover:text-foreground text-xs flex items-center gap-1.5",
+              "data-ocid": "calendar-form.cancel_button",
+              children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(X, { className: "w-3.5 h-3.5" }),
+                " Cancel"
+              ]
+            }
+          ),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs(
+            Button,
+            {
+              type: "submit",
+              size: "sm",
+              disabled: isPending || !form.subject.trim() || !form.date,
+              className: "btn-primary text-xs flex items-center gap-1.5",
+              "data-ocid": "calendar-form.submit_button",
+              children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(Plus, { className: "w-3.5 h-3.5" }),
+                isPending ? "Saving…" : "Save Event"
+              ]
+            }
+          )
+        ] })
+      ]
+    }
+  );
+}
+function EventRow({
+  event,
+  index: index2,
+  onEdit,
+  onDelete
+}) {
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+    "div",
+    {
+      className: "flex items-start gap-3 p-3 rounded-xl bg-muted/20 border border-border/50 hover:border-primary/30 transition-colors group",
+      "data-ocid": `calendar-event.item.${index2 + 1}`,
+      children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex-1 min-w-0", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 flex-wrap", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "font-display font-semibold text-sm text-foreground truncate", children: event.subject }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-xs font-mono text-muted-foreground bg-muted/60 px-1.5 py-0.5 rounded-md", children: event.category })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 mt-0.5", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-xs text-muted-foreground font-mono", children: event.date }),
+            event.time && /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "text-xs text-muted-foreground font-mono", children: [
+              "· ",
+              event.time
+            ] })
+          ] }),
+          event.description && /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs text-muted-foreground mt-1 line-clamp-2 leading-relaxed", children: event.description })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-1 flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "button",
+            {
+              type: "button",
+              onClick: onEdit,
+              className: "p-1.5 rounded-md text-muted-foreground hover:text-primary hover:bg-primary/10 transition-colors",
+              "aria-label": `Edit ${event.subject}`,
+              "data-ocid": `calendar-event.edit_button.${index2 + 1}`,
+              children: /* @__PURE__ */ jsxRuntimeExports.jsx(Pen, { className: "w-3.5 h-3.5" })
+            }
+          ),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "button",
+            {
+              type: "button",
+              onClick: onDelete,
+              className: "p-1.5 rounded-md text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors",
+              "aria-label": `Delete ${event.subject}`,
+              "data-ocid": `calendar-event.delete_button.${index2 + 1}`,
+              children: /* @__PURE__ */ jsxRuntimeExports.jsx(Trash2, { className: "w-3.5 h-3.5" })
+            }
+          )
+        ] })
+      ]
+    }
+  );
+}
+function EditCalendarTab() {
+  const { data: events2 = [], isLoading } = useCalendarEvents();
+  const { mutate: createEvent, isPending: isCreating } = useCreateEvent();
+  const { mutate: updateEvent, isPending: isUpdating } = useUpdateEvent();
+  const { mutate: deleteEvent, isPending: isDeleting } = useDeleteEvent();
+  const [editingEvent, setEditingEvent] = reactExports.useState(null);
+  const [confirmDeleteId, setConfirmDeleteId] = reactExports.useState(null);
+  const [formKey, setFormKey] = reactExports.useState(0);
+  function handleCreate(input) {
+    createEvent(input, {
+      onSuccess: () => setFormKey((k2) => k2 + 1)
+    });
+  }
+  function handleUpdate(input) {
+    if (!editingEvent) return;
+    updateEvent(
+      { id: editingEvent.id, input },
+      { onSuccess: () => setEditingEvent(null) }
+    );
+  }
+  function handleDelete(id2) {
+    deleteEvent(id2, { onSuccess: () => setConfirmDeleteId(null) });
+  }
+  const sortedEvents = [...events2].sort((a2, b2) => a2.date.localeCompare(b2.date));
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "max-w-screen-xl mx-auto px-4 sm:px-6 py-8 space-y-6", children: [
+    editingEvent ? /* @__PURE__ */ jsxRuntimeExports.jsx(
+      EventForm,
+      {
+        title: "Edit Event",
+        initial: {
+          subject: editingEvent.subject,
+          description: editingEvent.description,
+          date: editingEvent.date,
+          time: editingEvent.time,
+          category: editingEvent.category
+        },
+        onSubmit: handleUpdate,
+        onCancel: () => setEditingEvent(null),
+        isPending: isUpdating
+      }
+    ) : /* @__PURE__ */ jsxRuntimeExports.jsx(
+      EventForm,
+      {
+        title: "Add New Event",
+        initial: EMPTY_FORM,
+        onSubmit: handleCreate,
+        isPending: isCreating
+      },
+      `create-${formKey}`
+    ),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "font-display font-bold text-sm uppercase tracking-widest text-muted-foreground mb-3", children: "All Events" }),
+      isLoading ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "space-y-2", children: [1, 2, 3].map((i) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+        "div",
+        {
+          className: "h-16 rounded-xl bg-muted/30 animate-pulse"
+        },
+        i
+      )) }) : sortedEvents.length === 0 ? /* @__PURE__ */ jsxRuntimeExports.jsxs(
+        "div",
+        {
+          className: "text-center py-10 border border-dashed border-border/50 rounded-xl",
+          "data-ocid": "calendar-events.empty_state",
+          children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(Calendar, { className: "w-8 h-8 text-muted-foreground/40 mx-auto mb-2" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-muted-foreground text-sm font-mono", children: "No events yet — add one above." })
+          ]
+        }
+      ) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "space-y-2", children: sortedEvents.map((ev, idx) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+        EventRow,
+        {
+          event: ev,
+          index: idx,
+          onEdit: () => {
+            setEditingEvent(ev);
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          },
+          onDelete: () => setConfirmDeleteId(ev.id)
+        },
+        String(ev.id)
+      )) })
+    ] }),
+    confirmDeleteId !== null && /* @__PURE__ */ jsxRuntimeExports.jsxs(
+      "div",
+      {
+        className: "fixed inset-0 z-[60] flex items-center justify-center p-4",
+        "data-ocid": "event-delete-confirm.dialog",
+        children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "button",
+            {
+              type: "button",
+              className: "absolute inset-0 bg-black/50 backdrop-blur-sm",
+              onClick: () => setConfirmDeleteId(null),
+              "aria-label": "Cancel"
+            }
+          ),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative w-full max-w-sm bg-card border border-border rounded-2xl shadow-2xl card-elevated p-6 text-center", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-4 bg-destructive/10", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Trash2, { className: "w-6 h-6 text-destructive" }) }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "font-display font-bold text-foreground text-base mb-2", children: "Delete Event" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-muted-foreground text-sm leading-relaxed mb-6", children: "Are you sure you want to delete this event? This cannot be undone." }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-3 justify-center", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                Button,
+                {
+                  type: "button",
+                  "data-ocid": "event-delete-confirm.cancel_button",
+                  variant: "outline",
+                  size: "sm",
+                  onClick: () => setConfirmDeleteId(null),
+                  className: "border-border text-muted-foreground hover:text-foreground text-xs flex-1",
+                  children: "Cancel"
+                }
+              ),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                Button,
+                {
+                  type: "button",
+                  "data-ocid": "event-delete-confirm.confirm_button",
+                  size: "sm",
+                  disabled: isDeleting,
+                  onClick: () => handleDelete(confirmDeleteId),
+                  className: "bg-destructive text-destructive-foreground hover:bg-destructive/90 text-xs flex items-center gap-1.5 flex-1",
+                  children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsx(Trash2, { className: "w-3.5 h-3.5" }),
+                    isDeleting ? "Deleting…" : "Yes, Delete"
+                  ]
+                }
+              )
+            ] })
+          ] })
+        ]
+      }
+    )
+  ] });
+}
+function useGamePlayers() {
+  const { actor, isFetching } = useActor(createActor);
+  return useQuery({
+    queryKey: ["gamePlayers"],
+    queryFn: async () => {
+      if (!actor) return [];
+      return actor.getGamePlayers();
+    },
+    enabled: !!actor && !isFetching
+  });
+}
+function useAllGameScores() {
+  const { actor, isFetching } = useActor(createActor);
+  return useQuery({
+    queryKey: ["allGameScores"],
+    queryFn: async () => {
+      if (!actor) return [];
+      return actor.getAllGameScores();
+    },
+    enabled: !!actor && !isFetching
+  });
+}
+function useDeleteGamePlayer() {
+  const { actor } = useActor(createActor);
+  const queryClient2 = useQueryClient();
+  return useMutation({
+    mutationFn: async (playerId) => {
+      if (!actor) throw new Error("Actor not available");
+      return actor.deleteGamePlayer(playerId);
+    },
+    onSuccess: () => {
+      queryClient2.invalidateQueries({ queryKey: ["gamePlayers"] });
+      queryClient2.invalidateQueries({ queryKey: ["allGameScores"] });
+    }
+  });
+}
+function useDeleteGameScore() {
+  const { actor } = useActor(createActor);
+  const queryClient2 = useQueryClient();
+  return useMutation({
+    mutationFn: async (scoreId) => {
+      if (!actor) throw new Error("Actor not available");
+      return actor.deleteGameScore(scoreId);
+    },
+    onSuccess: () => {
+      queryClient2.invalidateQueries({ queryKey: ["allGameScores"] });
+      queryClient2.invalidateQueries({ queryKey: ["topScores"] });
+      queryClient2.invalidateQueries({ queryKey: ["grandLeaderboard"] });
+    }
+  });
+}
 function useApplications() {
   const { actor, isFetching } = useActor(createActor);
   return useQuery({
     queryKey: ["applications"],
     queryFn: async () => {
       if (!actor) return [];
-      const result = await actor.getApplications();
-      return result;
+      return actor.getApplications();
     },
     enabled: !!actor && !isFetching
+  });
+}
+function useApproveApplication() {
+  const { actor } = useActor(createActor);
+  const queryClient2 = useQueryClient();
+  return useMutation({
+    mutationFn: async (id2) => {
+      if (!actor) throw new Error("Actor not ready");
+      return actor.approveApplication(id2);
+    },
+    onSuccess: () => {
+      queryClient2.invalidateQueries({ queryKey: ["applications"] });
+    }
   });
 }
 function useDeleteApplication() {
@@ -36149,12 +37407,73 @@ function useDeleteApplication() {
   return useMutation({
     mutationFn: async (id2) => {
       if (!actor) throw new Error("Actor not ready");
-      await actor.deleteApplication(id2);
+      return actor.deleteApplication(id2);
     },
     onSuccess: () => {
       queryClient2.invalidateQueries({ queryKey: ["applications"] });
     }
   });
+}
+function useTopScores(gameId, limit = 10) {
+  const { actor, isFetching } = useActor(createActor);
+  return useQuery({
+    queryKey: ["topScores", gameId, limit],
+    queryFn: async () => {
+      if (!actor) return [];
+      return actor.getTopScores(gameId, BigInt(limit));
+    },
+    enabled: !!actor && !isFetching
+  });
+}
+function usePlayerRank(gameId, playerId) {
+  const { actor, isFetching } = useActor(createActor);
+  return useQuery({
+    queryKey: ["playerRank", gameId, playerId],
+    queryFn: async () => {
+      if (!actor || !playerId) return null;
+      return actor.getPlayerRank(gameId, playerId);
+    },
+    enabled: !!actor && !isFetching && !!playerId
+  });
+}
+function useGrandLeaderboard(limit = 10) {
+  const { actor, isFetching } = useActor(createActor);
+  return useQuery({
+    queryKey: ["grandLeaderboard", limit],
+    queryFn: async () => {
+      if (!actor) return [];
+      return actor.getGrandLeaderboard(BigInt(limit));
+    },
+    enabled: !!actor && !isFetching
+  });
+}
+function useSubmitGameScore() {
+  const { actor } = useActor(createActor);
+  const queryClient2 = useQueryClient();
+  return useMutation({
+    mutationFn: async (params) => {
+      if (!actor) throw new Error("Actor not available");
+      const result = await actor.submitGameScore(
+        params.playerId,
+        params.gameId,
+        BigInt(params.score),
+        BigInt(params.kills),
+        BigInt(params.waves)
+      );
+      if (result.__kind__ === "err") throw new Error(result.err);
+      return result.ok;
+    },
+    onSuccess: (_2, vars) => {
+      queryClient2.invalidateQueries({ queryKey: ["topScores", vars.gameId] });
+      queryClient2.invalidateQueries({
+        queryKey: ["playerRank", vars.gameId, vars.playerId]
+      });
+      queryClient2.invalidateQueries({ queryKey: ["grandLeaderboard"] });
+    }
+  });
+}
+function isApproved(app) {
+  return app.status === ApplicationStatus.approved;
 }
 function formatTimestamp(ns) {
   const ms = Number(ns / 1000000n);
@@ -36261,8 +37580,10 @@ function AppRow({
   app,
   index: index2,
   onClick,
-  onDelete
+  onDelete,
+  onApprove
 }) {
+  const approved = isApproved(app);
   return /* @__PURE__ */ jsxRuntimeExports.jsxs(
     TableRow,
     {
@@ -36272,7 +37593,17 @@ function AppRow({
       children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "text-muted-foreground font-mono text-xs w-10", children: index2 + 1 }),
         /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "text-muted-foreground text-xs whitespace-nowrap", children: formatTimestamp(app.submittedAt) }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "font-medium text-foreground whitespace-nowrap", children: app.name }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "font-medium text-foreground whitespace-nowrap", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2", children: [
+          app.name,
+          approved && /* @__PURE__ */ jsxRuntimeExports.jsx(
+            Badge,
+            {
+              variant: "outline",
+              className: "border-emerald-500/40 text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 font-mono text-[10px] uppercase tracking-wider",
+              children: "Approved"
+            }
+          )
+        ] }) }),
         /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "whitespace-nowrap", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
           "a",
           {
@@ -36294,17 +37625,379 @@ function AppRow({
         /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "text-foreground whitespace-nowrap text-sm", children: app.department }),
         /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "max-w-[220px]", children: /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-foreground text-sm line-clamp-2 leading-relaxed", children: app.reasonForJoining }) }),
         /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "max-w-[180px]", children: app.priorExperience ? /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-muted-foreground text-sm line-clamp-2 leading-relaxed", children: app.priorExperience }) : /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "italic text-muted-foreground/50 text-sm", children: "None" }) }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-          "button",
-          {
-            type: "button",
-            "data-ocid": `application.delete_button.${index2 + 1}`,
-            "aria-label": `Delete application from ${app.name}`,
-            onClick: onDelete,
-            className: "p-1.5 rounded-md text-muted-foreground/50 hover:text-destructive hover:bg-destructive/10 transition-colors",
-            children: /* @__PURE__ */ jsxRuntimeExports.jsx(Trash2, { className: "w-3.5 h-3.5" })
-          }
-        ) })
+        /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-1", children: [
+          !approved && /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "button",
+            {
+              type: "button",
+              "data-ocid": `application.approve_button.${index2 + 1}`,
+              "aria-label": `Approve application from ${app.name}`,
+              onClick: onApprove,
+              className: "p-1.5 rounded-md text-muted-foreground/50 hover:text-emerald-600 hover:bg-emerald-500/10 transition-colors",
+              children: /* @__PURE__ */ jsxRuntimeExports.jsx(CircleCheckBig, { className: "w-3.5 h-3.5" })
+            }
+          ),
+          !approved && /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "button",
+            {
+              type: "button",
+              "data-ocid": `application.delete_button.${index2 + 1}`,
+              "aria-label": `Delete application from ${app.name}`,
+              onClick: onDelete,
+              className: "p-1.5 rounded-md text-muted-foreground/50 hover:text-destructive hover:bg-destructive/10 transition-colors",
+              children: /* @__PURE__ */ jsxRuntimeExports.jsx(Trash2, { className: "w-3.5 h-3.5" })
+            }
+          )
+        ] }) })
+      ]
+    }
+  );
+}
+const PLAYER_SKEL_IDS = ["ps-a", "ps-b", "ps-c", "ps-d"];
+const PLAYER_COL_IDS = ["p1", "p2", "p3", "p4"];
+function GamePlayersTab() {
+  const { data: players = [], isLoading, isError } = useGamePlayers();
+  const { mutate: deletePlayer, isPending: isDeleting } = useDeleteGamePlayer();
+  const [confirmDeleteId, setConfirmDeleteId] = reactExports.useState(null);
+  function formatTs(ns) {
+    const ms = Number(ns / 1000000n);
+    return new Date(ms).toLocaleString("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric"
+    });
+  }
+  const PLAYER_HEADERS = ["#", "Username", "Player ID", "Joined", ""];
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+    "main",
+    {
+      className: "max-w-screen-xl mx-auto px-4 sm:px-6 py-8",
+      "data-ocid": "game-players.section",
+      children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mb-6", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("h2", { className: "font-display font-bold text-xl text-foreground tracking-wide flex items-center gap-2", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(Gamepad2, { className: "w-5 h-5 text-primary" }),
+            "Game Players"
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-muted-foreground text-sm mt-0.5", children: isLoading ? "Loading players…" : `${players.length} registered players` })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "bg-card border border-border rounded-xl overflow-hidden card-elevated", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "overflow-x-auto", "data-ocid": "game-players.table", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(Table, { children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(TableHeader, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(TableRow, { className: "border-border/60 bg-muted/40", children: PLAYER_HEADERS.map((col) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+            TableHead,
+            {
+              className: "text-muted-foreground font-display text-xs tracking-widest uppercase whitespace-nowrap py-3",
+              children: col
+            },
+            col
+          )) }) }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(TableBody, { children: isLoading ? /* @__PURE__ */ jsxRuntimeExports.jsx(jsxRuntimeExports.Fragment, { children: PLAYER_SKEL_IDS.map((rowId) => /* @__PURE__ */ jsxRuntimeExports.jsx(TableRow, { className: "border-border/40", children: PLAYER_COL_IDS.map((colId) => /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-4 w-full" }) }, `${rowId}-${colId}`)) }, rowId)) }) : isError ? /* @__PURE__ */ jsxRuntimeExports.jsx(TableRow, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+            TableCell,
+            {
+              colSpan: 5,
+              className: "h-32 text-center text-destructive text-sm",
+              "data-ocid": "game-players.error_state",
+              children: "Failed to load game players. Please try again."
+            }
+          ) }) : players.length === 0 ? /* @__PURE__ */ jsxRuntimeExports.jsx(TableRow, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+            TableCell,
+            {
+              colSpan: 5,
+              className: "h-48 text-center",
+              "data-ocid": "game-players.empty_state",
+              children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col items-center gap-3 py-8", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-12 h-12 rounded-lg flex items-center justify-center bg-muted/50", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Gamepad2, { className: "w-6 h-6 text-muted-foreground" }) }),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "font-display font-semibold text-foreground", children: "No players yet" }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-muted-foreground text-sm mt-1", children: "Players will appear here once they register in the Games Hub." })
+                ] })
+              ] })
+            }
+          ) }) : players.map((player, i) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
+            TableRow,
+            {
+              className: "border-border/40 hover:bg-muted/20 transition-colors",
+              "data-ocid": `game-players.item.${i + 1}`,
+              children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "text-muted-foreground font-mono text-xs w-10", children: i + 1 }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "font-medium text-foreground", children: player.username }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "font-mono text-xs text-muted-foreground", children: player.playerId }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "text-muted-foreground text-sm whitespace-nowrap", children: formatTs(player.createdAt) }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { children: confirmDeleteId === player.playerId ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[10px] text-destructive font-mono whitespace-nowrap", children: "Are you sure?" }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(
+                    "button",
+                    {
+                      type: "button",
+                      "data-ocid": `game-players.cancel_button.${i + 1}`,
+                      onClick: () => setConfirmDeleteId(null),
+                      className: "text-[10px] px-2 py-1 rounded border border-border text-muted-foreground hover:text-foreground transition-colors",
+                      children: "No"
+                    }
+                  ),
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                    "button",
+                    {
+                      type: "button",
+                      "data-ocid": `game-players.confirm_button.${i + 1}`,
+                      disabled: isDeleting,
+                      onClick: () => deletePlayer(player.playerId, {
+                        onSuccess: () => setConfirmDeleteId(null)
+                      }),
+                      className: "text-[10px] px-2 py-1 rounded bg-destructive text-destructive-foreground hover:bg-destructive/90 transition-colors flex items-center gap-1 disabled:opacity-60",
+                      children: [
+                        /* @__PURE__ */ jsxRuntimeExports.jsx(Trash2, { className: "w-2.5 h-2.5" }),
+                        isDeleting ? "…" : "Yes"
+                      ]
+                    }
+                  )
+                ] }) : /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  "button",
+                  {
+                    type: "button",
+                    "data-ocid": `game-players.delete_button.${i + 1}`,
+                    "aria-label": `Delete player ${player.username}`,
+                    onClick: () => setConfirmDeleteId(player.playerId),
+                    className: "p-1.5 rounded-md text-muted-foreground/50 hover:text-destructive hover:bg-destructive/10 transition-colors",
+                    children: /* @__PURE__ */ jsxRuntimeExports.jsx(Trash2, { className: "w-3.5 h-3.5" })
+                  }
+                ) })
+              ]
+            },
+            player.playerId
+          )) })
+        ] }) }) })
+      ]
+    }
+  );
+}
+const LB_SKEL_IDS = ["lb-a", "lb-b", "lb-c", "lb-d", "lb-e"];
+const LB_COL_IDS = ["l1", "l2", "l3", "l4", "l5", "l6", "l7"];
+function GameLeaderboardsTab() {
+  const {
+    data: scores = [],
+    isLoading: scoresLoading,
+    isError: scoresError
+  } = useAllGameScores();
+  const { data: players = [], isLoading: playersLoading } = useGamePlayers();
+  const { mutate: deleteScore, isPending: isDeletingScore } = useDeleteGameScore();
+  const [confirmDeleteScoreId, setConfirmDeleteScoreId] = reactExports.useState(null);
+  const isLoading = scoresLoading || playersLoading;
+  const playerMap = reactExports.useMemo(() => {
+    const m2 = {};
+    for (const p2 of players) {
+      m2[p2.playerId] = p2.username;
+    }
+    return m2;
+  }, [players]);
+  const spaceShooterTop10 = reactExports.useMemo(() => {
+    return [...scores].filter((s2) => s2.gameId === "space-shooter").sort((a2, b2) => Number(b2.score - a2.score)).slice(0, 10);
+  }, [scores]);
+  const { data: grandRankings = [] } = useGrandLeaderboard(20);
+  function formatDate(ns) {
+    const ms = Number(ns / 1000000n);
+    return new Date(ms).toLocaleString("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric"
+    });
+  }
+  const LB_HEADERS = [
+    "Rank",
+    "Username",
+    "Score",
+    "Enemies Killed",
+    "Waves",
+    "Date",
+    ""
+  ];
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+    "main",
+    {
+      className: "max-w-screen-xl mx-auto px-4 sm:px-6 py-8",
+      "data-ocid": "game-leaderboards.section",
+      children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mb-6", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("h2", { className: "font-display font-bold text-xl text-foreground tracking-wide flex items-center gap-2", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(Trophy, { className: "w-5 h-5 text-primary" }),
+            "Game Leaderboards"
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-muted-foreground text-sm mt-0.5", children: "Top 10 scores per game. Delete any score with confirmation." })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-3 mb-4", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-8 h-8 rounded-lg flex items-center justify-center bg-primary/12", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Gamepad2, { className: "w-4 h-4 text-primary" }) }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "font-display font-semibold text-foreground tracking-wide text-base", children: "Space Shooter Leaderboard" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-muted-foreground text-xs font-mono", children: "game-id: space-shooter" })
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs(
+              Badge,
+              {
+                variant: "outline",
+                className: "ml-auto text-xs font-mono bg-primary/8 text-primary border-primary/30",
+                children: [
+                  "Top ",
+                  Math.min(spaceShooterTop10.length, 10)
+                ]
+              }
+            )
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "bg-card border border-border rounded-xl overflow-hidden card-elevated", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "overflow-x-auto", "data-ocid": "game-leaderboards.table", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(Table, { children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(TableHeader, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(TableRow, { className: "border-border/60 bg-muted/40", children: LB_HEADERS.map((col) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+              TableHead,
+              {
+                className: "text-muted-foreground font-display text-xs tracking-widest uppercase whitespace-nowrap py-3",
+                children: col
+              },
+              col
+            )) }) }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(TableBody, { children: isLoading ? /* @__PURE__ */ jsxRuntimeExports.jsx(jsxRuntimeExports.Fragment, { children: LB_SKEL_IDS.map((rowId) => /* @__PURE__ */ jsxRuntimeExports.jsx(TableRow, { className: "border-border/40", children: LB_COL_IDS.map((colId) => /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-4 w-full" }) }, `${rowId}-${colId}`)) }, rowId)) }) : scoresError ? /* @__PURE__ */ jsxRuntimeExports.jsx(TableRow, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+              TableCell,
+              {
+                colSpan: 7,
+                className: "h-32 text-center text-destructive text-sm",
+                "data-ocid": "game-leaderboards.error_state",
+                children: "Failed to load scores. Please try again."
+              }
+            ) }) : spaceShooterTop10.length === 0 ? /* @__PURE__ */ jsxRuntimeExports.jsx(TableRow, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+              TableCell,
+              {
+                colSpan: 7,
+                className: "h-48 text-center",
+                "data-ocid": "game-leaderboards.empty_state",
+                children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col items-center gap-3 py-8", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-12 h-12 rounded-lg flex items-center justify-center bg-muted/50", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Trophy, { className: "w-6 h-6 text-muted-foreground" }) }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "font-display font-semibold text-foreground", children: "No scores yet" }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-muted-foreground text-sm mt-1", children: "Scores will appear here once players finish a game." })
+                  ] })
+                ] })
+              }
+            ) }) : spaceShooterTop10.map((score, i) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
+              TableRow,
+              {
+                className: "border-border/40 hover:bg-muted/20 transition-colors",
+                "data-ocid": `game-leaderboards.item.${i + 1}`,
+                children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "font-mono text-sm w-12", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                    "span",
+                    {
+                      className: `font-bold ${i === 0 ? "text-yellow-500" : i === 1 ? "text-slate-400" : i === 2 ? "text-amber-600" : "text-muted-foreground"}`,
+                      children: [
+                        "#",
+                        i + 1
+                      ]
+                    }
+                  ) }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "font-medium text-foreground", children: playerMap[score.playerId] ?? score.playerId }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "font-mono font-bold text-primary tabular-nums", children: Number(score.score).toLocaleString() }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "font-mono text-sm text-foreground tabular-nums", children: Number(score.killedEnemies).toLocaleString() }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "font-mono text-sm text-foreground tabular-nums", children: Number(score.wavesCleared) }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "text-muted-foreground text-sm whitespace-nowrap", children: formatDate(score.achievedAt) }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { children: confirmDeleteScoreId === score.scoreId ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2", children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[10px] text-destructive font-mono whitespace-nowrap", children: "Are you sure?" }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx(
+                      "button",
+                      {
+                        type: "button",
+                        "data-ocid": `game-leaderboards.cancel_button.${i + 1}`,
+                        onClick: () => setConfirmDeleteScoreId(null),
+                        className: "text-[10px] px-2 py-1 rounded border border-border text-muted-foreground hover:text-foreground transition-colors",
+                        children: "No"
+                      }
+                    ),
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                      "button",
+                      {
+                        type: "button",
+                        "data-ocid": `game-leaderboards.confirm_button.${i + 1}`,
+                        disabled: isDeletingScore,
+                        onClick: () => deleteScore(score.scoreId, {
+                          onSuccess: () => setConfirmDeleteScoreId(null)
+                        }),
+                        className: "text-[10px] px-2 py-1 rounded bg-destructive text-destructive-foreground hover:bg-destructive/90 transition-colors flex items-center gap-1 disabled:opacity-60",
+                        children: [
+                          /* @__PURE__ */ jsxRuntimeExports.jsx(Trash2, { className: "w-2.5 h-2.5" }),
+                          isDeletingScore ? "…" : "Yes"
+                        ]
+                      }
+                    )
+                  ] }) : /* @__PURE__ */ jsxRuntimeExports.jsx(
+                    "button",
+                    {
+                      type: "button",
+                      "data-ocid": `game-leaderboards.delete_button.${i + 1}`,
+                      "aria-label": `Delete score from ${playerMap[score.playerId] ?? score.playerId}`,
+                      onClick: () => setConfirmDeleteScoreId(score.scoreId),
+                      className: "p-1.5 rounded-md text-muted-foreground/50 hover:text-destructive hover:bg-destructive/10 transition-colors",
+                      children: /* @__PURE__ */ jsxRuntimeExports.jsx(Trash2, { className: "w-3.5 h-3.5" })
+                    }
+                  ) })
+                ]
+              },
+              score.scoreId
+            )) })
+          ] }) }) })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mt-10", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mb-4", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("h3", { className: "font-display font-bold text-lg text-foreground tracking-wide flex items-center gap-2", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(Trophy, { className: "w-5 h-5 text-yellow-500" }),
+              "Grand Arena Rankings"
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-muted-foreground text-sm mt-0.5", children: "Cumulative total scores across all games — top 20 players." })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "bg-card border border-border rounded-xl overflow-hidden card-elevated", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "div",
+            {
+              className: "overflow-x-auto",
+              "data-ocid": "admin.grand-rankings.table",
+              children: /* @__PURE__ */ jsxRuntimeExports.jsxs(Table, { children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(TableHeader, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(TableRow, { className: "border-border/60 bg-muted/40", children: ["Rank", "Username", "Grand Score"].map((col) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  TableHead,
+                  {
+                    className: "text-muted-foreground font-display text-xs tracking-widest uppercase whitespace-nowrap py-3",
+                    children: col
+                  },
+                  col
+                )) }) }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx(TableBody, { children: grandRankings.length === 0 ? /* @__PURE__ */ jsxRuntimeExports.jsx(TableRow, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  TableCell,
+                  {
+                    colSpan: 3,
+                    className: "h-32 text-center",
+                    "data-ocid": "admin.grand-rankings.empty_state",
+                    children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col items-center gap-2 py-6", children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx(Trophy, { className: "w-8 h-8 text-muted-foreground opacity-40" }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-muted-foreground text-sm", children: "No grand rankings yet — scores appear once players submit." })
+                    ] })
+                  }
+                ) }) : grandRankings.map((gr) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                  TableRow,
+                  {
+                    className: "border-border/40 hover:bg-muted/20 transition-colors",
+                    "data-ocid": `admin.grand-rankings.item.${Number(gr.rank)}`,
+                    children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "font-mono text-sm w-16", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                        "span",
+                        {
+                          className: `font-bold ${Number(gr.rank) === 1 ? "text-yellow-500" : Number(gr.rank) === 2 ? "text-slate-400" : Number(gr.rank) === 3 ? "text-amber-600" : "text-muted-foreground"}`,
+                          children: [
+                            "#",
+                            Number(gr.rank)
+                          ]
+                        }
+                      ) }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "font-medium text-foreground", children: gr.username }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "font-mono font-bold text-primary tabular-nums", children: Number(gr.score).toLocaleString() })
+                    ]
+                  },
+                  `admin-gr-${Number(gr.rank)}`
+                )) })
+              ] })
+            }
+          ) })
+        ] })
       ]
     }
   );
@@ -36312,9 +38005,12 @@ function AppRow({
 function Dashboard({ onLock }) {
   const { data: applications = [], isLoading } = useApplications();
   const { mutate: deleteApplication, isPending: isDeleting } = useDeleteApplication();
+  const { mutate: approveApplication, isPending: isApproving } = useApproveApplication();
   const [search, setSearch] = reactExports.useState("");
+  const [activeTab, setActiveTab] = reactExports.useState("applications");
   const [selectedApplication, setSelectedApplication] = reactExports.useState(null);
   const [confirmDeleteId, setConfirmDeleteId] = reactExports.useState(null);
+  const [confirmApproveId, setConfirmApproveId] = reactExports.useState(null);
   reactExports.useEffect(() => {
     function handleKeyDown(e) {
       if (e.key === "Escape") setSelectedApplication(null);
@@ -36334,9 +38030,17 @@ function Dashboard({ onLock }) {
       (app) => app.name.toLowerCase().includes(q2) || app.email.toLowerCase().includes(q2)
     );
   }, [applications, search]);
-  function handleRowDelete(app, e) {
+  function handleRowApprove(app, e) {
     e.stopPropagation();
-    deleteApplication(app.id);
+    setConfirmApproveId(app.id);
+  }
+  function handleConfirmApprove(id2) {
+    approveApplication(id2, {
+      onSuccess: () => {
+        setConfirmApproveId(null);
+        setSelectedApplication(null);
+      }
+    });
   }
   const TABLE_HEADERS = [
     "#",
@@ -36383,7 +38087,61 @@ function Dashboard({ onLock }) {
         }
       )
     ] }) }),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("main", { className: "max-w-screen-xl mx-auto px-4 sm:px-6 py-8", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "border-b border-border bg-card", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "max-w-screen-xl mx-auto px-4 sm:px-6", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex gap-0", "data-ocid": "admin-tabs", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs(
+        "button",
+        {
+          type: "button",
+          onClick: () => setActiveTab("applications"),
+          "data-ocid": "admin-tab.applications",
+          className: `flex items-center gap-2 px-4 py-3 text-sm font-display font-semibold border-b-2 transition-colors ${activeTab === "applications" ? "border-primary text-primary" : "border-transparent text-muted-foreground hover:text-foreground"}`,
+          children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(Users, { className: "w-4 h-4" }),
+            "Member Applications"
+          ]
+        }
+      ),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs(
+        "button",
+        {
+          type: "button",
+          onClick: () => setActiveTab("calendar"),
+          "data-ocid": "admin-tab.calendar",
+          className: `flex items-center gap-2 px-4 py-3 text-sm font-display font-semibold border-b-2 transition-colors ${activeTab === "calendar" ? "border-primary text-primary" : "border-transparent text-muted-foreground hover:text-foreground"}`,
+          children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(CalendarDays, { className: "w-4 h-4" }),
+            "Edit Calendar"
+          ]
+        }
+      ),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs(
+        "button",
+        {
+          type: "button",
+          onClick: () => setActiveTab("game-players"),
+          "data-ocid": "admin-tab.game-players",
+          className: `flex items-center gap-2 px-4 py-3 text-sm font-display font-semibold border-b-2 transition-colors ${activeTab === "game-players" ? "border-primary text-primary" : "border-transparent text-muted-foreground hover:text-foreground"}`,
+          children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(Gamepad2, { className: "w-4 h-4" }),
+            "Game Players"
+          ]
+        }
+      ),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs(
+        "button",
+        {
+          type: "button",
+          onClick: () => setActiveTab("game-leaderboards"),
+          "data-ocid": "admin-tab.game-leaderboards",
+          className: `flex items-center gap-2 px-4 py-3 text-sm font-display font-semibold border-b-2 transition-colors ${activeTab === "game-leaderboards" ? "border-primary text-primary" : "border-transparent text-muted-foreground hover:text-foreground"}`,
+          children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(Trophy, { className: "w-4 h-4" }),
+            "Game Leaderboards"
+          ]
+        }
+      )
+    ] }) }) }),
+    activeTab === "calendar" ? /* @__PURE__ */ jsxRuntimeExports.jsx(EditCalendarTab, {}) : activeTab === "game-players" ? /* @__PURE__ */ jsxRuntimeExports.jsx(GamePlayersTab, {}) : activeTab === "game-leaderboards" ? /* @__PURE__ */ jsxRuntimeExports.jsx(GameLeaderboardsTab, {}) : /* @__PURE__ */ jsxRuntimeExports.jsxs("main", { className: "max-w-screen-xl mx-auto px-4 sm:px-6 py-8", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
           /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "font-display font-bold text-xl text-foreground tracking-wide", children: "Member Applications" }),
@@ -36415,7 +38173,7 @@ function Dashboard({ onLock }) {
         /* @__PURE__ */ jsxRuntimeExports.jsx(TableBody, { children: isLoading ? /* @__PURE__ */ jsxRuntimeExports.jsx(TableSkeleton, {}) : filtered.length === 0 ? /* @__PURE__ */ jsxRuntimeExports.jsx(TableRow, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(
           TableCell,
           {
-            colSpan: 9,
+            colSpan: 10,
             className: "h-48 text-center",
             "data-ocid": "empty-state",
             children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col items-center gap-3 py-8", children: [
@@ -36432,7 +38190,11 @@ function Dashboard({ onLock }) {
             app,
             index: i,
             onClick: () => setSelectedApplication(app),
-            onDelete: (e) => handleRowDelete(app, e)
+            onDelete: (e) => {
+              e.stopPropagation();
+              setConfirmDeleteId(app.id);
+            },
+            onApprove: (e) => handleRowApprove(app, e)
           },
           String(app.id)
         )) })
@@ -36444,6 +38206,131 @@ function Dashboard({ onLock }) {
         " applications"
       ] })
     ] }),
+    confirmApproveId !== null && /* @__PURE__ */ jsxRuntimeExports.jsxs(
+      "div",
+      {
+        className: "fixed inset-0 z-[60] flex items-center justify-center p-4",
+        "data-ocid": "approve-confirm.dialog",
+        children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "button",
+            {
+              type: "button",
+              className: "absolute inset-0 bg-black/50 backdrop-blur-sm",
+              onClick: () => setConfirmApproveId(null),
+              "aria-label": "Cancel approval"
+            }
+          ),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative w-full max-w-sm bg-card border border-border rounded-2xl shadow-2xl card-elevated p-6 text-center", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-4 bg-emerald-500/10", children: /* @__PURE__ */ jsxRuntimeExports.jsx(CircleCheckBig, { className: "w-6 h-6 text-emerald-600 dark:text-emerald-400" }) }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "font-display font-bold text-foreground text-base mb-2", children: "Approve Application" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-muted-foreground text-sm leading-relaxed mb-6", children: [
+              "Are you sure you want to approve this application? The status will be permanently set to",
+              " ",
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-emerald-600 dark:text-emerald-400 font-medium", children: "Approved" }),
+              " ",
+              "and cannot be deleted afterward."
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-3 justify-center", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                Button,
+                {
+                  type: "button",
+                  "data-ocid": "approve-confirm.cancel_button",
+                  variant: "outline",
+                  size: "sm",
+                  onClick: () => setConfirmApproveId(null),
+                  className: "border-border text-muted-foreground hover:text-foreground text-xs flex-1",
+                  children: "Cancel"
+                }
+              ),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                Button,
+                {
+                  type: "button",
+                  "data-ocid": "approve-confirm.confirm_button",
+                  size: "sm",
+                  disabled: isApproving,
+                  onClick: () => handleConfirmApprove(confirmApproveId),
+                  className: "bg-emerald-600 text-white hover:bg-emerald-700 transition-smooth text-xs flex items-center gap-1.5 flex-1",
+                  children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsx(CircleCheckBig, { className: "w-3.5 h-3.5" }),
+                    isApproving ? "Approving…" : "Yes, Approve"
+                  ]
+                }
+              )
+            ] })
+          ] })
+        ]
+      }
+    ),
+    confirmDeleteId !== null && selectedApplication === null && (() => {
+      const targetApp = applications.find((a2) => a2.id === confirmDeleteId) ?? null;
+      return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+        "div",
+        {
+          className: "fixed inset-0 z-[60] flex items-center justify-center p-4",
+          "data-ocid": "delete-confirm.dialog",
+          children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "button",
+              {
+                type: "button",
+                className: "absolute inset-0 bg-black/50 backdrop-blur-sm",
+                onClick: () => setConfirmDeleteId(null),
+                "aria-label": "Cancel delete"
+              }
+            ),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative w-full max-w-sm bg-card border border-border rounded-2xl shadow-2xl card-elevated p-6 text-center", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-4 bg-destructive/10", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Trash2, { className: "w-6 h-6 text-destructive" }) }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "font-display font-bold text-foreground text-base mb-2", children: "Delete Application" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-muted-foreground text-sm leading-relaxed mb-1", children: [
+                "Are you sure you want to delete the application from",
+                " ",
+                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-foreground font-medium", children: (targetApp == null ? void 0 : targetApp.name) ?? "this applicant" }),
+                "?"
+              ] }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-muted-foreground/70 text-xs mb-6 font-mono", children: "This action cannot be undone." }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-3 justify-center", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  Button,
+                  {
+                    type: "button",
+                    "data-ocid": "delete-confirm.cancel_button",
+                    variant: "outline",
+                    size: "sm",
+                    onClick: () => setConfirmDeleteId(null),
+                    className: "border-border text-muted-foreground hover:text-foreground text-xs flex-1",
+                    children: "Cancel"
+                  }
+                ),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                  Button,
+                  {
+                    type: "button",
+                    "data-ocid": "delete-confirm.confirm_button",
+                    size: "sm",
+                    disabled: isDeleting,
+                    onClick: () => {
+                      deleteApplication(confirmDeleteId, {
+                        onSuccess: () => {
+                          setConfirmDeleteId(null);
+                        }
+                      });
+                    },
+                    className: "bg-destructive text-destructive-foreground hover:bg-destructive/90 transition-smooth text-xs flex items-center gap-1.5 flex-1",
+                    children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx(Trash2, { className: "w-3.5 h-3.5" }),
+                      isDeleting ? "Deleting..." : "Yes, Delete"
+                    ]
+                  }
+                )
+              ] })
+            ] })
+          ]
+        }
+      );
+    })(),
     selectedApplication && /* @__PURE__ */ jsxRuntimeExports.jsxs(
       "div",
       {
@@ -36468,7 +38355,24 @@ function Dashboard({ onLock }) {
               children: [
                 /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sticky top-0 z-10 flex items-center justify-between px-6 py-4 border-b border-border bg-card/95 backdrop-blur-sm", children: [
                   /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-                    /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "font-display font-bold text-lg text-foreground tracking-wide", children: "Application Details" }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2", children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "font-display font-bold text-lg text-foreground tracking-wide", children: "Application Details" }),
+                      isApproved(selectedApplication) ? /* @__PURE__ */ jsxRuntimeExports.jsx(
+                        Badge,
+                        {
+                          variant: "outline",
+                          className: "border-emerald-500/40 text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 font-mono text-[10px] uppercase tracking-wider",
+                          children: "Approved"
+                        }
+                      ) : /* @__PURE__ */ jsxRuntimeExports.jsx(
+                        Badge,
+                        {
+                          variant: "outline",
+                          className: "border-border text-muted-foreground bg-muted/40 font-mono text-[10px] uppercase tracking-wider",
+                          children: "Pending"
+                        }
+                      )
+                    ] }),
                     /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-muted-foreground text-xs mt-0.5 font-mono", children: [
                       "Submitted ",
                       formatTimestamp(selectedApplication.submittedAt)
@@ -36558,10 +38462,10 @@ function Dashboard({ onLock }) {
                         size: "sm",
                         disabled: isDeleting,
                         onClick: () => {
-                          deleteApplication(selectedApplication.id, {
+                          deleteApplication(confirmDeleteId, {
                             onSuccess: () => {
-                              setSelectedApplication(null);
                               setConfirmDeleteId(null);
+                              setSelectedApplication(null);
                             }
                           });
                         },
@@ -36574,7 +38478,7 @@ function Dashboard({ onLock }) {
                     )
                   ] })
                 ] }) : /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
-                  /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                  !isApproved(selectedApplication) && /* @__PURE__ */ jsxRuntimeExports.jsxs(
                     Button,
                     {
                       type: "button",
@@ -36589,18 +38493,35 @@ function Dashboard({ onLock }) {
                       ]
                     }
                   ),
-                  /* @__PURE__ */ jsxRuntimeExports.jsx(
-                    Button,
-                    {
-                      type: "button",
-                      "data-ocid": "application-detail.close_button",
-                      variant: "outline",
-                      size: "sm",
-                      onClick: () => setSelectedApplication(null),
-                      className: "border-border text-muted-foreground hover:text-foreground hover:border-primary/40 transition-smooth text-xs",
-                      children: "Close"
-                    }
-                  )
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 ml-auto", children: [
+                    !isApproved(selectedApplication) && /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                      Button,
+                      {
+                        type: "button",
+                        "data-ocid": "application-detail.approve_button",
+                        size: "sm",
+                        disabled: isApproving,
+                        onClick: () => setConfirmApproveId(selectedApplication.id),
+                        className: "bg-emerald-600 text-white hover:bg-emerald-700 transition-smooth text-xs flex items-center gap-1.5",
+                        children: [
+                          /* @__PURE__ */ jsxRuntimeExports.jsx(CircleCheckBig, { className: "w-3.5 h-3.5" }),
+                          "Approve"
+                        ]
+                      }
+                    ),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx(
+                      Button,
+                      {
+                        type: "button",
+                        "data-ocid": "application-detail.close_button.footer",
+                        variant: "outline",
+                        size: "sm",
+                        onClick: () => setSelectedApplication(null),
+                        className: "border-border text-muted-foreground hover:text-foreground hover:border-primary/40 transition-smooth text-xs",
+                        children: "Close"
+                      }
+                    )
+                  ] })
                 ] }) })
               ]
             }
@@ -36617,10 +38538,3052 @@ function AdminPage() {
   }
   return /* @__PURE__ */ jsxRuntimeExports.jsx(Dashboard, { onLock: () => setUnlocked(false) });
 }
-const Route$2 = createRoute({
-  getParentRoute: () => Route$3,
+const Route$5 = createRoute({
+  getParentRoute: () => Route$6,
   path: "/admin",
   component: AdminPage
+});
+const WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+const MONTHS = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December"
+];
+const SKELETON_CELL_IDS = Array.from(
+  { length: 35 },
+  (_2, i) => `skeleton-cell-${i}`
+);
+const GRID_CELL_IDS = Array.from({ length: 42 }, (_2, i) => `grid-cell-${i}`);
+function getDaysInMonth(year, month) {
+  return new Date(year, month + 1, 0).getDate();
+}
+function getFirstDayOfWeek(year, month) {
+  return new Date(year, month, 1).getDay();
+}
+function toDateKey(year, month, day) {
+  return `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+}
+function categoryColor(category) {
+  const map = {
+    Hackathon: "text-cyan-400",
+    Workshop: "text-purple-400",
+    Meeting: "text-amber-400",
+    Social: "text-emerald-400",
+    Other: "text-muted-foreground"
+  };
+  return map[category] ?? "text-muted-foreground";
+}
+function EventTooltip({ events: events2 }) {
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "calendar-event-tooltip absolute z-50 bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 rounded-xl p-3 shadow-2xl pointer-events-none", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "space-y-3", children: events2.map((ev) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-1", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "font-display font-semibold text-sm text-foreground leading-tight", children: ev.subject }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 flex-wrap", children: [
+        ev.time && /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "flex items-center gap-1 text-xs text-muted-foreground font-mono", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(Clock, { className: "w-3 h-3" }),
+          ev.time
+        ] }),
+        ev.category && /* @__PURE__ */ jsxRuntimeExports.jsxs(
+          "span",
+          {
+            className: `flex items-center gap-1 text-xs font-mono ${categoryColor(ev.category)}`,
+            children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(Tag, { className: "w-3 h-3" }),
+              ev.category
+            ]
+          }
+        )
+      ] }),
+      ev.description && /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs text-muted-foreground leading-relaxed line-clamp-3", children: ev.description })
+    ] }, String(ev.id))) }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute top-full left-1/2 -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-l-transparent border-r-transparent border-t-white/10" })
+  ] });
+}
+function EventDetailModal({
+  events: events2,
+  dateKey,
+  onClose
+}) {
+  reactExports.useEffect(() => {
+    function handleKeyDown(e) {
+      if (e.key === "Escape") onClose();
+    }
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [onClose]);
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+    "div",
+    {
+      className: "fixed inset-0 z-50 flex items-start sm:items-center justify-center p-4 sm:p-6",
+      "data-ocid": "calendar-event-detail.dialog",
+      children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "button",
+          {
+            type: "button",
+            className: "absolute inset-0 bg-black/50 backdrop-blur-sm",
+            onClick: onClose,
+            "aria-label": "Close modal"
+          }
+        ),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative w-full max-w-lg max-h-[90vh] overflow-y-auto calendar-glass rounded-2xl shadow-2xl p-6", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between mb-4", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "font-display font-bold text-lg text-foreground tracking-wide", children: dateKey }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "button",
+              {
+                type: "button",
+                "data-ocid": "calendar-event-detail.close_button",
+                onClick: onClose,
+                className: "p-2 rounded-lg hover:bg-muted/60 transition-colors text-muted-foreground hover:text-foreground",
+                "aria-label": "Close modal",
+                children: /* @__PURE__ */ jsxRuntimeExports.jsx(X, { className: "w-5 h-5" })
+              }
+            )
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "space-y-4", children: events2.map((ev, idx) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
+            "div",
+            {
+              className: "p-4 rounded-xl bg-muted/20 border border-border/50 space-y-2",
+              "data-ocid": `calendar-event-detail.item.${idx + 1}`,
+              children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "font-display font-semibold text-foreground", children: ev.subject }),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-3 flex-wrap", children: [
+                  ev.time && /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "flex items-center gap-1 text-xs text-muted-foreground font-mono", children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsx(Clock, { className: "w-3 h-3" }),
+                    ev.time
+                  ] }),
+                  ev.category && /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                    "span",
+                    {
+                      className: `flex items-center gap-1 text-xs font-mono ${categoryColor(ev.category)}`,
+                      children: [
+                        /* @__PURE__ */ jsxRuntimeExports.jsx(Tag, { className: "w-3 h-3" }),
+                        ev.category
+                      ]
+                    }
+                  )
+                ] }),
+                ev.description && /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm text-muted-foreground leading-relaxed", children: ev.description })
+              ]
+            },
+            String(ev.id)
+          )) })
+        ] })
+      ]
+    }
+  );
+}
+function DayCell({
+  day,
+  dateKey,
+  events: events2,
+  isToday,
+  onClick
+}) {
+  const [hovered, setHovered] = reactExports.useState(false);
+  const hasEvents = events2.length > 0;
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+    "button",
+    {
+      type: "button",
+      className: `relative min-h-[72px] sm:min-h-[90px] p-1.5 sm:p-2 rounded-lg transition-colors duration-150 group text-left w-full ${hasEvents ? "calendar-day-event cursor-pointer" : "hover:bg-muted/20"} ${isToday ? "ring-1 ring-primary/50" : ""}`,
+      onMouseEnter: () => hasEvents && setHovered(true),
+      onMouseLeave: () => setHovered(false),
+      onClick: () => hasEvents && onClick(),
+      disabled: !hasEvents,
+      "data-ocid": `calendar.day.${dateKey}`,
+      children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "span",
+          {
+            className: `text-xs font-mono ${isToday ? "font-bold text-primary" : hasEvents ? "text-foreground" : "text-muted-foreground"}`,
+            children: day
+          }
+        ),
+        hasEvents && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mt-1 flex flex-wrap gap-0.5", children: [
+          events2.slice(0, 3).map((ev) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "span",
+            {
+              className: "block w-1.5 h-1.5 rounded-full bg-primary/80"
+            },
+            String(ev.id)
+          )),
+          events2.length > 3 && /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "text-[9px] text-primary font-mono", children: [
+            "+",
+            events2.length - 3
+          ] })
+        ] }),
+        hasEvents && hovered && /* @__PURE__ */ jsxRuntimeExports.jsx(EventTooltip, { events: events2 })
+      ]
+    }
+  );
+}
+function CalendarPage() {
+  const today = /* @__PURE__ */ new Date();
+  const [viewYear, setViewYear] = reactExports.useState(today.getFullYear());
+  const [viewMonth, setViewMonth] = reactExports.useState(today.getMonth());
+  const { data: events2 = [], isLoading } = useCalendarEvents();
+  const [selectedDateEvents, setSelectedDateEvents] = reactExports.useState(null);
+  const [selectedDateKey, setSelectedDateKey] = reactExports.useState(null);
+  const eventsByDate = events2.reduce(
+    (acc, ev) => {
+      if (!acc[ev.date]) acc[ev.date] = [];
+      acc[ev.date].push(ev);
+      return acc;
+    },
+    {}
+  );
+  function prevMonth() {
+    if (viewMonth === 0) {
+      setViewYear((y2) => y2 - 1);
+      setViewMonth(11);
+    } else setViewMonth((m2) => m2 - 1);
+  }
+  function nextMonth() {
+    if (viewMonth === 11) {
+      setViewYear((y2) => y2 + 1);
+      setViewMonth(0);
+    } else setViewMonth((m2) => m2 + 1);
+  }
+  const daysInMonth = getDaysInMonth(viewYear, viewMonth);
+  const firstDay = getFirstDayOfWeek(viewYear, viewMonth);
+  const totalCells = Math.ceil((firstDay + daysInMonth) / 7) * 7;
+  const todayKey = toDateKey(
+    today.getFullYear(),
+    today.getMonth(),
+    today.getDate()
+  );
+  const upcomingEvents = [...events2].filter((ev) => ev.date >= todayKey).sort((a2, b2) => a2.date.localeCompare(b2.date)).slice(0, 5);
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "min-h-screen bg-background", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "border-b border-border bg-card", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-3", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(Calendar, { className: "w-6 h-6 text-primary" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("h1", { className: "font-display font-bold text-2xl sm:text-3xl text-foreground tracking-wide", children: [
+          "समय ",
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-primary", children: "CODEX" })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-muted-foreground text-sm font-mono mt-0.5", children: "Club events & schedule — CODEX_LETHALIS" })
+      ] })
+    ] }) }) }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-6", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs(
+        "div",
+        {
+          className: "calendar-glass rounded-2xl p-4 sm:p-6",
+          "data-ocid": "calendar.panel",
+          children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between mb-6", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                "button",
+                {
+                  type: "button",
+                  onClick: prevMonth,
+                  className: "p-2 rounded-lg hover:bg-muted/40 transition-colors text-muted-foreground hover:text-foreground",
+                  "aria-label": "Previous month",
+                  "data-ocid": "calendar.pagination_prev",
+                  children: /* @__PURE__ */ jsxRuntimeExports.jsx(ChevronLeft, { className: "w-4 h-4" })
+                }
+              ),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("h2", { className: "font-display font-bold text-lg sm:text-xl text-foreground tracking-wide", children: [
+                MONTHS[viewMonth],
+                " ",
+                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-primary font-mono", children: viewYear })
+              ] }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                "button",
+                {
+                  type: "button",
+                  onClick: nextMonth,
+                  className: "p-2 rounded-lg hover:bg-muted/40 transition-colors text-muted-foreground hover:text-foreground",
+                  "aria-label": "Next month",
+                  "data-ocid": "calendar.pagination_next",
+                  children: /* @__PURE__ */ jsxRuntimeExports.jsx(ChevronRight, { className: "w-4 h-4" })
+                }
+              )
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "grid grid-cols-7 mb-2", children: WEEKDAYS.map((day) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "div",
+              {
+                className: "text-center text-xs font-display font-semibold text-muted-foreground uppercase tracking-wider py-1",
+                children: day
+              },
+              day
+            )) }),
+            isLoading ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "grid grid-cols-7 gap-1", children: SKELETON_CELL_IDS.map((cellId) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "div",
+              {
+                className: "min-h-[72px] rounded-lg bg-muted/30 animate-pulse"
+              },
+              cellId
+            )) }) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "grid grid-cols-7 gap-1", children: GRID_CELL_IDS.slice(0, totalCells).map((cellId, i) => {
+              const day = i - firstDay + 1;
+              const isCurrentMonth = day >= 1 && day <= daysInMonth;
+              if (!isCurrentMonth) {
+                return /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  "div",
+                  {
+                    className: "min-h-[72px] sm:min-h-[90px]"
+                  },
+                  cellId
+                );
+              }
+              const dateKey = toDateKey(viewYear, viewMonth, day);
+              const dayEvents = eventsByDate[dateKey] ?? [];
+              const isToday = dateKey === todayKey;
+              return /* @__PURE__ */ jsxRuntimeExports.jsx(
+                DayCell,
+                {
+                  day,
+                  dateKey,
+                  events: dayEvents,
+                  isToday,
+                  onClick: () => {
+                    setSelectedDateEvents(dayEvents);
+                    setSelectedDateKey(dateKey);
+                  }
+                },
+                dateKey
+              );
+            }) })
+          ]
+        }
+      ),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-4", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs(
+          "div",
+          {
+            className: "calendar-glass rounded-2xl p-4 sm:p-5",
+            "data-ocid": "calendar.upcoming-section",
+            children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "font-display font-bold text-sm uppercase tracking-widest text-muted-foreground mb-4", children: "Upcoming Events" }),
+              isLoading ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "space-y-3", children: [1, 2, 3].map((i) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+                "div",
+                {
+                  className: "h-14 rounded-lg bg-muted/30 animate-pulse"
+                },
+                i
+              )) }) : upcomingEvents.length === 0 ? /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                "div",
+                {
+                  className: "text-center py-6",
+                  "data-ocid": "calendar.empty_state",
+                  children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsx(Calendar, { className: "w-8 h-8 text-muted-foreground/40 mx-auto mb-2" }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-muted-foreground text-xs font-mono", children: "No upcoming events" })
+                  ]
+                }
+              ) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "space-y-3", children: upcomingEvents.map((ev, idx) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                "div",
+                {
+                  className: "p-3 rounded-xl bg-muted/20 border border-border/50 hover:border-primary/30 transition-colors",
+                  "data-ocid": `calendar.upcoming.item.${idx + 1}`,
+                  children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-start justify-between gap-2", children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "font-display font-semibold text-sm text-foreground leading-tight truncate", children: ev.subject }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx(
+                        "span",
+                        {
+                          className: `text-xs font-mono flex-shrink-0 ${categoryColor(ev.category)}`,
+                          children: ev.category
+                        }
+                      )
+                    ] }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 mt-1", children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-xs text-muted-foreground font-mono", children: ev.date }),
+                      ev.time && /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "text-xs text-muted-foreground font-mono", children: [
+                        "· ",
+                        ev.time
+                      ] })
+                    ] })
+                  ]
+                },
+                String(ev.id)
+              )) })
+            ]
+          }
+        ),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs(
+          "div",
+          {
+            className: "calendar-glass rounded-2xl p-4",
+            "data-ocid": "calendar.legend",
+            children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "font-display font-bold text-xs uppercase tracking-widest text-muted-foreground mb-3", children: "Categories" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "space-y-2", children: ["Hackathon", "Workshop", "Meeting", "Social", "Other"].map(
+                (cat) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(
+                    "span",
+                    {
+                      className: `text-xs font-mono ${categoryColor(cat)}`,
+                      children: "◆"
+                    }
+                  ),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-xs text-muted-foreground", children: cat })
+                ] }, cat)
+              ) })
+            ]
+          }
+        )
+      ] })
+    ] }) }),
+    selectedDateEvents && selectedDateKey && /* @__PURE__ */ jsxRuntimeExports.jsx(
+      EventDetailModal,
+      {
+        events: selectedDateEvents,
+        dateKey: selectedDateKey,
+        onClose: () => {
+          setSelectedDateEvents(null);
+          setSelectedDateKey(null);
+        }
+      }
+    )
+  ] });
+}
+const Route$4 = createRoute({
+  getParentRoute: () => Route$6,
+  path: "/calendar",
+  component: CalendarPage
+});
+const GAME_ID = "space-shooter";
+const W = 480;
+const H = 680;
+const PLAYER_W = 28;
+const PLAYER_H = 40;
+const XP_PER_LEVEL = 100;
+const WEAPON_COLORS = {
+  single: "#06b6d4",
+  triple: "#a855f7",
+  homing: "#ec4899",
+  plasma: "#f97316",
+  electric: "#fbbf24"
+};
+const WEAPON_NAMES = {
+  single: "LASER",
+  triple: "TRIPLE",
+  homing: "HOMING",
+  plasma: "PLASMA",
+  electric: "CHAIN"
+};
+const POWERUP_COLORS = {
+  health: "#22c55e",
+  shield: "#06b6d4",
+  rapidfire: "#f59e0b",
+  multiplier: "#ec4899",
+  weapon: "#a855f7"
+};
+const POWERUP_ICONS = {
+  health: "♥",
+  shield: "⬡",
+  rapidfire: "⚡",
+  multiplier: "×2",
+  weapon: "▲"
+};
+const WEAPON_DROPS = ["triple", "homing", "plasma", "electric"];
+const HEART_KEYS = ["h0", "h1", "h2"];
+function mkStars(n, minV, maxV) {
+  return Array.from({ length: n }, () => ({
+    x: Math.random() * W,
+    y: Math.random() * H,
+    vy: minV + Math.random() * (maxV - minV),
+    size: Math.random() * 1.5 + 0.3
+  }));
+}
+function initState() {
+  return {
+    player: { x: W / 2, y: H - 80 },
+    invTimer: 0,
+    lives: 3,
+    shield: false,
+    shieldTimer: 0,
+    rapidFire: false,
+    rapidFireTimer: 0,
+    multiplier: false,
+    multiplierTimer: 0,
+    weapon: "single",
+    weaponTimer: 0,
+    bullets: [],
+    enemies: [],
+    particles: [],
+    powerUps: [],
+    floatTexts: [],
+    stars1: mkStars(40, 0.3, 0.7),
+    stars2: mkStars(30, 1.2, 1.8),
+    stars3: mkStars(20, 2.5, 3.5),
+    score: 0,
+    kills: 0,
+    xp: 0,
+    level: 1,
+    xpToNext: XP_PER_LEVEL,
+    levelUpAnim: 0,
+    coins: 0,
+    wave: 1,
+    waveEnemiesLeft: 0,
+    waveDelay: 0,
+    bossAlive: false,
+    combo: 0,
+    comboTimer: 0,
+    screenShake: 0,
+    shootTimer: 0,
+    idCounter: 0,
+    gameOver: false
+  };
+}
+function nextId(g2) {
+  return ++g2.idCounter;
+}
+function spawnWave(g2) {
+  const isBoss = g2.wave % 5 === 0;
+  if (isBoss) {
+    const hp = 200 + g2.wave * 40;
+    g2.enemies.push({
+      id: nextId(g2),
+      x: W / 2,
+      y: -70,
+      w: 100,
+      h: 60,
+      hp,
+      maxHp: hp,
+      speed: 0.8 + g2.wave * 0.02,
+      type: "boss",
+      color: "#f43f5e",
+      fireTimer: 50,
+      xDir: 1,
+      stealthAlpha: 1,
+      stealthTimer: 9999,
+      sineAngle: 0,
+      baseX: W / 2
+    });
+    g2.bossAlive = true;
+    g2.waveEnemiesLeft = 1;
+  } else {
+    const count = Math.min(8 + (g2.wave - 1) * 2, 20);
+    const speedMul = 1 + (g2.wave - 1) * 0.1;
+    for (let i = 0; i < count; i++) {
+      const r2 = Math.random();
+      let type;
+      if (g2.wave <= 1) type = "fighter";
+      else if (r2 < 0.18) type = "kamikaze";
+      else if (r2 < 0.32) type = "tank";
+      else if (r2 < 0.46) type = "stealth";
+      else if (r2 < 0.6) type = "drone";
+      else type = "fighter";
+      const dims = {
+        fighter: [26, 20],
+        kamikaze: [20, 16],
+        tank: [40, 30],
+        stealth: [24, 18],
+        drone: [22, 22],
+        boss: [100, 60]
+      };
+      const hpMap = {
+        fighter: 10,
+        kamikaze: 6,
+        tank: 30,
+        stealth: 10,
+        drone: 15,
+        boss: 0
+      };
+      const spMap = {
+        fighter: 1.1,
+        kamikaze: 3,
+        tank: 0.5,
+        stealth: 1.6,
+        drone: 0.9,
+        boss: 0
+      };
+      const colMap = {
+        fighter: "#06b6d4",
+        kamikaze: "#f97316",
+        tank: "#ef4444",
+        stealth: "#8b5cf6",
+        drone: "#ec4899",
+        boss: "#f43f5e"
+      };
+      const [w2, h2] = dims[type];
+      const bx = 40 + Math.random() * (W - 80);
+      g2.enemies.push({
+        id: nextId(g2),
+        x: bx,
+        y: -35 - i * 45,
+        w: w2,
+        h: h2,
+        hp: hpMap[type],
+        maxHp: hpMap[type],
+        speed: spMap[type] * speedMul,
+        type,
+        color: colMap[type],
+        fireTimer: 80 + Math.random() * 80,
+        xDir: Math.random() < 0.5 ? 1 : -1,
+        stealthAlpha: 1,
+        stealthTimer: type === "stealth" ? 60 + Math.random() * 60 : 9999,
+        sineAngle: Math.random() * Math.PI * 2,
+        baseX: bx
+      });
+    }
+    g2.waveEnemiesLeft = count;
+    g2.bossAlive = false;
+  }
+}
+function addParticles(g2, x2, y2, color2, n = 14) {
+  for (let i = 0; i < n; i++) {
+    const a2 = Math.PI * 2 * i / n + Math.random() * 0.5;
+    const s2 = Math.random() * 3.5 + 0.8;
+    g2.particles.push({
+      x: x2,
+      y: y2,
+      vx: Math.cos(a2) * s2,
+      vy: Math.sin(a2) * s2,
+      life: 40 + Math.random() * 30,
+      maxLife: 70,
+      color: color2,
+      size: Math.random() * 4 + 1
+    });
+  }
+}
+function addFloat(g2, x2, y2, text, color2) {
+  g2.floatTexts.push({ x: x2, y: y2, text, color: color2, life: 55, vy: -1.1 });
+}
+function overlap(ax, ay, aw, ah, bx, by, bw, bh) {
+  return ax < bx + bw && ax + aw > bx && ay < by + bh && ay + ah > by;
+}
+function nearestEnemy(g2, x2, y2) {
+  let best = null;
+  let bestD = Number.POSITIVE_INFINITY;
+  for (const e of g2.enemies) {
+    const d2 = Math.hypot(e.x - x2, e.y - y2);
+    if (d2 < bestD) {
+      bestD = d2;
+      best = e;
+    }
+  }
+  return best;
+}
+function fireWeapon(g2) {
+  const { x: x2, y: y2 } = g2.player;
+  switch (g2.weapon) {
+    case "single":
+      g2.bullets.push({
+        id: nextId(g2),
+        x: x2,
+        y: y2 - 24,
+        vx: 0,
+        vy: -11,
+        type: "player",
+        color: "#06b6d4",
+        w: 4,
+        h: 14,
+        dmg: 10
+      });
+      break;
+    case "triple":
+      for (let i = -1; i <= 1; i++)
+        g2.bullets.push({
+          id: nextId(g2),
+          x: x2 + i * 12,
+          y: y2 - 18,
+          vx: i * 1.8,
+          vy: -10.5,
+          type: "player",
+          color: "#a855f7",
+          w: 4,
+          h: 12,
+          dmg: 8
+        });
+      break;
+    case "homing": {
+      const t = nearestEnemy(g2, x2, y2);
+      const ang = t ? Math.atan2(t.y - y2, t.x - x2) : -Math.PI / 2;
+      g2.bullets.push({
+        id: nextId(g2),
+        x: x2,
+        y: y2 - 20,
+        vx: Math.cos(ang) * 9,
+        vy: Math.sin(ang) * 9,
+        type: "player",
+        color: "#ec4899",
+        w: 6,
+        h: 6,
+        dmg: 12,
+        targetId: t == null ? void 0 : t.id
+      });
+      break;
+    }
+    case "plasma":
+      g2.bullets.push({
+        id: nextId(g2),
+        x: x2,
+        y: y2 - 10,
+        vx: 0,
+        vy: -5,
+        type: "player",
+        color: "#f97316",
+        w: 22,
+        h: 8,
+        dmg: 20,
+        life: 12
+      });
+      break;
+    case "electric": {
+      const te2 = nearestEnemy(g2, x2, y2);
+      g2.bullets.push({
+        id: nextId(g2),
+        x: x2,
+        y: y2 - 20,
+        vx: te2 ? (te2.x - x2) / 20 : 0,
+        vy: -10,
+        type: "player",
+        color: "#fbbf24",
+        w: 5,
+        h: 18,
+        dmg: 8
+      });
+      break;
+    }
+  }
+}
+function SpaceShooterGame({
+  playerId,
+  username,
+  onExit
+}) {
+  const canvasRef = reactExports.useRef(null);
+  const stateRef = reactExports.useRef(initState());
+  const keysRef = reactExports.useRef(/* @__PURE__ */ new Set());
+  const rafRef = reactExports.useRef(0);
+  const gameRunningRef = reactExports.useRef(false);
+  const touchRef = reactExports.useRef({
+    left: false,
+    right: false
+  });
+  const [uiScore, setUiScore] = reactExports.useState(0);
+  const [uiWave, setUiWave] = reactExports.useState(1);
+  const [uiLives, setUiLives] = reactExports.useState(3);
+  const [uiCombo, setUiCombo] = reactExports.useState(0);
+  const [uiWeapon, setUiWeapon] = reactExports.useState("single");
+  const [uiXp, setUiXp] = reactExports.useState(0);
+  const [uiLevel, setUiLevel] = reactExports.useState(1);
+  const [uiShield, setUiShield] = reactExports.useState(false);
+  const [showLb, setShowLb] = reactExports.useState(false);
+  const [gameOver, setGameOver] = reactExports.useState(null);
+  const [submitted, setSubmitted] = reactExports.useState(false);
+  const submitScore = useSubmitGameScore();
+  const { data: topScores } = useTopScores(GAME_ID, 10);
+  const { data: playerRank } = usePlayerRank(GAME_ID, playerId);
+  const { data: grandRankings = [] } = useGrandLeaderboard(10);
+  const { data: gamePlayers } = useGamePlayers();
+  const playerMap = reactExports.useMemo(() => {
+    const map = {};
+    for (const p2 of gamePlayers ?? []) map[p2.playerId] = p2.username;
+    return map;
+  }, [gamePlayers]);
+  const ctxRef = reactExports.useRef(null);
+  const lastTsRef = reactExports.useRef(-1);
+  const loopRef = reactExports.useRef(null);
+  const startLoop = reactExports.useCallback(() => {
+    if (gameRunningRef.current) return;
+    if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    rafRef.current = 0;
+    lastTsRef.current = -1;
+    const fn = loopRef.current;
+    if (!fn) return;
+    gameRunningRef.current = true;
+    rafRef.current = requestAnimationFrame(fn);
+  }, []);
+  const resetGame = reactExports.useCallback(() => {
+    var _a3;
+    if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    rafRef.current = 0;
+    gameRunningRef.current = false;
+    stateRef.current = initState();
+    spawnWave(stateRef.current);
+    setUiScore(0);
+    setUiWave(1);
+    setUiLives(3);
+    setUiCombo(0);
+    setUiWeapon("single");
+    setUiXp(0);
+    setUiLevel(1);
+    setUiShield(false);
+    setGameOver(null);
+    setSubmitted(false);
+    startLoop();
+    (_a3 = canvasRef.current) == null ? void 0 : _a3.focus();
+  }, [startLoop]);
+  const handleSubmit = reactExports.useCallback(() => {
+    if (!gameOver || submitted) return;
+    setSubmitted(true);
+    submitScore.mutate({
+      playerId,
+      gameId: GAME_ID,
+      score: gameOver.score,
+      kills: gameOver.kills,
+      waves: gameOver.waves
+    });
+  }, [gameOver, submitted, submitScore, playerId]);
+  reactExports.useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+    ctxRef.current = ctx;
+    function onKey(e) {
+      if (["ArrowLeft", "ArrowRight", "Space", "KeyA", "KeyD", "KeyL"].includes(
+        e.code
+      ))
+        e.preventDefault();
+      if (e.type === "keydown") {
+        keysRef.current.add(e.code);
+        if (e.code === "KeyL") setShowLb((v2) => !v2);
+      } else {
+        keysRef.current.delete(e.code);
+      }
+    }
+    window.addEventListener("keydown", onKey);
+    window.addEventListener("keyup", onKey);
+    canvas.focus();
+    function loop(ts) {
+      if (!ctx) return;
+      const lastTs = lastTsRef.current;
+      const dt2 = lastTs < 0 ? 1 : Math.min((ts - lastTs) / 16.67, 3);
+      lastTsRef.current = ts;
+      const g2 = stateRef.current;
+      if (g2.gameOver) {
+        gameRunningRef.current = false;
+        return;
+      }
+      const spd = 4.5;
+      if (keysRef.current.has("ArrowLeft") || keysRef.current.has("KeyA") || touchRef.current.left)
+        g2.player.x -= spd * dt2;
+      if (keysRef.current.has("ArrowRight") || keysRef.current.has("KeyD") || touchRef.current.right)
+        g2.player.x += spd * dt2;
+      g2.player.x = Math.max(18, Math.min(W - 18, g2.player.x));
+      const fireRate = g2.rapidFire ? 5 : 12;
+      g2.shootTimer += dt2;
+      if (g2.shootTimer >= fireRate) {
+        g2.shootTimer = 0;
+        fireWeapon(g2);
+      }
+      if (g2.invTimer > 0) g2.invTimer -= dt2;
+      if (g2.shield) {
+        g2.shieldTimer -= dt2;
+        if (g2.shieldTimer <= 0) {
+          g2.shield = false;
+          setUiShield(false);
+        }
+      }
+      if (g2.rapidFire) {
+        g2.rapidFireTimer -= dt2;
+        if (g2.rapidFireTimer <= 0) g2.rapidFire = false;
+      }
+      if (g2.multiplier) {
+        g2.multiplierTimer -= dt2;
+        if (g2.multiplierTimer <= 0) g2.multiplier = false;
+      }
+      if (g2.weaponTimer > 0) {
+        g2.weaponTimer -= dt2;
+        if (g2.weaponTimer <= 0) {
+          g2.weapon = "single";
+          setUiWeapon("single");
+        }
+      }
+      if (g2.comboTimer > 0) {
+        g2.comboTimer -= dt2;
+        if (g2.comboTimer <= 0) {
+          g2.combo = 0;
+          setUiCombo(0);
+        }
+      }
+      if (g2.levelUpAnim > 0) g2.levelUpAnim -= dt2;
+      if (g2.enemies.length === 0 && !g2.bossAlive) {
+        if (g2.waveDelay > 0) {
+          g2.waveDelay -= dt2;
+        } else {
+          if (g2.waveEnemiesLeft > 0) {
+            g2.wave++;
+            setUiWave(g2.wave);
+          }
+          spawnWave(g2);
+        }
+      }
+      if (g2.bossAlive && !g2.enemies.some((e) => e.type === "boss")) {
+        g2.bossAlive = false;
+        g2.wave++;
+        setUiWave(g2.wave);
+        g2.waveDelay = 90;
+      }
+      for (const b2 of g2.bullets) {
+        if (b2.targetId !== void 0) {
+          const t = g2.enemies.find((e) => e.id === b2.targetId);
+          if (t) {
+            const a2 = Math.atan2(t.y - b2.y, t.x - b2.x);
+            b2.vx += Math.cos(a2) * 0.6;
+            b2.vy += Math.sin(a2) * 0.6;
+            const m2 = Math.hypot(b2.vx, b2.vy);
+            if (m2 > 10) {
+              b2.vx = b2.vx / m2 * 10;
+              b2.vy = b2.vy / m2 * 10;
+            }
+          }
+        }
+        b2.x += b2.vx * dt2;
+        b2.y += b2.vy * dt2;
+        if (b2.life !== void 0) b2.life -= dt2;
+      }
+      g2.bullets = g2.bullets.filter(
+        (b2) => b2.y > -30 && b2.y < H + 30 && b2.x > -30 && b2.x < W + 30 && (b2.life === void 0 || b2.life > 0)
+      );
+      for (const e of g2.enemies) {
+        if (e.type === "boss") {
+          e.x += e.xDir * 1.5 * dt2;
+          if (e.x > W - 60 || e.x < 60) e.xDir = -e.xDir;
+          e.y = Math.min(e.y + e.speed * 0.3 * dt2, 100);
+          e.fireTimer -= dt2;
+          if (e.fireTimer <= 0) {
+            e.fireTimer = 35;
+            for (let i = -2; i <= 2; i++)
+              g2.bullets.push({
+                id: nextId(g2),
+                x: e.x + i * 18,
+                y: e.y + 35,
+                vx: i * 1,
+                vy: 5,
+                type: "enemy",
+                color: "#f43f5e",
+                w: 5,
+                h: 12,
+                dmg: 15
+              });
+          }
+        } else if (e.type === "kamikaze") {
+          const dx = g2.player.x - e.x;
+          const dy = g2.player.y - e.y;
+          const dist = Math.hypot(dx, dy) || 1;
+          e.x += dx / dist * e.speed * 1.5 * dt2;
+          e.y += dy / dist * e.speed * 1.5 * dt2;
+        } else if (e.type === "drone") {
+          e.sineAngle += 0.05 * dt2;
+          e.x = e.baseX + Math.sin(e.sineAngle) * 60;
+          e.y += e.speed * dt2;
+        } else if (e.type === "stealth") {
+          e.stealthTimer -= dt2;
+          if (e.stealthTimer <= 0) {
+            e.stealthAlpha = e.stealthAlpha > 0.5 ? 0.2 : 1;
+            e.stealthTimer = 60 + Math.random() * 60;
+          }
+          e.y += e.speed * dt2;
+        } else {
+          e.y += e.speed * dt2;
+          e.fireTimer -= dt2;
+          if (e.fireTimer <= 0) {
+            e.fireTimer = 90 + Math.random() * 60;
+            g2.bullets.push({
+              id: nextId(g2),
+              x: e.x,
+              y: e.y + e.h / 2,
+              vx: 0,
+              vy: 4,
+              type: "enemy",
+              color: "#f43f5e",
+              w: 4,
+              h: 10,
+              dmg: 12
+            });
+          }
+        }
+      }
+      const toRemoveBullets = /* @__PURE__ */ new Set();
+      const toRemoveEnemies = /* @__PURE__ */ new Set();
+      for (const b2 of g2.bullets) {
+        if (b2.type !== "player") continue;
+        for (const e of g2.enemies) {
+          if (toRemoveEnemies.has(e.id)) continue;
+          if (!overlap(
+            b2.x - b2.w / 2,
+            b2.y - b2.h / 2,
+            b2.w,
+            b2.h,
+            e.x - e.w / 2,
+            e.y - e.h / 2,
+            e.w,
+            e.h
+          ))
+            continue;
+          if (b2.life === void 0) toRemoveBullets.add(b2.id);
+          e.hp -= b2.dmg;
+          addParticles(g2, b2.x, b2.y, e.color, 5);
+          if (b2.color === "#fbbf24") {
+            for (const e2 of g2.enemies) {
+              if (e2.id !== e.id && Math.hypot(e2.x - e.x, e2.y - e.y) < 80) {
+                e2.hp -= b2.dmg * 0.6;
+                addParticles(g2, e2.x, e2.y, "#fbbf24", 4);
+              }
+            }
+          }
+          if (e.hp <= 0) {
+            toRemoveEnemies.add(e.id);
+            addParticles(g2, e.x, e.y, e.color, e.type === "boss" ? 40 : 14);
+            g2.screenShake = e.type === "boss" ? 18 : 6;
+            g2.kills++;
+            g2.combo = Math.min(g2.combo + 1, 20);
+            g2.comboTimer = 180;
+            const cm = Math.min(Math.floor(g2.combo / 4) + 1, 5);
+            setUiCombo(g2.combo);
+            const baseScores = {
+              fighter: 20,
+              kamikaze: 25,
+              tank: 60,
+              stealth: 40,
+              drone: 35,
+              boss: 500
+            };
+            const scored = baseScores[e.type] * cm * (g2.multiplier ? 2 : 1);
+            g2.score += scored;
+            setUiScore(g2.score);
+            addFloat(g2, e.x, e.y - 20, `+${scored}`, "#fbbf24");
+            const xpGain = e.type === "boss" ? 50 : e.type === "tank" ? 12 : 5;
+            g2.xp += xpGain;
+            g2.coins += Math.floor(Math.random() * 3) + 1;
+            if (g2.xp >= g2.xpToNext) {
+              g2.xp -= g2.xpToNext;
+              g2.level++;
+              g2.xpToNext = XP_PER_LEVEL + g2.level * 20;
+              g2.levelUpAnim = 90;
+              setUiLevel(g2.level);
+            }
+            setUiXp(g2.xp);
+            if (e.type === "boss") {
+              g2.bossAlive = false;
+              g2.wave++;
+              setUiWave(g2.wave);
+              g2.waveDelay = 90;
+            }
+            const roll = Math.random();
+            let pType = null;
+            let wType;
+            if (roll < 0.06) pType = "health";
+            else if (roll < 0.12) pType = "shield";
+            else if (roll < 0.18) pType = "rapidfire";
+            else if (roll < 0.22) pType = "multiplier";
+            else if (roll < 0.32) {
+              pType = "weapon";
+              wType = WEAPON_DROPS[Math.floor(Math.random() * WEAPON_DROPS.length)];
+            }
+            if (pType)
+              g2.powerUps.push({
+                id: nextId(g2),
+                x: e.x,
+                y: e.y,
+                vy: 1.5,
+                type: pType,
+                weaponType: wType
+              });
+          }
+          break;
+        }
+      }
+      g2.bullets = g2.bullets.filter((b2) => !toRemoveBullets.has(b2.id));
+      g2.enemies = g2.enemies.filter(
+        (e) => !toRemoveEnemies.has(e.id) && e.y < H + 60
+      );
+      if (g2.invTimer <= 0) {
+        if (g2.shield) {
+          g2.bullets = g2.bullets.filter((b2) => {
+            if (b2.type !== "enemy") return true;
+            if (overlap(
+              b2.x - b2.w / 2,
+              b2.y - b2.h / 2,
+              b2.w,
+              b2.h,
+              g2.player.x - 38,
+              g2.player.y - 38,
+              76,
+              76
+            )) {
+              addParticles(g2, b2.x, b2.y, "#06b6d4", 5);
+              return false;
+            }
+            return true;
+          });
+        } else {
+          g2.bullets = g2.bullets.filter((b2) => {
+            if (b2.type !== "enemy") return true;
+            if (overlap(
+              b2.x - b2.w / 2,
+              b2.y - b2.h / 2,
+              b2.w,
+              b2.h,
+              g2.player.x - PLAYER_W / 2,
+              g2.player.y - PLAYER_H / 2,
+              PLAYER_W,
+              PLAYER_H
+            )) {
+              g2.lives--;
+              setUiLives(g2.lives);
+              g2.invTimer = 60;
+              g2.screenShake = 8;
+              g2.combo = 0;
+              setUiCombo(0);
+              addParticles(g2, g2.player.x, g2.player.y, "#f43f5e", 8);
+              addFloat(g2, g2.player.x, g2.player.y - 30, "HIT!", "#f43f5e");
+              return false;
+            }
+            return true;
+          });
+          g2.enemies = g2.enemies.filter((e) => {
+            if (e.type !== "kamikaze") return true;
+            if (overlap(
+              e.x - e.w / 2,
+              e.y - e.h / 2,
+              e.w,
+              e.h,
+              g2.player.x - PLAYER_W / 2,
+              g2.player.y - PLAYER_H / 2,
+              PLAYER_W,
+              PLAYER_H
+            )) {
+              g2.lives--;
+              setUiLives(g2.lives);
+              g2.invTimer = 60;
+              g2.screenShake = 10;
+              addParticles(g2, e.x, e.y, "#f97316", 16);
+              return false;
+            }
+            return true;
+          });
+        }
+      }
+      for (const p2 of g2.powerUps) {
+        p2.y += p2.vy * dt2;
+        if (overlap(
+          p2.x - 14,
+          p2.y - 14,
+          28,
+          28,
+          g2.player.x - 24,
+          g2.player.y - 24,
+          48,
+          48
+        )) {
+          p2.vy = 9999;
+          addParticles(g2, p2.x, p2.y, POWERUP_COLORS[p2.type], 10);
+          if (p2.type === "health") {
+            g2.lives = Math.min(g2.lives + 1, 5);
+            setUiLives(g2.lives);
+            addFloat(g2, p2.x, p2.y - 20, "+LIFE", "#22c55e");
+          } else if (p2.type === "shield") {
+            g2.shield = true;
+            g2.shieldTimer = 120;
+            setUiShield(true);
+            addFloat(g2, p2.x, p2.y - 20, "SHIELD!", "#06b6d4");
+          } else if (p2.type === "rapidfire") {
+            g2.rapidFire = true;
+            g2.rapidFireTimer = 300;
+            addFloat(g2, p2.x, p2.y - 20, "RAPID!", "#f59e0b");
+          } else if (p2.type === "multiplier") {
+            g2.multiplier = true;
+            g2.multiplierTimer = 600;
+            addFloat(g2, p2.x, p2.y - 20, "x2 SCORE!", "#ec4899");
+          } else if (p2.type === "weapon" && p2.weaponType) {
+            g2.weapon = p2.weaponType;
+            g2.weaponTimer = 600;
+            setUiWeapon(p2.weaponType);
+            addFloat(
+              g2,
+              p2.x,
+              p2.y - 20,
+              `${WEAPON_NAMES[p2.weaponType]}!`,
+              "#a855f7"
+            );
+          }
+        }
+      }
+      g2.powerUps = g2.powerUps.filter((p2) => p2.vy !== 9999 && p2.y < H + 60);
+      for (const p2 of g2.particles) {
+        p2.x += p2.vx * dt2;
+        p2.y += p2.vy * dt2;
+        p2.vy += 0.07 * dt2;
+        p2.life -= dt2;
+      }
+      g2.particles = g2.particles.filter((p2) => p2.life > 0);
+      for (const f of g2.floatTexts) {
+        f.y += f.vy * dt2;
+        f.life -= dt2;
+      }
+      g2.floatTexts = g2.floatTexts.filter((f) => f.life > 0);
+      for (const s2 of g2.stars1) {
+        s2.y += s2.vy * dt2;
+        if (s2.y > H + 2) s2.y = -2;
+      }
+      for (const s2 of g2.stars2) {
+        s2.y += s2.vy * dt2;
+        if (s2.y > H + 2) s2.y = -2;
+      }
+      for (const s2 of g2.stars3) {
+        s2.y += s2.vy * dt2;
+        if (s2.y > H + 2) s2.y = -2;
+      }
+      if (g2.screenShake > 0) g2.screenShake = Math.max(0, g2.screenShake - dt2);
+      if (g2.lives <= 0) {
+        g2.gameOver = true;
+        setGameOver({ score: g2.score, kills: g2.kills, waves: g2.wave });
+        return;
+      }
+      ctx.save();
+      const sx = g2.screenShake > 0 ? (Math.random() - 0.5) * Math.min(g2.screenShake, 8) : 0;
+      ctx.translate(sx, sx * 0.5);
+      ctx.fillStyle = "#050510";
+      ctx.fillRect(-10, -10, W + 20, H + 20);
+      for (const s2 of g2.stars1) {
+        ctx.globalAlpha = 0.3;
+        ctx.fillStyle = "#fff";
+        ctx.beginPath();
+        ctx.arc(s2.x, s2.y, s2.size * 0.4, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      for (const s2 of g2.stars2) {
+        ctx.globalAlpha = 0.5;
+        ctx.fillStyle = "#c7d2fe";
+        ctx.beginPath();
+        ctx.arc(s2.x, s2.y, s2.size * 0.6, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.shadowBlur = 3;
+      ctx.shadowColor = "#fff";
+      for (const s2 of g2.stars3) {
+        ctx.globalAlpha = 0.9;
+        ctx.fillStyle = "#fff";
+        ctx.beginPath();
+        ctx.arc(s2.x, s2.y, s2.size * 0.8, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.shadowBlur = 0;
+      ctx.globalAlpha = 1;
+      for (const p2 of g2.powerUps) {
+        const c2 = POWERUP_COLORS[p2.type];
+        ctx.save();
+        ctx.shadowColor = c2;
+        ctx.shadowBlur = 12;
+        ctx.fillStyle = `${c2}33`;
+        ctx.strokeStyle = c2;
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.roundRect(p2.x - 13, p2.y - 13, 26, 26, 6);
+        ctx.fill();
+        ctx.stroke();
+        ctx.fillStyle = c2;
+        ctx.font = "bold 12px monospace";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText(POWERUP_ICONS[p2.type], p2.x, p2.y);
+        ctx.restore();
+      }
+      for (const e of g2.enemies) {
+        ctx.save();
+        ctx.globalAlpha = e.type === "stealth" ? e.stealthAlpha : 1;
+        ctx.shadowColor = e.color;
+        ctx.shadowBlur = 10;
+        ctx.fillStyle = `${e.color}44`;
+        ctx.strokeStyle = e.color;
+        ctx.lineWidth = 1.5;
+        if (e.type === "boss") {
+          ctx.beginPath();
+          ctx.moveTo(e.x, e.y - e.h / 2);
+          ctx.lineTo(e.x + e.w / 2, e.y);
+          ctx.lineTo(e.x, e.y + e.h / 2);
+          ctx.lineTo(e.x - e.w / 2, e.y);
+          ctx.closePath();
+          ctx.fill();
+          ctx.stroke();
+          ctx.fillStyle = "#1f2937";
+          ctx.fillRect(e.x - 50, e.y - e.h / 2 - 12, 100, 6);
+          ctx.fillStyle = "#f43f5e";
+          ctx.shadowColor = "#f43f5e";
+          ctx.shadowBlur = 6;
+          ctx.fillRect(e.x - 50, e.y - e.h / 2 - 12, 100 * (e.hp / e.maxHp), 6);
+        } else if (e.type === "drone") {
+          ctx.beginPath();
+          ctx.arc(e.x, e.y, e.w / 2, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.stroke();
+        } else {
+          ctx.beginPath();
+          ctx.moveTo(e.x, e.y + e.h / 2);
+          ctx.lineTo(e.x + e.w / 2, e.y - e.h / 2);
+          ctx.lineTo(e.x - e.w / 2, e.y - e.h / 2);
+          ctx.closePath();
+          ctx.fill();
+          ctx.stroke();
+          if (e.maxHp > 10) {
+            ctx.fillStyle = "#1f2937";
+            ctx.fillRect(e.x - e.w / 2, e.y - e.h / 2 - 6, e.w, 3);
+            ctx.fillStyle = e.color;
+            ctx.fillRect(
+              e.x - e.w / 2,
+              e.y - e.h / 2 - 6,
+              e.w * (e.hp / e.maxHp),
+              3
+            );
+          }
+        }
+        ctx.restore();
+      }
+      for (const b2 of g2.bullets) {
+        ctx.save();
+        ctx.shadowColor = b2.color;
+        ctx.shadowBlur = b2.type === "player" ? 12 : 8;
+        ctx.fillStyle = b2.color;
+        ctx.beginPath();
+        ctx.roundRect(b2.x - b2.w / 2, b2.y - b2.h / 2, b2.w, b2.h, 2);
+        ctx.fill();
+        ctx.restore();
+      }
+      for (const p2 of g2.particles) {
+        const a2 = Math.max(0, p2.life / p2.maxLife);
+        ctx.globalAlpha = a2;
+        ctx.fillStyle = p2.color;
+        ctx.shadowColor = p2.color;
+        ctx.shadowBlur = 5;
+        ctx.beginPath();
+        ctx.arc(p2.x, p2.y, p2.size * a2, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.globalAlpha = 1;
+      ctx.shadowBlur = 0;
+      for (const f of g2.floatTexts) {
+        ctx.globalAlpha = Math.max(0, f.life / 55);
+        ctx.fillStyle = f.color;
+        ctx.font = "bold 11px monospace";
+        ctx.textAlign = "center";
+        ctx.fillText(f.text, f.x, f.y);
+      }
+      ctx.globalAlpha = 1;
+      if (g2.shield) {
+        ctx.save();
+        ctx.globalAlpha = 0.4;
+        ctx.strokeStyle = "#06b6d4";
+        ctx.shadowColor = "#06b6d4";
+        ctx.shadowBlur = 20;
+        ctx.lineWidth = 2.5;
+        ctx.beginPath();
+        ctx.arc(g2.player.x, g2.player.y, 38, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.restore();
+      }
+      const drawPlayer = g2.invTimer <= 0 || Math.floor(g2.invTimer / 8) % 2 === 0;
+      if (drawPlayer) {
+        ctx.save();
+        ctx.shadowColor = "#06b6d4";
+        ctx.shadowBlur = 18;
+        ctx.fillStyle = "#06b6d4";
+        ctx.beginPath();
+        ctx.arc(g2.player.x, g2.player.y + 15, 5, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = "#06b6d4";
+        ctx.strokeStyle = "#67e8f9";
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(g2.player.x, g2.player.y - 22);
+        ctx.lineTo(g2.player.x + 14, g2.player.y + 16);
+        ctx.lineTo(g2.player.x + 5, g2.player.y + 10);
+        ctx.lineTo(g2.player.x - 5, g2.player.y + 10);
+        ctx.lineTo(g2.player.x - 14, g2.player.y + 16);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+        ctx.restore();
+      }
+      if (g2.levelUpAnim > 0) {
+        ctx.globalAlpha = g2.levelUpAnim / 90;
+        ctx.fillStyle = "#fbbf24";
+        ctx.font = "bold 22px monospace";
+        ctx.textAlign = "center";
+        ctx.fillText(`LEVEL ${g2.level}!`, W / 2, H / 2 - 60);
+        ctx.globalAlpha = 1;
+      }
+      ctx.restore();
+      const nextFn = loopRef.current;
+      if (nextFn) rafRef.current = requestAnimationFrame(nextFn);
+    }
+    loopRef.current = loop;
+    spawnWave(stateRef.current);
+    lastTsRef.current = -1;
+    gameRunningRef.current = false;
+    const fn = loopRef.current;
+    if (fn) {
+      gameRunningRef.current = true;
+      rafRef.current = requestAnimationFrame(fn);
+    }
+    return () => {
+      cancelAnimationFrame(rafRef.current);
+      rafRef.current = 0;
+      gameRunningRef.current = false;
+      loopRef.current = null;
+      window.removeEventListener("keydown", onKey);
+      window.removeEventListener("keyup", onKey);
+    };
+  }, []);
+  const xpPct = Math.min(uiXp / (XP_PER_LEVEL + uiLevel * 20) * 100, 100);
+  const comboMul = Math.min(Math.floor(uiCombo / 4) + 1, 5);
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+    "div",
+    {
+      className: "w-full flex flex-col items-center py-4 px-2",
+      style: { background: "#050510", minHeight: "100vh" },
+      children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "w-full max-w-3xl flex items-center justify-between mb-3 px-1", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs(
+            "button",
+            {
+              type: "button",
+              onClick: onExit,
+              "data-ocid": "space-shooter.back_button",
+              className: "flex items-center gap-1 text-sm font-mono px-3 py-1.5 rounded-lg transition-colors",
+              style: {
+                background: "rgba(6,182,212,0.12)",
+                color: "#06b6d4",
+                border: "1px solid rgba(6,182,212,0.3)"
+              },
+              children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(ArrowLeft, { className: "w-4 h-4" }),
+                " NEXUS ARENA"
+              ]
+            }
+          ),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "div",
+            {
+              className: "text-xs font-mono tracking-widest",
+              style: { color: "rgba(168,85,247,0.5)" },
+              children: "VOID STRIKER"
+            }
+          ),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs(
+            "button",
+            {
+              type: "button",
+              onClick: () => setShowLb((v2) => !v2),
+              "data-ocid": "space-shooter.leaderboard_toggle",
+              className: "flex items-center gap-1 text-sm font-mono px-3 py-1.5 rounded-lg transition-colors",
+              style: {
+                background: "rgba(168,85,247,0.12)",
+                color: "#a855f7",
+                border: "1px solid rgba(168,85,247,0.3)"
+              },
+              children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(Trophy, { className: "w-4 h-4" }),
+                " SCORES"
+              ]
+            }
+          )
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex gap-3 w-full max-w-3xl items-start", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs(
+            "div",
+            {
+              className: "flex flex-col gap-2 flex-shrink-0",
+              style: { width: 100 },
+              children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                  "div",
+                  {
+                    className: "rounded-xl p-2 border",
+                    style: {
+                      background: "rgba(15,10,35,0.85)",
+                      borderColor: "rgba(168,85,247,0.3)"
+                    },
+                    children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx(
+                        "div",
+                        {
+                          className: "text-xs font-mono mb-0.5",
+                          style: { color: "#6b7280" },
+                          children: "SCORE"
+                        }
+                      ),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx(
+                        "div",
+                        {
+                          className: "text-base font-black font-mono",
+                          style: { color: "#a855f7" },
+                          children: uiScore.toLocaleString()
+                        }
+                      )
+                    ]
+                  }
+                ),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                  "div",
+                  {
+                    className: "rounded-xl p-2 border",
+                    style: {
+                      background: "rgba(15,10,35,0.85)",
+                      borderColor: "rgba(6,182,212,0.3)"
+                    },
+                    children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx(
+                        "div",
+                        {
+                          className: "text-xs font-mono mb-0.5",
+                          style: { color: "#6b7280" },
+                          children: "WAVE"
+                        }
+                      ),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx(
+                        "div",
+                        {
+                          className: "text-xl font-black font-mono",
+                          style: { color: "#06b6d4" },
+                          children: uiWave
+                        }
+                      )
+                    ]
+                  }
+                ),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                  "div",
+                  {
+                    className: "rounded-xl p-2 border",
+                    style: {
+                      background: "rgba(15,10,35,0.85)",
+                      borderColor: "rgba(244,63,94,0.3)"
+                    },
+                    children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx(
+                        "div",
+                        {
+                          className: "text-xs font-mono mb-1",
+                          style: { color: "#6b7280" },
+                          children: "LIVES"
+                        }
+                      ),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex flex-wrap gap-0.5", children: HEART_KEYS.map((k2, i) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+                        Heart,
+                        {
+                          className: "w-4 h-4",
+                          style: {
+                            color: i < uiLives ? "#f43f5e" : "#1f2937",
+                            fill: i < uiLives ? "#f43f5e" : "transparent"
+                          }
+                        },
+                        k2
+                      )) })
+                    ]
+                  }
+                ),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                  "div",
+                  {
+                    className: "rounded-xl p-2 border",
+                    style: {
+                      background: comboMul > 1 ? "rgba(236,72,153,0.12)" : "rgba(15,10,35,0.85)",
+                      borderColor: comboMul > 1 ? "rgba(236,72,153,0.5)" : "rgba(255,255,255,0.05)"
+                    },
+                    children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx(
+                        "div",
+                        {
+                          className: "text-xs font-mono mb-0.5",
+                          style: { color: "#6b7280" },
+                          children: "COMBO"
+                        }
+                      ),
+                      /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                        "div",
+                        {
+                          className: "text-lg font-black font-mono",
+                          style: { color: comboMul > 1 ? "#ec4899" : "#374151" },
+                          children: [
+                            "x",
+                            comboMul
+                          ]
+                        }
+                      )
+                    ]
+                  }
+                ),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                  "div",
+                  {
+                    className: "rounded-xl p-2 border",
+                    style: {
+                      background: "rgba(15,10,35,0.85)",
+                      borderColor: `${WEAPON_COLORS[uiWeapon]}44`
+                    },
+                    children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx(
+                        "div",
+                        {
+                          className: "text-xs font-mono mb-0.5",
+                          style: { color: "#6b7280" },
+                          children: "WEAPON"
+                        }
+                      ),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx(
+                        "div",
+                        {
+                          className: "text-xs font-bold font-mono",
+                          style: { color: WEAPON_COLORS[uiWeapon] },
+                          children: WEAPON_NAMES[uiWeapon]
+                        }
+                      )
+                    ]
+                  }
+                ),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                  "div",
+                  {
+                    className: "rounded-xl p-2 border",
+                    style: {
+                      background: "rgba(15,10,35,0.85)",
+                      borderColor: "rgba(251,191,36,0.3)"
+                    },
+                    children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex justify-between items-center mb-1", children: [
+                        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-xs font-mono", style: { color: "#6b7280" }, children: "LVL" }),
+                        /* @__PURE__ */ jsxRuntimeExports.jsx(
+                          "span",
+                          {
+                            className: "text-xs font-bold font-mono",
+                            style: { color: "#fbbf24" },
+                            children: uiLevel
+                          }
+                        )
+                      ] }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx(
+                        "div",
+                        {
+                          className: "w-full rounded-full h-1.5",
+                          style: { background: "rgba(255,255,255,0.1)" },
+                          children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+                            "div",
+                            {
+                              className: "h-1.5 rounded-full transition-all",
+                              style: {
+                                width: `${xpPct}%`,
+                                background: "#fbbf24",
+                                boxShadow: "0 0 6px #fbbf24"
+                              }
+                            }
+                          )
+                        }
+                      )
+                    ]
+                  }
+                ),
+                uiShield && /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  "div",
+                  {
+                    className: "rounded-xl p-2 border text-center",
+                    style: {
+                      background: "rgba(6,182,212,0.1)",
+                      borderColor: "rgba(6,182,212,0.4)"
+                    },
+                    children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-xs font-mono", style: { color: "#06b6d4" }, children: "⬡ SHIELD" })
+                  }
+                ),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                  "div",
+                  {
+                    className: "rounded-xl p-2 border mt-1",
+                    style: {
+                      background: "rgba(15,10,35,0.85)",
+                      borderColor: "rgba(255,255,255,0.06)"
+                    },
+                    children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx(
+                        "div",
+                        {
+                          className: "text-xs font-mono truncate",
+                          style: { color: "#4b5563" },
+                          children: "PILOT"
+                        }
+                      ),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx(
+                        "div",
+                        {
+                          className: "text-xs font-bold font-mono truncate",
+                          style: { color: "#06b6d4" },
+                          children: username.toUpperCase()
+                        }
+                      )
+                    ]
+                  }
+                )
+              ]
+            }
+          ),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative flex-1", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "canvas",
+              {
+                ref: canvasRef,
+                width: W,
+                height: H,
+                tabIndex: 0,
+                className: "w-full rounded-xl outline-none block",
+                style: {
+                  imageRendering: "pixelated",
+                  border: "1px solid rgba(168,85,247,0.2)",
+                  boxShadow: "0 0 40px rgba(168,85,247,0.15)",
+                  maxHeight: "85vh"
+                },
+                "data-ocid": "space-shooter.canvas"
+              }
+            ),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "absolute bottom-4 left-0 right-0 flex justify-between px-4 pointer-events-none", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                "button",
+                {
+                  type: "button",
+                  onTouchStart: (e) => {
+                    e.preventDefault();
+                    touchRef.current.left = true;
+                  },
+                  onTouchEnd: () => {
+                    touchRef.current.left = false;
+                  },
+                  className: "pointer-events-auto w-14 h-14 rounded-full font-bold text-2xl flex items-center justify-center select-none",
+                  style: {
+                    background: "rgba(6,182,212,0.2)",
+                    border: "2px solid rgba(6,182,212,0.5)",
+                    color: "#06b6d4"
+                  },
+                  "data-ocid": "space-shooter.left_button",
+                  children: "←"
+                }
+              ),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                "button",
+                {
+                  type: "button",
+                  onTouchStart: (e) => {
+                    e.preventDefault();
+                  },
+                  onTouchEnd: () => {
+                  },
+                  className: "pointer-events-auto w-14 h-14 rounded-full font-bold flex items-center justify-center select-none",
+                  style: {
+                    background: "rgba(168,85,247,0.2)",
+                    border: "2px solid rgba(168,85,247,0.5)",
+                    color: "#a855f7"
+                  },
+                  "data-ocid": "space-shooter.fire_button",
+                  children: /* @__PURE__ */ jsxRuntimeExports.jsx(Zap, { className: "w-6 h-6" })
+                }
+              ),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                "button",
+                {
+                  type: "button",
+                  onTouchStart: (e) => {
+                    e.preventDefault();
+                    touchRef.current.right = true;
+                  },
+                  onTouchEnd: () => {
+                    touchRef.current.right = false;
+                  },
+                  className: "pointer-events-auto w-14 h-14 rounded-full font-bold text-2xl flex items-center justify-center select-none",
+                  style: {
+                    background: "rgba(6,182,212,0.2)",
+                    border: "2px solid rgba(6,182,212,0.5)",
+                    color: "#06b6d4"
+                  },
+                  "data-ocid": "space-shooter.right_button",
+                  children: "→"
+                }
+              )
+            ] }),
+            gameOver && /* @__PURE__ */ jsxRuntimeExports.jsxs(
+              "div",
+              {
+                className: "absolute inset-0 rounded-xl flex flex-col items-center justify-center gap-4",
+                style: {
+                  background: "rgba(5,5,16,0.93)",
+                  backdropFilter: "blur(8px)"
+                },
+                "data-ocid": "space-shooter.game_over_panel",
+                children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(
+                    "div",
+                    {
+                      className: "text-4xl font-black tracking-widest",
+                      style: {
+                        color: "#f43f5e",
+                        textShadow: "0 0 30px rgba(244,63,94,0.8)"
+                      },
+                      children: "GAME OVER"
+                    }
+                  ),
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-center", children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                      "div",
+                      {
+                        className: "text-2xl font-black font-mono",
+                        style: { color: "#a855f7" },
+                        children: [
+                          gameOver.score.toLocaleString(),
+                          " PTS"
+                        ]
+                      }
+                    ),
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                      "div",
+                      {
+                        className: "text-sm font-mono mt-1",
+                        style: { color: "#6b7280" },
+                        children: [
+                          gameOver.kills,
+                          " KILLS · WAVE ",
+                          gameOver.waves
+                        ]
+                      }
+                    )
+                  ] }),
+                  submitted && playerRank && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-sm font-mono", style: { color: "#fbbf24" }, children: [
+                    "YOUR RANK: #",
+                    Number(playerRank.rank)
+                  ] }),
+                  topScores && topScores.length > 0 && /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                    "div",
+                    {
+                      className: "w-full max-w-xs rounded-xl border p-3",
+                      style: {
+                        background: "rgba(5,15,30,0.85)",
+                        borderColor: "rgba(6,182,212,0.35)"
+                      },
+                      children: [
+                        /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                          "div",
+                          {
+                            className: "text-xs font-bold tracking-widest font-mono mb-2 flex items-center gap-1.5",
+                            style: { color: "#06b6d4" },
+                            children: [
+                              /* @__PURE__ */ jsxRuntimeExports.jsx(Trophy, { className: "w-3 h-3" }),
+                              "VOID STRIKER HIGH SCORES"
+                            ]
+                          }
+                        ),
+                        topScores.map((s2, i) => {
+                          const isMe = s2.playerId === playerId;
+                          return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                            "div",
+                            {
+                              className: "flex items-center gap-2 py-0.5",
+                              style: {
+                                borderBottom: "1px solid rgba(255,255,255,0.04)"
+                              },
+                              children: [
+                                /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                                  "span",
+                                  {
+                                    className: "text-xs font-mono w-5 flex-shrink-0",
+                                    style: {
+                                      color: i === 0 ? "#fbbf24" : i === 1 ? "#9ca3af" : i === 2 ? "#d97706" : "#374151"
+                                    },
+                                    children: [
+                                      "#",
+                                      i + 1
+                                    ]
+                                  }
+                                ),
+                                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex-1 min-w-0", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+                                  "div",
+                                  {
+                                    className: "text-xs font-mono truncate",
+                                    style: { color: isMe ? "#06b6d4" : "#e2e8f0" },
+                                    children: isMe ? /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                                      "span",
+                                      {
+                                        style: { color: "#06b6d4", fontWeight: "bold" },
+                                        children: [
+                                          "▶",
+                                          " ",
+                                          playerMap[s2.playerId] ?? s2.playerId.slice(0, 8)
+                                        ]
+                                      }
+                                    ) : playerMap[s2.playerId] ?? s2.playerId.slice(0, 8)
+                                  }
+                                ) }),
+                                /* @__PURE__ */ jsxRuntimeExports.jsx(
+                                  "div",
+                                  {
+                                    className: "text-xs font-bold font-mono flex-shrink-0",
+                                    style: { color: isMe ? "#06b6d4" : "#a855f7" },
+                                    children: Number(s2.score).toLocaleString()
+                                  }
+                                )
+                              ]
+                            },
+                            `vs-${i}-${Number(s2.score)}`
+                          );
+                        })
+                      ]
+                    }
+                  ),
+                  grandRankings.length > 0 && /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                    "div",
+                    {
+                      className: "w-full max-w-xs rounded-xl border p-3",
+                      style: {
+                        background: "rgba(15,10,35,0.85)",
+                        borderColor: "rgba(139,92,246,0.35)"
+                      },
+                      children: [
+                        /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                          "div",
+                          {
+                            className: "text-xs font-bold tracking-widest font-mono mb-2 flex items-center gap-1.5",
+                            style: { color: "#a855f7" },
+                            children: [
+                              /* @__PURE__ */ jsxRuntimeExports.jsx(Trophy, { className: "w-3 h-3" }),
+                              "GRAND ARENA RANKING"
+                            ]
+                          }
+                        ),
+                        grandRankings.map((gr) => {
+                          const isMe = gr.playerId.toString() === playerId;
+                          return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                            "div",
+                            {
+                              className: "flex items-center gap-2 py-0.5",
+                              style: {
+                                borderBottom: "1px solid rgba(255,255,255,0.04)"
+                              },
+                              children: [
+                                /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                                  "span",
+                                  {
+                                    className: "text-xs font-mono w-5 flex-shrink-0",
+                                    style: {
+                                      color: Number(gr.rank) === 1 ? "#fbbf24" : Number(gr.rank) === 2 ? "#9ca3af" : Number(gr.rank) === 3 ? "#d97706" : "#374151"
+                                    },
+                                    children: [
+                                      "#",
+                                      Number(gr.rank)
+                                    ]
+                                  }
+                                ),
+                                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex-1 min-w-0", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+                                  "div",
+                                  {
+                                    className: "text-xs font-mono truncate",
+                                    style: { color: isMe ? "#06b6d4" : "#e2e8f0" },
+                                    children: isMe ? /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                                      "span",
+                                      {
+                                        style: { color: "#06b6d4", fontWeight: "bold" },
+                                        children: [
+                                          "▶ ",
+                                          gr.username
+                                        ]
+                                      }
+                                    ) : gr.username
+                                  }
+                                ) }),
+                                /* @__PURE__ */ jsxRuntimeExports.jsx(
+                                  "div",
+                                  {
+                                    className: "text-xs font-bold font-mono flex-shrink-0",
+                                    style: { color: isMe ? "#06b6d4" : "#a855f7" },
+                                    children: Number(gr.score).toLocaleString()
+                                  }
+                                )
+                              ]
+                            },
+                            `gr-${Number(gr.rank)}`
+                          );
+                        })
+                      ]
+                    }
+                  ),
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex gap-3 flex-wrap justify-center mt-2", children: [
+                    !submitted && /* @__PURE__ */ jsxRuntimeExports.jsx(
+                      "button",
+                      {
+                        type: "button",
+                        onClick: handleSubmit,
+                        "data-ocid": "space-shooter.submit_button",
+                        className: "px-5 py-2.5 rounded-lg font-bold text-sm tracking-widest transition-all",
+                        style: {
+                          background: "linear-gradient(135deg,#7c3aed,#0891b2)",
+                          color: "#fff",
+                          boxShadow: "0 0 20px rgba(124,58,237,0.4)"
+                        },
+                        children: submitScore.isPending ? "SAVING..." : "SUBMIT SCORE"
+                      }
+                    ),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx(
+                      "button",
+                      {
+                        type: "button",
+                        onClick: resetGame,
+                        "data-ocid": "space-shooter.restart_button",
+                        className: "px-5 py-2.5 rounded-lg font-bold text-sm tracking-widest",
+                        style: {
+                          background: "rgba(168,85,247,0.15)",
+                          color: "#a855f7",
+                          border: "1px solid rgba(168,85,247,0.4)"
+                        },
+                        children: "PLAY AGAIN"
+                      }
+                    ),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx(
+                      "button",
+                      {
+                        type: "button",
+                        onClick: onExit,
+                        "data-ocid": "space-shooter.exit_button",
+                        className: "px-5 py-2.5 rounded-lg font-bold text-sm tracking-widest",
+                        style: {
+                          background: "rgba(6,182,212,0.12)",
+                          color: "#06b6d4",
+                          border: "1px solid rgba(6,182,212,0.3)"
+                        },
+                        children: "HUB"
+                      }
+                    )
+                  ] })
+                ]
+              }
+            )
+          ] }),
+          showLb && /* @__PURE__ */ jsxRuntimeExports.jsxs(
+            "div",
+            {
+              className: "rounded-xl p-4 border flex flex-col gap-2 flex-shrink-0",
+              style: {
+                width: 180,
+                background: "rgba(15,10,35,0.9)",
+                borderColor: "rgba(6,182,212,0.3)",
+                backdropFilter: "blur(12px)",
+                maxHeight: H,
+                overflowY: "auto"
+              },
+              "data-ocid": "space-shooter.leaderboard_panel",
+              children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between mb-1", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-1", children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsx(Trophy, { className: "w-3.5 h-3.5", style: { color: "#06b6d4" } }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx(
+                      "span",
+                      {
+                        className: "text-xs font-bold tracking-widest font-mono",
+                        style: { color: "#06b6d4" },
+                        children: "TOP 10"
+                      }
+                    )
+                  ] }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(
+                    "button",
+                    {
+                      type: "button",
+                      onClick: () => setShowLb(false),
+                      "data-ocid": "space-shooter.leaderboard_close",
+                      children: /* @__PURE__ */ jsxRuntimeExports.jsx(X, { className: "w-3.5 h-3.5", style: { color: "#6b7280" } })
+                    }
+                  )
+                ] }),
+                !topScores || topScores.length === 0 ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-xs font-mono", style: { color: "#374151" }, children: "No scores yet" }) : topScores.map((s2, i) => {
+                  const isMe = playerId === s2.playerId;
+                  return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                    "div",
+                    {
+                      className: "flex items-center gap-1.5 py-0.5",
+                      style: { borderBottom: "1px solid rgba(255,255,255,0.04)" },
+                      "data-ocid": `space-shooter.leaderboard.item.${i + 1}`,
+                      children: [
+                        /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                          "span",
+                          {
+                            className: "text-xs font-mono w-5 flex-shrink-0",
+                            style: {
+                              color: i === 0 ? "#fbbf24" : i === 1 ? "#9ca3af" : i === 2 ? "#d97706" : "#374151"
+                            },
+                            children: [
+                              "#",
+                              i + 1
+                            ]
+                          }
+                        ),
+                        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex-1 min-w-0", children: [
+                          /* @__PURE__ */ jsxRuntimeExports.jsx(
+                            "div",
+                            {
+                              className: "text-xs font-mono truncate",
+                              style: { color: isMe ? "#06b6d4" : "#e2e8f0" },
+                              children: playerMap[s2.playerId] ?? s2.playerId.slice(0, 8)
+                            }
+                          ),
+                          /* @__PURE__ */ jsxRuntimeExports.jsx(
+                            "div",
+                            {
+                              className: "text-xs font-bold font-mono",
+                              style: { color: "#a855f7" },
+                              children: Number(s2.score).toLocaleString()
+                            }
+                          )
+                        ] })
+                      ]
+                    },
+                    s2.scoreId
+                  );
+                }),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                  "div",
+                  {
+                    className: "mt-3 pt-3",
+                    style: { borderTop: "1px solid rgba(168,85,247,0.2)" },
+                    children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-1 mb-2", children: [
+                        /* @__PURE__ */ jsxRuntimeExports.jsx(Trophy, { className: "w-3 h-3", style: { color: "#a855f7" } }),
+                        /* @__PURE__ */ jsxRuntimeExports.jsx(
+                          "span",
+                          {
+                            className: "text-xs font-bold tracking-widest font-mono",
+                            style: { color: "#a855f7" },
+                            children: "GRAND ARENA"
+                          }
+                        )
+                      ] }),
+                      grandRankings.length === 0 ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-xs font-mono", style: { color: "#374151" }, children: "No rankings yet" }) : grandRankings.map((gr) => {
+                        const isMe = gr.playerId.toString() === playerId;
+                        return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                          "div",
+                          {
+                            className: "flex items-center gap-1.5 py-0.5",
+                            style: {
+                              borderBottom: "1px solid rgba(255,255,255,0.04)"
+                            },
+                            "data-ocid": `space-shooter.grand.item.${Number(gr.rank)}`,
+                            children: [
+                              /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                                "span",
+                                {
+                                  className: "text-xs font-mono w-5 flex-shrink-0",
+                                  style: {
+                                    color: Number(gr.rank) === 1 ? "#fbbf24" : Number(gr.rank) === 2 ? "#9ca3af" : Number(gr.rank) === 3 ? "#d97706" : "#374151"
+                                  },
+                                  children: [
+                                    "#",
+                                    Number(gr.rank)
+                                  ]
+                                }
+                              ),
+                              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex-1 min-w-0", children: [
+                                /* @__PURE__ */ jsxRuntimeExports.jsx(
+                                  "div",
+                                  {
+                                    className: "text-xs font-mono truncate",
+                                    style: {
+                                      color: isMe ? "#06b6d4" : "#e2e8f0",
+                                      fontWeight: isMe ? "bold" : "normal"
+                                    },
+                                    children: isMe ? `▶ ${gr.username}` : gr.username
+                                  }
+                                ),
+                                /* @__PURE__ */ jsxRuntimeExports.jsx(
+                                  "div",
+                                  {
+                                    className: "text-xs font-bold font-mono",
+                                    style: { color: isMe ? "#06b6d4" : "#ec4899" },
+                                    children: Number(gr.score).toLocaleString()
+                                  }
+                                )
+                              ] })
+                            ]
+                          },
+                          `gr-${Number(gr.rank)}`
+                        );
+                      })
+                    ]
+                  }
+                )
+              ]
+            }
+          )
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "div",
+          {
+            className: "mt-3 text-xs font-mono",
+            style: { color: "rgba(107,114,128,0.5)" },
+            children: "← → / A D — MOVE  ·  AUTO-FIRE  ·  L — LEADERBOARD  ·  COLLECT DROPS TO UPGRADE WEAPON"
+          }
+        )
+      ]
+    }
+  );
+}
+const STORAGE_KEY = "gamePlayer";
+function useGameAuth() {
+  const { actor } = useActor(createActor);
+  const [currentPlayer, setCurrentPlayer] = reactExports.useState(() => {
+    try {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      return stored ? JSON.parse(stored) : null;
+    } catch {
+      return null;
+    }
+  });
+  const [isLoading, setIsLoading] = reactExports.useState(false);
+  const [error, setError] = reactExports.useState(null);
+  const persist = reactExports.useCallback((player) => {
+    setCurrentPlayer(player);
+    if (player) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(player));
+    } else {
+      localStorage.removeItem(STORAGE_KEY);
+    }
+  }, []);
+  const register = reactExports.useCallback(
+    async (username, password) => {
+      if (!actor) return false;
+      setIsLoading(true);
+      setError(null);
+      try {
+        const result = await actor.registerGamePlayer(username, password);
+        if (result.__kind__ === "err") {
+          setError(result.err);
+          return false;
+        }
+        const loginResult = await actor.loginGamePlayer(username, password);
+        if (loginResult.__kind__ === "err") {
+          setError(loginResult.err);
+          return false;
+        }
+        persist(loginResult.ok);
+        return true;
+      } catch (_e2) {
+        setError("Registration failed. Please try again.");
+        return false;
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [actor, persist]
+  );
+  const login = reactExports.useCallback(
+    async (username, password) => {
+      if (!actor) return false;
+      setIsLoading(true);
+      setError(null);
+      try {
+        const result = await actor.loginGamePlayer(username, password);
+        if (result.__kind__ === "err") {
+          setError(result.err);
+          return false;
+        }
+        persist(result.ok);
+        return true;
+      } catch (_e2) {
+        setError("Login failed. Please try again.");
+        return false;
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [actor, persist]
+  );
+  const logout = reactExports.useCallback(() => {
+    persist(null);
+  }, [persist]);
+  return {
+    currentPlayer,
+    isLoggedIn: !!currentPlayer,
+    isLoading,
+    error,
+    register,
+    login,
+    logout,
+    clearError: () => setError(null)
+  };
+}
+const AUTH_STARS = Array.from({ length: 80 }, (_2, i) => ({
+  id: `auth-star-${i}`,
+  w: (i * 7 + 13) % 20 / 10 + 1,
+  h: (i * 11 + 7) % 20 / 10 + 1,
+  left: i * 137.508 % 100,
+  top: i * 97.31 % 100,
+  opacity: i * 53 % 60 / 100 + 0.2
+}));
+const HUB_STARS = Array.from({ length: 100 }, (_2, i) => ({
+  id: `hub-star-${i}`,
+  w: (i * 5 + 3) % 15 / 10 + 0.5,
+  h: (i * 9 + 17) % 15 / 10 + 0.5,
+  left: i * 113.517 % 100,
+  top: i * 83.47 % 100,
+  opacity: i * 41 % 50 / 100 + 0.1
+}));
+const THUMB_STARS = Array.from({ length: 30 }, (_2, i) => ({
+  id: `thumb-star-${i}`,
+  left: i * 127.4 % 100,
+  top: i * 71.3 % 100,
+  opacity: i * 63 % 80 / 100 + 0.2
+}));
+function GamesHubPage() {
+  const {
+    currentPlayer,
+    isLoggedIn,
+    isLoading,
+    error,
+    register,
+    login,
+    logout,
+    clearError
+  } = useGameAuth();
+  if (!isLoggedIn) {
+    return /* @__PURE__ */ jsxRuntimeExports.jsx(
+      AuthGate,
+      {
+        isLoading,
+        error,
+        onRegister: register,
+        onLogin: login,
+        clearError
+      }
+    );
+  }
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(GameHub, { player: currentPlayer, onLogout: logout });
+}
+function AuthGate({
+  isLoading,
+  error,
+  onRegister,
+  onLogin,
+  clearError
+}) {
+  const [tab, setTab] = reactExports.useState("login");
+  const [username, setUsername] = reactExports.useState("");
+  const [password, setPassword] = reactExports.useState("");
+  const [showPw, setShowPw] = reactExports.useState(false);
+  const [validationError, setValidationError] = reactExports.useState("");
+  async function handleSubmit(e) {
+    e.preventDefault();
+    setValidationError("");
+    clearError();
+    if (!username.trim()) {
+      setValidationError("Username is required.");
+      return;
+    }
+    if (password.length < 6) {
+      setValidationError("Password must be at least 6 characters.");
+      return;
+    }
+    if (tab === "create") {
+      await onRegister(username.trim(), password);
+    } else {
+      await onLogin(username.trim(), password);
+    }
+  }
+  const displayError = validationError || error;
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+    "div",
+    {
+      className: "min-h-screen flex flex-col items-center justify-center relative overflow-hidden",
+      style: { background: "#0a0a1a" },
+      children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute inset-0 pointer-events-none", children: AUTH_STARS.map((s2) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "div",
+          {
+            className: "absolute rounded-full bg-white",
+            style: {
+              width: s2.w,
+              height: s2.h,
+              left: `${s2.left}%`,
+              top: `${s2.top}%`,
+              opacity: s2.opacity
+            }
+          },
+          s2.id
+        )) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "div",
+          {
+            className: "absolute top-1/4 left-1/4 w-96 h-96 rounded-full pointer-events-none",
+            style: {
+              background: "radial-gradient(circle, rgba(139,92,246,0.15) 0%, transparent 70%)"
+            }
+          }
+        ),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "div",
+          {
+            className: "absolute bottom-1/4 right-1/4 w-80 h-80 rounded-full pointer-events-none",
+            style: {
+              background: "radial-gradient(circle, rgba(6,182,212,0.12) 0%, transparent 70%)"
+            }
+          }
+        ),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative z-10 w-full max-w-md px-4", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-center mb-8", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-center gap-3 mb-3", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(Gamepad2, { className: "w-8 h-8", style: { color: "#a855f7" } }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                "h1",
+                {
+                  className: "text-4xl font-black tracking-widest",
+                  style: {
+                    background: "linear-gradient(135deg, #a855f7, #06b6d4, #ec4899)",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    filter: "drop-shadow(0 0 20px rgba(168,85,247,0.5))"
+                  },
+                  children: "NEXUS ARENA"
+                }
+              )
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm tracking-widest", style: { color: "#6b7280" }, children: "ENTER THE GRID" })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs(
+            "div",
+            {
+              className: "rounded-2xl p-6 border",
+              style: {
+                background: "rgba(15,15,30,0.8)",
+                backdropFilter: "blur(16px)",
+                borderColor: "rgba(139,92,246,0.3)",
+                boxShadow: "0 0 40px rgba(139,92,246,0.15), inset 0 1px 0 rgba(255,255,255,0.05)"
+              },
+              children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  "div",
+                  {
+                    className: "flex rounded-lg mb-6 p-1",
+                    style: { background: "rgba(255,255,255,0.05)" },
+                    children: ["login", "create"].map((t) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+                      "button",
+                      {
+                        type: "button",
+                        onClick: () => {
+                          setTab(t);
+                          setValidationError("");
+                          clearError();
+                        },
+                        className: "flex-1 py-2 rounded-md text-sm font-semibold tracking-wider transition-all duration-200",
+                        style: {
+                          background: tab === t ? "rgba(139,92,246,0.4)" : "transparent",
+                          color: tab === t ? "#e2d9f3" : "#6b7280",
+                          boxShadow: tab === t ? "0 0 12px rgba(139,92,246,0.3)" : "none"
+                        },
+                        "data-ocid": `games-auth-tab-${t}`,
+                        children: t === "login" ? "LOGIN" : "CREATE ID"
+                      },
+                      t
+                    ))
+                  }
+                ),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("form", { onSubmit: handleSubmit, className: "flex flex-col gap-4", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsx(
+                      "label",
+                      {
+                        htmlFor: "games-username",
+                        className: "block text-xs tracking-wider mb-1",
+                        style: { color: "#9ca3af" },
+                        children: "USERNAME"
+                      }
+                    ),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx(
+                      "input",
+                      {
+                        id: "games-username",
+                        type: "text",
+                        value: username,
+                        onChange: (e) => setUsername(e.target.value),
+                        placeholder: "Enter username",
+                        className: "w-full px-4 py-3 rounded-lg text-sm outline-none transition-all duration-200",
+                        style: {
+                          background: "rgba(255,255,255,0.05)",
+                          border: "1px solid rgba(139,92,246,0.3)",
+                          color: "#e2e8f0"
+                        },
+                        "data-ocid": "games-auth-username-input"
+                      }
+                    )
+                  ] }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsx(
+                      "label",
+                      {
+                        htmlFor: "games-password",
+                        className: "block text-xs tracking-wider mb-1",
+                        style: { color: "#9ca3af" },
+                        children: "PASSWORD"
+                      }
+                    ),
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative", children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx(
+                        "input",
+                        {
+                          type: showPw ? "text" : "password",
+                          value: password,
+                          onChange: (e) => setPassword(e.target.value),
+                          placeholder: tab === "create" ? "Min 6 characters" : "Enter password",
+                          className: "w-full px-4 py-3 pr-10 rounded-lg text-sm outline-none transition-all duration-200",
+                          style: {
+                            background: "rgba(255,255,255,0.05)",
+                            border: "1px solid rgba(139,92,246,0.3)",
+                            color: "#e2e8f0"
+                          },
+                          "data-ocid": "games-auth-password-input",
+                          id: "games-password"
+                        }
+                      ),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx(
+                        "button",
+                        {
+                          type: "button",
+                          onClick: () => setShowPw((v2) => !v2),
+                          className: "absolute right-3 top-1/2 -translate-y-1/2",
+                          style: { color: "#6b7280" },
+                          "aria-label": "Toggle password visibility",
+                          children: showPw ? /* @__PURE__ */ jsxRuntimeExports.jsx(EyeOff, { className: "w-4 h-4" }) : /* @__PURE__ */ jsxRuntimeExports.jsx(Eye, { className: "w-4 h-4" })
+                        }
+                      )
+                    ] })
+                  ] }),
+                  displayError && /* @__PURE__ */ jsxRuntimeExports.jsx(
+                    "div",
+                    {
+                      className: "px-3 py-2 rounded-lg text-sm",
+                      style: {
+                        background: "rgba(239,68,68,0.15)",
+                        color: "#f87171",
+                        border: "1px solid rgba(239,68,68,0.3)"
+                      },
+                      "data-ocid": "games-auth-error-state",
+                      children: displayError
+                    }
+                  ),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(
+                    "button",
+                    {
+                      type: "submit",
+                      disabled: isLoading,
+                      className: "mt-2 py-3 rounded-lg font-bold text-sm tracking-widest transition-all duration-200 disabled:opacity-60",
+                      style: {
+                        background: "linear-gradient(135deg, #7c3aed, #06b6d4)",
+                        color: "#fff",
+                        boxShadow: "0 0 20px rgba(124,58,237,0.4)"
+                      },
+                      "data-ocid": "games-auth-submit-button",
+                      children: isLoading ? "CONNECTING..." : tab === "login" ? "LOGIN" : "CREATE ID"
+                    }
+                  )
+                ] })
+              ]
+            }
+          )
+        ] })
+      ]
+    }
+  );
+}
+function GameHub({
+  player,
+  onLogout
+}) {
+  const [activeGame, setActiveGame] = reactExports.useState(null);
+  const { data: grandRankings = [] } = useGrandLeaderboard(10);
+  const { data: gamePlayers = [] } = useGamePlayers();
+  const playerMap = {};
+  for (const p2 of gamePlayers) {
+    playerMap[p2.playerId.toString()] = p2.username;
+  }
+  if (activeGame === "space-shooter") {
+    return /* @__PURE__ */ jsxRuntimeExports.jsx(
+      SpaceShooterGame,
+      {
+        playerId: player.playerId,
+        username: player.username,
+        onExit: () => setActiveGame(null)
+      }
+    );
+  }
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+    "div",
+    {
+      className: "min-h-screen flex flex-col relative overflow-hidden",
+      style: { background: "#0a0a1a" },
+      children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute inset-0 pointer-events-none", children: HUB_STARS.map((s2) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "div",
+          {
+            className: "absolute rounded-full bg-white",
+            style: {
+              width: s2.w,
+              height: s2.h,
+              left: `${s2.left}%`,
+              top: `${s2.top}%`,
+              opacity: s2.opacity
+            }
+          },
+          s2.id
+        )) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "div",
+          {
+            className: "absolute top-0 left-1/3 w-[600px] h-[400px] pointer-events-none",
+            style: {
+              background: "radial-gradient(ellipse, rgba(139,92,246,0.12) 0%, transparent 70%)"
+            }
+          }
+        ),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "div",
+          {
+            className: "absolute bottom-0 right-1/3 w-[400px] h-[300px] pointer-events-none",
+            style: {
+              background: "radial-gradient(ellipse, rgba(6,182,212,0.1) 0%, transparent 70%)"
+            }
+          }
+        ),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative z-10 px-6 pt-8 pb-4 flex items-center justify-between max-w-6xl mx-auto w-full", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "h1",
+              {
+                className: "text-3xl font-black tracking-widest",
+                style: {
+                  background: "linear-gradient(135deg, #a855f7, #06b6d4)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  filter: "drop-shadow(0 0 16px rgba(168,85,247,0.5))"
+                },
+                children: "NEXUS ARENA"
+              }
+            ),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-sm mt-1 font-mono", style: { color: "#a855f7" }, children: [
+              "WELCOME,",
+              " ",
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { style: { color: "#06b6d4" }, children: player.username.toUpperCase() })
+            ] })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs(
+            "button",
+            {
+              type: "button",
+              onClick: onLogout,
+              className: "flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200 hover:opacity-80",
+              style: {
+                background: "rgba(239,68,68,0.15)",
+                color: "#f87171",
+                border: "1px solid rgba(239,68,68,0.3)"
+              },
+              "data-ocid": "games-logout-button",
+              children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(LogOut, { className: "w-4 h-4" }),
+                "LOGOUT"
+              ]
+            }
+          )
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative z-10 flex-1 max-w-6xl mx-auto w-full px-6 py-8", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "h2",
+            {
+              className: "text-xs font-bold tracking-[0.3em] mb-6",
+              style: { color: "#6b7280" },
+              children: "SELECT MISSION"
+            }
+          ),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs(
+              "div",
+              {
+                className: "rounded-2xl overflow-hidden border transition-all duration-300 cursor-pointer group",
+                style: {
+                  background: "rgba(15,15,30,0.7)",
+                  backdropFilter: "blur(12px)",
+                  borderColor: "rgba(139,92,246,0.3)",
+                  boxShadow: "0 0 30px rgba(139,92,246,0.1)"
+                },
+                "data-ocid": "games-hub-space-shooter-card",
+                children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                    "div",
+                    {
+                      className: "relative h-44 flex items-center justify-center overflow-hidden",
+                      style: {
+                        background: "linear-gradient(135deg, #0d0d2b 0%, #1a0533 50%, #0d1a2b 100%)"
+                      },
+                      children: [
+                        /* @__PURE__ */ jsxRuntimeExports.jsx(
+                          "div",
+                          {
+                            className: "absolute inset-0",
+                            style: {
+                              background: "radial-gradient(circle at 50% 50%, rgba(139,92,246,0.3) 0%, transparent 70%)"
+                            }
+                          }
+                        ),
+                        THUMB_STARS.map((s2) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+                          "div",
+                          {
+                            className: "absolute rounded-full bg-white",
+                            style: {
+                              width: 2,
+                              height: 2,
+                              left: `${s2.left}%`,
+                              top: `${s2.top}%`,
+                              opacity: s2.opacity
+                            }
+                          },
+                          s2.id
+                        )),
+                        /* @__PURE__ */ jsxRuntimeExports.jsx(
+                          Rocket,
+                          {
+                            className: "w-20 h-20 relative z-10 transition-transform duration-300 group-hover:scale-110",
+                            style: {
+                              color: "#a855f7",
+                              filter: "drop-shadow(0 0 20px rgba(168,85,247,0.8))"
+                            }
+                          }
+                        ),
+                        /* @__PURE__ */ jsxRuntimeExports.jsx(
+                          "div",
+                          {
+                            className: "absolute bottom-2 right-3 text-xs font-mono px-2 py-0.5 rounded",
+                            style: {
+                              background: "rgba(6,182,212,0.2)",
+                              color: "#06b6d4",
+                              border: "1px solid rgba(6,182,212,0.3)"
+                            },
+                            children: "ENDLESS"
+                          }
+                        )
+                      ]
+                    }
+                  ),
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "p-5", children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsx(
+                      "h3",
+                      {
+                        className: "font-black text-lg tracking-wider mb-1",
+                        style: { color: "#e2d9f3" },
+                        children: "VOID STRIKER"
+                      }
+                    ),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs mb-4", style: { color: "#6b7280" }, children: "Space shooter · Waves · Boss fights · Power-ups" }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx(
+                      "button",
+                      {
+                        type: "button",
+                        onClick: () => setActiveGame("space-shooter"),
+                        className: "w-full py-2.5 rounded-lg font-bold text-sm tracking-widest flex items-center justify-center gap-2 transition-all duration-200 group-hover:shadow-lg",
+                        style: {
+                          background: "linear-gradient(135deg, #7c3aed, #0891b2)",
+                          color: "#fff",
+                          boxShadow: "0 0 15px rgba(124,58,237,0.3)"
+                        },
+                        "data-ocid": "games-launch-space-shooter-button",
+                        children: "PLAY NOW"
+                      }
+                    )
+                  ] })
+                ]
+              }
+            ),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs(
+              "div",
+              {
+                className: "rounded-2xl border flex flex-col items-center justify-center h-72 gap-3",
+                style: {
+                  background: "rgba(15,15,30,0.3)",
+                  borderColor: "rgba(255,255,255,0.05)",
+                  backdropFilter: "blur(8px)"
+                },
+                children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-3xl opacity-30", children: "🎮" }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(
+                    "p",
+                    {
+                      className: "text-xs tracking-widest font-mono",
+                      style: { color: "#4b5563" },
+                      children: "COMING SOON"
+                    }
+                  )
+                ]
+              }
+            ),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs(
+              "div",
+              {
+                className: "rounded-2xl border flex flex-col items-center justify-center h-72 gap-3",
+                style: {
+                  background: "rgba(15,15,30,0.3)",
+                  borderColor: "rgba(255,255,255,0.05)",
+                  backdropFilter: "blur(8px)"
+                },
+                children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-3xl opacity-30", children: "🎮" }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(
+                    "p",
+                    {
+                      className: "text-xs tracking-widest font-mono",
+                      style: { color: "#4b5563" },
+                      children: "COMING SOON"
+                    }
+                  )
+                ]
+              }
+            )
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mt-10", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-3 mb-5", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                Trophy,
+                {
+                  className: "w-5 h-5",
+                  style: {
+                    color: "#a855f7",
+                    filter: "drop-shadow(0 0 8px rgba(168,85,247,0.6))"
+                  }
+                }
+              ),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                "h2",
+                {
+                  className: "text-sm font-black tracking-[0.3em] font-mono",
+                  style: {
+                    background: "linear-gradient(135deg, #a855f7, #ec4899)",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent"
+                  },
+                  children: "GRAND ARENA RANKING"
+                }
+              ),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                "span",
+                {
+                  className: "text-xs font-mono px-2 py-0.5 rounded-full",
+                  style: {
+                    background: "rgba(236,72,153,0.15)",
+                    color: "#ec4899",
+                    border: "1px solid rgba(236,72,153,0.3)"
+                  },
+                  children: "ALL GAMES · TOP 10"
+                }
+              )
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "div",
+              {
+                className: "rounded-2xl border overflow-hidden",
+                style: {
+                  background: "rgba(10,5,25,0.8)",
+                  borderColor: "rgba(139,92,246,0.25)",
+                  backdropFilter: "blur(12px)",
+                  boxShadow: "0 0 40px rgba(139,92,246,0.08), inset 0 1px 0 rgba(255,255,255,0.04)"
+                },
+                "data-ocid": "games-hub.grand-ranking.panel",
+                children: grandRankings.length === 0 ? /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                  "div",
+                  {
+                    className: "flex flex-col items-center justify-center py-14 gap-3",
+                    "data-ocid": "games-hub.grand-ranking.empty_state",
+                    children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx(
+                        Trophy,
+                        {
+                          className: "w-10 h-10 opacity-20",
+                          style: { color: "#a855f7" }
+                        }
+                      ),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm font-mono", style: { color: "#4b5563" }, children: "No rankings yet — be the first to play!" })
+                    ]
+                  }
+                ) : /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                  "div",
+                  {
+                    className: "divide-y",
+                    style: { borderColor: "rgba(255,255,255,0.04)" },
+                    children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                        "div",
+                        {
+                          className: "grid grid-cols-[2.5rem_1fr_auto] gap-3 px-5 py-2.5 text-xs font-bold tracking-widest font-mono",
+                          style: {
+                            background: "rgba(139,92,246,0.08)",
+                            color: "#6b7280"
+                          },
+                          children: [
+                            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "RANK" }),
+                            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "PLAYER" }),
+                            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-right", children: "GRAND SCORE" })
+                          ]
+                        }
+                      ),
+                      grandRankings.map((gr) => {
+                        const isMe = gr.playerId.toString() === player.playerId;
+                        return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                          "div",
+                          {
+                            className: "grid grid-cols-[2.5rem_1fr_auto] gap-3 items-center px-5 py-3 transition-colors",
+                            style: {
+                              background: isMe ? "rgba(6,182,212,0.06)" : "transparent",
+                              borderLeft: isMe ? "3px solid rgba(6,182,212,0.6)" : "3px solid transparent"
+                            },
+                            "data-ocid": `games-hub.grand-ranking.item.${Number(gr.rank)}`,
+                            children: [
+                              /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                                "span",
+                                {
+                                  className: "text-sm font-black font-mono",
+                                  style: {
+                                    color: Number(gr.rank) === 1 ? "#fbbf24" : Number(gr.rank) === 2 ? "#9ca3af" : Number(gr.rank) === 3 ? "#d97706" : "#4b5563"
+                                  },
+                                  children: [
+                                    "#",
+                                    Number(gr.rank)
+                                  ]
+                                }
+                              ),
+                              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 min-w-0", children: [
+                                /* @__PURE__ */ jsxRuntimeExports.jsx(
+                                  "div",
+                                  {
+                                    className: "w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0",
+                                    style: {
+                                      background: isMe ? "rgba(6,182,212,0.2)" : "rgba(168,85,247,0.15)",
+                                      color: isMe ? "#06b6d4" : "#a855f7"
+                                    },
+                                    children: gr.username.charAt(0).toUpperCase()
+                                  }
+                                ),
+                                /* @__PURE__ */ jsxRuntimeExports.jsx(
+                                  "span",
+                                  {
+                                    className: "text-sm font-mono truncate",
+                                    style: {
+                                      color: isMe ? "#06b6d4" : "#e2d9f3",
+                                      fontWeight: isMe ? "bold" : "normal"
+                                    },
+                                    children: isMe ? `▶ ${gr.username}` : gr.username
+                                  }
+                                )
+                              ] }),
+                              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                                "span",
+                                {
+                                  className: "text-sm font-black font-mono tabular-nums",
+                                  style: {
+                                    color: isMe ? "#06b6d4" : "#a855f7",
+                                    textShadow: isMe ? "0 0 12px rgba(6,182,212,0.5)" : "none"
+                                  },
+                                  children: Number(gr.score).toLocaleString()
+                                }
+                              )
+                            ]
+                          },
+                          `hub-gr-${Number(gr.rank)}`
+                        );
+                      })
+                    ]
+                  }
+                )
+              }
+            )
+          ] })
+        ] })
+      ]
+    }
+  );
+}
+const Route$3 = createRoute({
+  getParentRoute: () => Route$6,
+  path: "/games",
+  component: GamesHubPage
+});
+const scriptRel = "modulepreload";
+const assetsURL = function(dep) {
+  return "/" + dep;
+};
+const seen = {};
+const __vitePreload = function preload2(baseModule, deps, importerUrl) {
+  let promise = Promise.resolve();
+  if (deps && deps.length > 0) {
+    document.getElementsByTagName("link");
+    const cspNonceMeta = document.querySelector(
+      "meta[property=csp-nonce]"
+    );
+    const cspNonce = (cspNonceMeta == null ? void 0 : cspNonceMeta.nonce) || (cspNonceMeta == null ? void 0 : cspNonceMeta.getAttribute("nonce"));
+    promise = Promise.allSettled(
+      deps.map((dep) => {
+        dep = assetsURL(dep);
+        if (dep in seen) return;
+        seen[dep] = true;
+        const isCss = dep.endsWith(".css");
+        const cssSelector = isCss ? '[rel="stylesheet"]' : "";
+        if (document.querySelector(`link[href="${dep}"]${cssSelector}`)) {
+          return;
+        }
+        const link = document.createElement("link");
+        link.rel = isCss ? "stylesheet" : scriptRel;
+        if (!isCss) {
+          link.as = "script";
+        }
+        link.crossOrigin = "";
+        link.href = dep;
+        if (cspNonce) {
+          link.setAttribute("nonce", cspNonce);
+        }
+        document.head.appendChild(link);
+        if (isCss) {
+          return new Promise((res, rej) => {
+            link.addEventListener("load", res);
+            link.addEventListener(
+              "error",
+              () => rej(new Error(`Unable to preload CSS for ${dep}`))
+            );
+          });
+        }
+      })
+    );
+  }
+  function handlePreloadError(err) {
+    const e = new Event("vite:preloadError", {
+      cancelable: true
+    });
+    e.payload = err;
+    window.dispatchEvent(e);
+    if (!e.defaultPrevented) {
+      throw err;
+    }
+  }
+  return promise.then((res) => {
+    for (const item of res || []) {
+      if (item.status !== "rejected") continue;
+      handlePreloadError(item.reason);
+    }
+    return baseModule().catch(handlePreloadError);
+  });
+};
+const SpaceShooterPage = reactExports.lazy(
+  () => __vitePreload(() => import("./SpaceShooterPage-VcR6xH-L.js"), true ? [] : void 0).then((m2) => ({
+    default: m2.SpaceShooterPage
+  }))
+);
+const Route$2 = createRoute({
+  getParentRoute: () => Route$3,
+  path: "/space-shooter",
+  component: () => /* @__PURE__ */ jsxRuntimeExports.jsx(
+    reactExports.Suspense,
+    {
+      fallback: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "min-h-screen bg-[#0a0a1a] flex items-center justify-center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-cyan-400 text-xl font-mono animate-pulse", children: "LOADING NEXUS ARENA..." }) }),
+      children: /* @__PURE__ */ jsxRuntimeExports.jsx(SpaceShooterPage, {})
+    }
+  )
 });
 function Card({ className, ...props }) {
   return /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -45032,7 +49995,7 @@ function HomePage() {
   ] });
 }
 const Route$1 = createRoute({
-  getParentRoute: () => Route$3,
+  getParentRoute: () => Route$6,
   path: "/",
   component: HomePage
 });
@@ -47026,86 +51989,6 @@ reactExports.forwardRef(function(e, t) {
     })) : null;
   }));
 });
-var NODES = [
-  "a",
-  "button",
-  "div",
-  "form",
-  "h2",
-  "h3",
-  "img",
-  "input",
-  "label",
-  "li",
-  "nav",
-  "ol",
-  "p",
-  "select",
-  "span",
-  "svg",
-  "ul"
-];
-var Primitive = NODES.reduce((primitive, node) => {
-  const Slot2 = /* @__PURE__ */ createSlot(`Primitive.${node}`);
-  const Node = reactExports.forwardRef((props, forwardedRef) => {
-    const { asChild, ...primitiveProps } = props;
-    const Comp = asChild ? Slot2 : node;
-    if (typeof window !== "undefined") {
-      window[Symbol.for("radix-ui")] = true;
-    }
-    return /* @__PURE__ */ jsxRuntimeExports.jsx(Comp, { ...primitiveProps, ref: forwardedRef });
-  });
-  Node.displayName = `Primitive.${node}`;
-  return { ...primitive, [node]: Node };
-}, {});
-var NAME = "Label";
-var Label$1 = reactExports.forwardRef((props, forwardedRef) => {
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(
-    Primitive.label,
-    {
-      ...props,
-      ref: forwardedRef,
-      onMouseDown: (event) => {
-        var _a3;
-        const target = event.target;
-        if (target.closest("button, input, select, textarea")) return;
-        (_a3 = props.onMouseDown) == null ? void 0 : _a3.call(props, event);
-        if (!event.defaultPrevented && event.detail > 1) event.preventDefault();
-      }
-    }
-  );
-});
-Label$1.displayName = NAME;
-var Root = Label$1;
-function Label({
-  className,
-  ...props
-}) {
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(
-    Root,
-    {
-      "data-slot": "label",
-      className: cn(
-        "flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50",
-        className
-      ),
-      ...props
-    }
-  );
-}
-function Textarea({ className, ...props }) {
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(
-    "textarea",
-    {
-      "data-slot": "textarea",
-      className: cn(
-        "border-input placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:bg-input/30 flex field-sizing-content min-h-16 w-full rounded-md border bg-transparent px-3 py-2 text-base shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
-        className
-      ),
-      ...props
-    }
-  );
-}
 function useSubmitApplication() {
   const { actor } = useActor(createActor);
   const queryClient2 = useQueryClient();
@@ -47437,11 +52320,17 @@ function JoinPage() {
   ] });
 }
 const Route2 = createRoute({
-  getParentRoute: () => Route$3,
+  getParentRoute: () => Route$6,
   path: "/join",
   component: JoinPage
 });
-const routeTree = Route$3.addChildren([Route$1, Route2, Route$2]);
+const routeTree = Route$6.addChildren([
+  Route$1,
+  Route2,
+  Route$5,
+  Route$4,
+  Route$3.addChildren([Route$2])
+]);
 const router = createRouter({ routeTree });
 function App() {
   return /* @__PURE__ */ jsxRuntimeExports.jsx(RouterProvider, { router });
@@ -47453,3 +52342,18 @@ const queryClient = new QueryClient();
 ReactDOM.createRoot(document.getElementById("root")).render(
   /* @__PURE__ */ jsxRuntimeExports.jsx(QueryClientProvider, { client: queryClient, children: /* @__PURE__ */ jsxRuntimeExports.jsx(InternetIdentityProvider, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(App, {}) }) })
 );
+export {
+  ArrowLeft as A,
+  Heart as H,
+  Trophy as T,
+  X,
+  Zap as Z,
+  useGameAuth as a,
+  useSubmitGameScore as b,
+  useTopScores as c,
+  usePlayerRank as d,
+  useGamePlayers as e,
+  jsxRuntimeExports as j,
+  reactExports as r,
+  useNavigate as u
+};

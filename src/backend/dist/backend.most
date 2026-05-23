@@ -1,4 +1,5 @@
 // Version: 1.0.0
+type ApplicationStatus__163954182 = {#approved; #pending};
 type Application__670275444 =
   {
     department : Text;
@@ -8,18 +9,67 @@ type Application__670275444 =
     phone : Text;
     priorExperience : Text;
     reasonForJoining : Text;
+    status : ApplicationStatus__163954182;
     submittedAt : Timestamp__281302580;
     yearOfStudy : Text
+  };
+type CalendarEvent__338973844 =
+  {
+    category : Text;
+    createdAt : Timestamp__675676713;
+    date : Text;
+    description : Text;
+    id : Nat;
+    subject : Text;
+    time : Text
+  };
+type GamePlayer__969158341 =
+  {
+    createdAt : Timestamp__93733298;
+    passwordHash : Text;
+    playerId : Text;
+    username : Text
+  };
+type GameScore__189294243 =
+  {
+    achievedAt : Timestamp__93733298;
+    gameId : Text;
+    killedEnemies : Nat;
+    playerId : Text;
+    score : Nat;
+    scoreId : Text;
+    wavesCleared : Nat
   };
 type Nat__490723111 = Nat__920180692;
 type Nat__920180692 = Nat;
 type Timestamp__281302580 = Timestamp__301639476;
 type Timestamp__301639476 = Int;
+type Timestamp__675676713 = Timestamp__301639476;
+type Timestamp__93733298 = Timestamp__301639476;
 actor {
   stable applications :
     {
       var blockIndex : Nat__490723111;
       var blocks : [var [var ?Application__670275444]];
+      var elementIndex : Nat__490723111
+    };
+  stable eventState : {var nextEventId : Nat};
+  stable events :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?CalendarEvent__338973844]];
+      var elementIndex : Nat__490723111
+    };
+  stable gamePlayers :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?GamePlayer__969158341]];
+      var elementIndex : Nat__490723111
+    };
+  stable gameScores :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?GameScore__189294243]];
       var elementIndex : Nat__490723111
     };
   stable var nextId : Nat

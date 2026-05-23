@@ -77,6 +77,28 @@ export function Layout({ children }: { children: React.ReactNode }) {
               <NavLink to="/" label="Home" />
               <NavLink to="/join" label="Join Now" highlight />
               <Link
+                to="/calendar"
+                className={`text-sm font-medium transition-colors duration-200 ${
+                  location.pathname === "/calendar"
+                    ? "text-primary"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+                data-ocid="nav-calendar-link"
+              >
+                Calendar
+              </Link>
+              <Link
+                to="/games"
+                className={`text-sm font-medium transition-colors duration-200 ${
+                  location.pathname.startsWith("/games")
+                    ? "text-primary"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+                data-ocid="nav-games-link"
+              >
+                NEXUS ARENA
+              </Link>
+              <Link
                 to="/admin"
                 className={`text-xs transition-colors duration-200 ml-2 ${isAdmin ? "text-primary" : "text-muted-foreground hover:text-foreground"}`}
                 data-ocid="nav-admin-link"
@@ -118,6 +140,22 @@ export function Layout({ children }: { children: React.ReactNode }) {
               label="Join Now"
               onClick={() => setMenuOpen(false)}
             />
+            <Link
+              to="/calendar"
+              className="text-sm font-medium py-2 text-foreground hover:text-primary transition-colors"
+              onClick={() => setMenuOpen(false)}
+              data-ocid="nav-mobile-calendar-link"
+            >
+              Calendar
+            </Link>
+            <Link
+              to="/games"
+              className="text-sm font-medium py-2 text-foreground hover:text-primary transition-colors"
+              onClick={() => setMenuOpen(false)}
+              data-ocid="nav-mobile-games-link"
+            >
+              NEXUS ARENA
+            </Link>
             <Link
               to="/admin"
               className="text-sm text-muted-foreground hover:text-foreground py-2 transition-colors"

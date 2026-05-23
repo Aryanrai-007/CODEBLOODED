@@ -3,6 +3,11 @@ import Common "common";
 module {
   public type Timestamp = Common.Timestamp;
 
+  public type ApplicationStatus = {
+    #pending;
+    #approved;
+  };
+
   public type Application = {
     id : Nat;
     name : Text;
@@ -13,6 +18,7 @@ module {
     reasonForJoining : Text;
     priorExperience : Text;
     submittedAt : Timestamp;
+    status : ApplicationStatus;
   };
 
   public type SubmitResult = {

@@ -1,8 +1,70 @@
 type Timestamp = int;
+type SubmitScoreResult = 
+ variant {
+   err: text;
+   ok: text;
+ };
 type SubmitResult = 
  variant {
    err: text;
    ok: nat;
+ };
+type RegisterResult = 
+ variant {
+   err: text;
+   ok: text;
+ };
+type PlayerRank = 
+ record {
+   playerId: text;
+   rank: nat;
+   score: nat;
+   username: text;
+ };
+type LoginResult = 
+ variant {
+   err: text;
+   ok: GamePlayer;
+ };
+type GameScore = 
+ record {
+   achievedAt: Timestamp;
+   gameId: text;
+   killedEnemies: nat;
+   playerId: text;
+   score: nat;
+   scoreId: text;
+   wavesCleared: nat;
+ };
+type GamePlayer = 
+ record {
+   createdAt: Timestamp;
+   passwordHash: text;
+   playerId: text;
+   username: text;
+ };
+type CreateEventInput = 
+ record {
+   category: text;
+   date: text;
+   description: text;
+   subject: text;
+   time: text;
+ };
+type CalendarEvent = 
+ record {
+   category: text;
+   createdAt: Timestamp;
+   date: text;
+   description: text;
+   id: nat;
+   subject: text;
+   time: text;
+ };
+type ApplicationStatus = 
+ variant {
+   approved;
+   pending;
  };
 type Application = 
  record {
@@ -13,13 +75,30 @@ type Application =
    phone: text;
    priorExperience: text;
    reasonForJoining: text;
+   status: ApplicationStatus;
    submittedAt: Timestamp;
    yearOfStudy: text;
  };
 service : {
+  approveApplication: (id: nat) -> (bool);
+  createEvent: (input: CreateEventInput) -> (nat);
   deleteApplication: (id: nat) -> (bool);
+  deleteEvent: (id: nat) -> (bool);
+  deleteGamePlayer: (playerId: text) -> (bool);
+  deleteGameScore: (scoreId: text) -> (bool);
+  getAllGameScores: () -> (vec GameScore) query;
   getApplications: () -> (vec Application) query;
+  getEvents: () -> (vec CalendarEvent) query;
+  getGamePlayers: () -> (vec GamePlayer) query;
+  getGrandLeaderboard: (limit: nat) -> (vec PlayerRank) query;
+  getPlayerRank: (gameId: text, playerId: text) -> (opt PlayerRank) query;
+  getTopScores: (gameId: text, limit: nat) -> (vec GameScore) query;
+  loginGamePlayer: (username: text, password: text) -> (LoginResult);
+  registerGamePlayer: (username: text, password: text) -> (RegisterResult);
   submitApplication: (name: text, email: text, phone: text, yearOfStudy:
    text, department: text, reasonForJoining: text, priorExperience: text) ->
    (SubmitResult);
+  submitGameScore: (playerId: text, gameId: text, score: nat, kills: 
+   nat, waves: nat) -> (SubmitScoreResult);
+  updateEvent: (id: nat, input: CreateEventInput) -> (bool);
 }

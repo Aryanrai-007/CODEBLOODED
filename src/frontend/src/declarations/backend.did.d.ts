@@ -12,6 +12,7 @@ import type { Principal } from '@icp-sdk/core/principal';
 
 export interface Application {
   'id' : bigint,
+  'status' : ApplicationStatus,
   'reasonForJoining' : string,
   'name' : string,
   'submittedAt' : Timestamp,
@@ -21,16 +22,79 @@ export interface Application {
   'priorExperience' : string,
   'yearOfStudy' : string,
 }
+export type ApplicationStatus = { 'pending' : null } |
+  { 'approved' : null };
+export interface CalendarEvent {
+  'id' : bigint,
+  'subject' : string,
+  'date' : string,
+  'createdAt' : Timestamp,
+  'time' : string,
+  'description' : string,
+  'category' : string,
+}
+export interface CreateEventInput {
+  'subject' : string,
+  'date' : string,
+  'time' : string,
+  'description' : string,
+  'category' : string,
+}
+export interface GamePlayer {
+  'username' : string,
+  'playerId' : string,
+  'createdAt' : Timestamp,
+  'passwordHash' : string,
+}
+export interface GameScore {
+  'playerId' : string,
+  'achievedAt' : Timestamp,
+  'gameId' : string,
+  'wavesCleared' : bigint,
+  'scoreId' : string,
+  'score' : bigint,
+  'killedEnemies' : bigint,
+}
+export type LoginResult = { 'ok' : GamePlayer } |
+  { 'err' : string };
+export interface PlayerRank {
+  'username' : string,
+  'playerId' : string,
+  'rank' : bigint,
+  'score' : bigint,
+}
+export type RegisterResult = { 'ok' : string } |
+  { 'err' : string };
 export type SubmitResult = { 'ok' : bigint } |
+  { 'err' : string };
+export type SubmitScoreResult = { 'ok' : string } |
   { 'err' : string };
 export type Timestamp = bigint;
 export interface _SERVICE {
+  'approveApplication' : ActorMethod<[bigint], boolean>,
+  'createEvent' : ActorMethod<[CreateEventInput], bigint>,
   'deleteApplication' : ActorMethod<[bigint], boolean>,
+  'deleteEvent' : ActorMethod<[bigint], boolean>,
+  'deleteGamePlayer' : ActorMethod<[string], boolean>,
+  'deleteGameScore' : ActorMethod<[string], boolean>,
+  'getAllGameScores' : ActorMethod<[], Array<GameScore>>,
   'getApplications' : ActorMethod<[], Array<Application>>,
+  'getEvents' : ActorMethod<[], Array<CalendarEvent>>,
+  'getGamePlayers' : ActorMethod<[], Array<GamePlayer>>,
+  'getGrandLeaderboard' : ActorMethod<[bigint], Array<PlayerRank>>,
+  'getPlayerRank' : ActorMethod<[string, string], [] | [PlayerRank]>,
+  'getTopScores' : ActorMethod<[string, bigint], Array<GameScore>>,
+  'loginGamePlayer' : ActorMethod<[string, string], LoginResult>,
+  'registerGamePlayer' : ActorMethod<[string, string], RegisterResult>,
   'submitApplication' : ActorMethod<
     [string, string, string, string, string, string, string],
     SubmitResult
   >,
+  'submitGameScore' : ActorMethod<
+    [string, string, bigint, bigint, bigint],
+    SubmitScoreResult
+  >,
+  'updateEvent' : ActorMethod<[bigint, CreateEventInput], boolean>,
 }
 export declare const idlService: IDL.ServiceClass;
 export declare const idlInitArgs: IDL.Type[];

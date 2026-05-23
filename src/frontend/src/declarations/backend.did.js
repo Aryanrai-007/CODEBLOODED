@@ -8,9 +8,30 @@
 
 import { IDL } from '@icp-sdk/core/candid';
 
+export const CreateEventInput = IDL.Record({
+  'subject' : IDL.Text,
+  'date' : IDL.Text,
+  'time' : IDL.Text,
+  'description' : IDL.Text,
+  'category' : IDL.Text,
+});
 export const Timestamp = IDL.Int;
+export const GameScore = IDL.Record({
+  'playerId' : IDL.Text,
+  'achievedAt' : Timestamp,
+  'gameId' : IDL.Text,
+  'wavesCleared' : IDL.Nat,
+  'scoreId' : IDL.Text,
+  'score' : IDL.Nat,
+  'killedEnemies' : IDL.Nat,
+});
+export const ApplicationStatus = IDL.Variant({
+  'pending' : IDL.Null,
+  'approved' : IDL.Null,
+});
 export const Application = IDL.Record({
   'id' : IDL.Nat,
+  'status' : ApplicationStatus,
   'reasonForJoining' : IDL.Text,
   'name' : IDL.Text,
   'submittedAt' : Timestamp,
@@ -20,24 +41,102 @@ export const Application = IDL.Record({
   'priorExperience' : IDL.Text,
   'yearOfStudy' : IDL.Text,
 });
+export const CalendarEvent = IDL.Record({
+  'id' : IDL.Nat,
+  'subject' : IDL.Text,
+  'date' : IDL.Text,
+  'createdAt' : Timestamp,
+  'time' : IDL.Text,
+  'description' : IDL.Text,
+  'category' : IDL.Text,
+});
+export const GamePlayer = IDL.Record({
+  'username' : IDL.Text,
+  'playerId' : IDL.Text,
+  'createdAt' : Timestamp,
+  'passwordHash' : IDL.Text,
+});
+export const PlayerRank = IDL.Record({
+  'username' : IDL.Text,
+  'playerId' : IDL.Text,
+  'rank' : IDL.Nat,
+  'score' : IDL.Nat,
+});
+export const LoginResult = IDL.Variant({ 'ok' : GamePlayer, 'err' : IDL.Text });
+export const RegisterResult = IDL.Variant({
+  'ok' : IDL.Text,
+  'err' : IDL.Text,
+});
 export const SubmitResult = IDL.Variant({ 'ok' : IDL.Nat, 'err' : IDL.Text });
+export const SubmitScoreResult = IDL.Variant({
+  'ok' : IDL.Text,
+  'err' : IDL.Text,
+});
 
 export const idlService = IDL.Service({
+  'approveApplication' : IDL.Func([IDL.Nat], [IDL.Bool], []),
+  'createEvent' : IDL.Func([CreateEventInput], [IDL.Nat], []),
   'deleteApplication' : IDL.Func([IDL.Nat], [IDL.Bool], []),
+  'deleteEvent' : IDL.Func([IDL.Nat], [IDL.Bool], []),
+  'deleteGamePlayer' : IDL.Func([IDL.Text], [IDL.Bool], []),
+  'deleteGameScore' : IDL.Func([IDL.Text], [IDL.Bool], []),
+  'getAllGameScores' : IDL.Func([], [IDL.Vec(GameScore)], ['query']),
   'getApplications' : IDL.Func([], [IDL.Vec(Application)], ['query']),
+  'getEvents' : IDL.Func([], [IDL.Vec(CalendarEvent)], ['query']),
+  'getGamePlayers' : IDL.Func([], [IDL.Vec(GamePlayer)], ['query']),
+  'getGrandLeaderboard' : IDL.Func([IDL.Nat], [IDL.Vec(PlayerRank)], ['query']),
+  'getPlayerRank' : IDL.Func(
+      [IDL.Text, IDL.Text],
+      [IDL.Opt(PlayerRank)],
+      ['query'],
+    ),
+  'getTopScores' : IDL.Func(
+      [IDL.Text, IDL.Nat],
+      [IDL.Vec(GameScore)],
+      ['query'],
+    ),
+  'loginGamePlayer' : IDL.Func([IDL.Text, IDL.Text], [LoginResult], []),
+  'registerGamePlayer' : IDL.Func([IDL.Text, IDL.Text], [RegisterResult], []),
   'submitApplication' : IDL.Func(
       [IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Text],
       [SubmitResult],
       [],
     ),
+  'submitGameScore' : IDL.Func(
+      [IDL.Text, IDL.Text, IDL.Nat, IDL.Nat, IDL.Nat],
+      [SubmitScoreResult],
+      [],
+    ),
+  'updateEvent' : IDL.Func([IDL.Nat, CreateEventInput], [IDL.Bool], []),
 });
 
 export const idlInitArgs = [];
 
 export const idlFactory = ({ IDL }) => {
+  const CreateEventInput = IDL.Record({
+    'subject' : IDL.Text,
+    'date' : IDL.Text,
+    'time' : IDL.Text,
+    'description' : IDL.Text,
+    'category' : IDL.Text,
+  });
   const Timestamp = IDL.Int;
+  const GameScore = IDL.Record({
+    'playerId' : IDL.Text,
+    'achievedAt' : Timestamp,
+    'gameId' : IDL.Text,
+    'wavesCleared' : IDL.Nat,
+    'scoreId' : IDL.Text,
+    'score' : IDL.Nat,
+    'killedEnemies' : IDL.Nat,
+  });
+  const ApplicationStatus = IDL.Variant({
+    'pending' : IDL.Null,
+    'approved' : IDL.Null,
+  });
   const Application = IDL.Record({
     'id' : IDL.Nat,
+    'status' : ApplicationStatus,
     'reasonForJoining' : IDL.Text,
     'name' : IDL.Text,
     'submittedAt' : Timestamp,
@@ -47,16 +146,71 @@ export const idlFactory = ({ IDL }) => {
     'priorExperience' : IDL.Text,
     'yearOfStudy' : IDL.Text,
   });
+  const CalendarEvent = IDL.Record({
+    'id' : IDL.Nat,
+    'subject' : IDL.Text,
+    'date' : IDL.Text,
+    'createdAt' : Timestamp,
+    'time' : IDL.Text,
+    'description' : IDL.Text,
+    'category' : IDL.Text,
+  });
+  const GamePlayer = IDL.Record({
+    'username' : IDL.Text,
+    'playerId' : IDL.Text,
+    'createdAt' : Timestamp,
+    'passwordHash' : IDL.Text,
+  });
+  const PlayerRank = IDL.Record({
+    'username' : IDL.Text,
+    'playerId' : IDL.Text,
+    'rank' : IDL.Nat,
+    'score' : IDL.Nat,
+  });
+  const LoginResult = IDL.Variant({ 'ok' : GamePlayer, 'err' : IDL.Text });
+  const RegisterResult = IDL.Variant({ 'ok' : IDL.Text, 'err' : IDL.Text });
   const SubmitResult = IDL.Variant({ 'ok' : IDL.Nat, 'err' : IDL.Text });
+  const SubmitScoreResult = IDL.Variant({ 'ok' : IDL.Text, 'err' : IDL.Text });
   
   return IDL.Service({
+    'approveApplication' : IDL.Func([IDL.Nat], [IDL.Bool], []),
+    'createEvent' : IDL.Func([CreateEventInput], [IDL.Nat], []),
     'deleteApplication' : IDL.Func([IDL.Nat], [IDL.Bool], []),
+    'deleteEvent' : IDL.Func([IDL.Nat], [IDL.Bool], []),
+    'deleteGamePlayer' : IDL.Func([IDL.Text], [IDL.Bool], []),
+    'deleteGameScore' : IDL.Func([IDL.Text], [IDL.Bool], []),
+    'getAllGameScores' : IDL.Func([], [IDL.Vec(GameScore)], ['query']),
     'getApplications' : IDL.Func([], [IDL.Vec(Application)], ['query']),
+    'getEvents' : IDL.Func([], [IDL.Vec(CalendarEvent)], ['query']),
+    'getGamePlayers' : IDL.Func([], [IDL.Vec(GamePlayer)], ['query']),
+    'getGrandLeaderboard' : IDL.Func(
+        [IDL.Nat],
+        [IDL.Vec(PlayerRank)],
+        ['query'],
+      ),
+    'getPlayerRank' : IDL.Func(
+        [IDL.Text, IDL.Text],
+        [IDL.Opt(PlayerRank)],
+        ['query'],
+      ),
+    'getTopScores' : IDL.Func(
+        [IDL.Text, IDL.Nat],
+        [IDL.Vec(GameScore)],
+        ['query'],
+      ),
+    'loginGamePlayer' : IDL.Func([IDL.Text, IDL.Text], [LoginResult], []),
+    'registerGamePlayer' : IDL.Func([IDL.Text, IDL.Text], [RegisterResult], []),
     'submitApplication' : IDL.Func(
         [IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Text],
         [SubmitResult],
         [],
       ),
+    'submitGameScore' : IDL.Func(
+        [IDL.Text, IDL.Text, IDL.Nat, IDL.Nat, IDL.Nat],
+        [SubmitScoreResult],
+        [],
+      ),
+    'updateEvent' : IDL.Func([IDL.Nat, CreateEventInput], [IDL.Bool], []),
   });
 };
 

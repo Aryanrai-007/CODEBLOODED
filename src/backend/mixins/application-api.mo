@@ -25,6 +25,7 @@ mixin (applications : List.List<Types.Application>) {
       reasonForJoining;
       priorExperience;
       submittedAt = Time.now();
+      status = #pending;
     };
     applications.add(app);
     nextId += 1;
@@ -37,5 +38,9 @@ mixin (applications : List.List<Types.Application>) {
 
   public func deleteApplication(id : Nat) : async Bool {
     AppLib.delete(applications, id);
+  };
+
+  public func approveApplication(id : Nat) : async Bool {
+    AppLib.approve(applications, id);
   };
 };

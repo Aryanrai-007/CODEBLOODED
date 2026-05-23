@@ -1,16 +1,16 @@
 import { useActor } from "@caffeineai/core-infrastructure";
 import { useQuery } from "@tanstack/react-query";
 import { createActor } from "../backend";
-import type { Application } from "../types";
+import type { CalendarEvent } from "../types";
 
-export function useApplications() {
+export function useCalendarEvents() {
   const { actor, isFetching } = useActor(createActor);
 
-  return useQuery<Application[]>({
-    queryKey: ["applications"],
+  return useQuery<CalendarEvent[]>({
+    queryKey: ["calendarEvents"],
     queryFn: async () => {
       if (!actor) return [];
-      return actor.getApplications();
+      return actor.getEvents();
     },
     enabled: !!actor && !isFetching,
   });
