@@ -3,10 +3,13 @@ import Array "mo:core/Array";
 import Int "mo:core/Int";
 import Types "../types/game";
 import Time "mo:core/Time";
+import Map "mo:core/Map";
 
 module {
   public type GamePlayer = Types.GamePlayer;
   public type GameScore = Types.GameScore;
+  public type PlayerAchievement = Types.PlayerAchievement;
+  public type PlayerSkin = Types.PlayerSkin;
 
   // ---------------------------------------------------------------------------
   // registerPlayer
@@ -303,5 +306,132 @@ module {
     scores : List.List<GameScore>
   ) : [GameScore] {
     scores.toArray();
+  };
+
+  // ---------------------------------------------------------------------------
+  // unlockAchievement — idempotent, keyed by "playerId_achievementId"
+  // ---------------------------------------------------------------------------
+  public func unlockAchievement(
+    achievements : Map.Map<Text, PlayerAchievement>,
+    playerId : Text,
+    achievementId : Text
+  ) : Types.AchievementResult {
+    let key = playerId # "_" # achievementId;
+    switch (achievements.get(key)) {
+      case (?_) { #ok false }; // already unlocked
+      case null {
+        let record : PlayerAchievement = {
+          achievementId = achievementId;
+          playerId = playerId;
+          unlockedAt = Time.now();
+        };
+        achievements.add(key, record);
+        #ok true;
+      };
+    };
+  };
+
+  // ---------------------------------------------------------------------------
+  // getPlayerAchievements
+  // ---------------------------------------------------------------------------
+  public func getPlayerAchievements(
+    achievements : Map.Map<Text, PlayerAchievement>,
+    playerId : Text
+  ) : [PlayerAchievement] {
+    let result = List.empty<PlayerAchievement>();
+    for ((_, v) in achievements.entries()) {
+      if (v.playerId == playerId) {
+        result.add(v);
+      };
+    };
+    result.toArray();
+  };
+
+  // ---------------------------------------------------------------------------
+  // unlockSkin — idempotent, keyed by "playerId_skinId"
+  // ---------------------------------------------------------------------------
+  public func unlockSkin(
+    skins : Map.Map<Text, PlayerSkin>,
+    playerId : Text,
+    skinId : Text
+  ) : Types.SkinResult {
+    let key = playerId # "_" # skinId;
+    switch (skins.get(key)) {
+      case (?_) { #ok false }; // already unlocked
+      case null {
+        let record : PlayerSkin = {
+          skinId = skinId;
+          playerId = playerId;
+          unlockedAt = Time.now();
+          equipped = false;
+        };
+        skins.add(key, record);
+        #ok true;
+      };
+    };
+  };
+
+  // ---------------------------------------------------------------------------
+  // getPlayerSkins
+  // ---------------------------------------------------------------------------
+  public func getPlayerSkins(
+    skins : Map.Map<Text, PlayerSkin>,
+    playerId : Text
+  ) : [PlayerSkin] {
+    let result = List.empty<PlayerSkin>();
+    for ((_, v) in skins.entries()) {
+      if (v.playerId == playerId) {
+        result.add(v);
+      };
+    };
+    result.toArray();
+  };
+
+  // ---------------------------------------------------------------------------
+  // equipSkin — sets equipped=true for given skin, false for all others of player
+  // ---------------------------------------------------------------------------
+  public func equipSkin(
+    skins : Map.Map<Text, PlayerSkin>,
+    playerId : Text,
+    skinId : Text
+  ) : Types.SkinResult {
+    let targetKey = playerId # "_" # skinId;
+    switch (skins.get(targetKey)) {
+      case null { #err "Skin not unlocked" };
+      case (?_) {
+        // Unequip all skins belonging to this player, equip the target
+        let keys = List.empty<Text>();
+        for ((k, v) in skins.entries()) {
+          if (v.playerId == playerId) {
+            keys.add(k);
+          };
+        };
+        for (k in keys.toArray().values()) {
+          switch (skins.get(k)) {
+            case null {};
+            case (?skin) {
+              skins.add(k, { skin with equipped = (k == targetKey) });
+            };
+          };
+        };
+        #ok true;
+      };
+    };
+  };
+
+  // ---------------------------------------------------------------------------
+  // getEquippedSkin
+  // ---------------------------------------------------------------------------
+  public func getEquippedSkin(
+    skins : Map.Map<Text, PlayerSkin>,
+    playerId : Text
+  ) : ?PlayerSkin {
+    var equipped : ?PlayerSkin = null;
+    for ((_, v) in skins.entries()) {
+      if (v.playerId == playerId and v.equipped) {
+        equipped := ?v;
+      };
+    };
+    equipped;
   };
 };

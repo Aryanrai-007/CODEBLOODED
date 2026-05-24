@@ -15,6 +15,7 @@ export const CreateEventInput = IDL.Record({
   'description' : IDL.Text,
   'category' : IDL.Text,
 });
+export const SkinResult = IDL.Variant({ 'ok' : IDL.Bool, 'err' : IDL.Text });
 export const Timestamp = IDL.Int;
 export const GameScore = IDL.Record({
   'playerId' : IDL.Text,
@@ -41,6 +42,12 @@ export const Application = IDL.Record({
   'priorExperience' : IDL.Text,
   'yearOfStudy' : IDL.Text,
 });
+export const PlayerSkin = IDL.Record({
+  'unlockedAt' : IDL.Int,
+  'playerId' : IDL.Text,
+  'equipped' : IDL.Bool,
+  'skinId' : IDL.Text,
+});
 export const CalendarEvent = IDL.Record({
   'id' : IDL.Nat,
   'subject' : IDL.Text,
@@ -62,6 +69,11 @@ export const PlayerRank = IDL.Record({
   'rank' : IDL.Nat,
   'score' : IDL.Nat,
 });
+export const PlayerAchievement = IDL.Record({
+  'achievementId' : IDL.Text,
+  'unlockedAt' : IDL.Int,
+  'playerId' : IDL.Text,
+});
 export const LoginResult = IDL.Variant({ 'ok' : GamePlayer, 'err' : IDL.Text });
 export const RegisterResult = IDL.Variant({
   'ok' : IDL.Text,
@@ -72,6 +84,10 @@ export const SubmitScoreResult = IDL.Variant({
   'ok' : IDL.Text,
   'err' : IDL.Text,
 });
+export const AchievementResult = IDL.Variant({
+  'ok' : IDL.Bool,
+  'err' : IDL.Text,
+});
 
 export const idlService = IDL.Service({
   'approveApplication' : IDL.Func([IDL.Nat], [IDL.Bool], []),
@@ -80,16 +96,24 @@ export const idlService = IDL.Service({
   'deleteEvent' : IDL.Func([IDL.Nat], [IDL.Bool], []),
   'deleteGamePlayer' : IDL.Func([IDL.Text], [IDL.Bool], []),
   'deleteGameScore' : IDL.Func([IDL.Text], [IDL.Bool], []),
+  'equipSkin' : IDL.Func([IDL.Text, IDL.Text], [SkinResult], []),
   'getAllGameScores' : IDL.Func([], [IDL.Vec(GameScore)], ['query']),
   'getApplications' : IDL.Func([], [IDL.Vec(Application)], ['query']),
+  'getEquippedSkin' : IDL.Func([IDL.Text], [IDL.Opt(PlayerSkin)], ['query']),
   'getEvents' : IDL.Func([], [IDL.Vec(CalendarEvent)], ['query']),
   'getGamePlayers' : IDL.Func([], [IDL.Vec(GamePlayer)], ['query']),
   'getGrandLeaderboard' : IDL.Func([IDL.Nat], [IDL.Vec(PlayerRank)], ['query']),
+  'getPlayerAchievements' : IDL.Func(
+      [IDL.Text],
+      [IDL.Vec(PlayerAchievement)],
+      ['query'],
+    ),
   'getPlayerRank' : IDL.Func(
       [IDL.Text, IDL.Text],
       [IDL.Opt(PlayerRank)],
       ['query'],
     ),
+  'getPlayerSkins' : IDL.Func([IDL.Text], [IDL.Vec(PlayerSkin)], ['query']),
   'getTopScores' : IDL.Func(
       [IDL.Text, IDL.Nat],
       [IDL.Vec(GameScore)],
@@ -107,6 +131,8 @@ export const idlService = IDL.Service({
       [SubmitScoreResult],
       [],
     ),
+  'unlockAchievement' : IDL.Func([IDL.Text, IDL.Text], [AchievementResult], []),
+  'unlockSkin' : IDL.Func([IDL.Text, IDL.Text], [SkinResult], []),
   'updateEvent' : IDL.Func([IDL.Nat, CreateEventInput], [IDL.Bool], []),
 });
 
@@ -120,6 +146,7 @@ export const idlFactory = ({ IDL }) => {
     'description' : IDL.Text,
     'category' : IDL.Text,
   });
+  const SkinResult = IDL.Variant({ 'ok' : IDL.Bool, 'err' : IDL.Text });
   const Timestamp = IDL.Int;
   const GameScore = IDL.Record({
     'playerId' : IDL.Text,
@@ -146,6 +173,12 @@ export const idlFactory = ({ IDL }) => {
     'priorExperience' : IDL.Text,
     'yearOfStudy' : IDL.Text,
   });
+  const PlayerSkin = IDL.Record({
+    'unlockedAt' : IDL.Int,
+    'playerId' : IDL.Text,
+    'equipped' : IDL.Bool,
+    'skinId' : IDL.Text,
+  });
   const CalendarEvent = IDL.Record({
     'id' : IDL.Nat,
     'subject' : IDL.Text,
@@ -167,10 +200,16 @@ export const idlFactory = ({ IDL }) => {
     'rank' : IDL.Nat,
     'score' : IDL.Nat,
   });
+  const PlayerAchievement = IDL.Record({
+    'achievementId' : IDL.Text,
+    'unlockedAt' : IDL.Int,
+    'playerId' : IDL.Text,
+  });
   const LoginResult = IDL.Variant({ 'ok' : GamePlayer, 'err' : IDL.Text });
   const RegisterResult = IDL.Variant({ 'ok' : IDL.Text, 'err' : IDL.Text });
   const SubmitResult = IDL.Variant({ 'ok' : IDL.Nat, 'err' : IDL.Text });
   const SubmitScoreResult = IDL.Variant({ 'ok' : IDL.Text, 'err' : IDL.Text });
+  const AchievementResult = IDL.Variant({ 'ok' : IDL.Bool, 'err' : IDL.Text });
   
   return IDL.Service({
     'approveApplication' : IDL.Func([IDL.Nat], [IDL.Bool], []),
@@ -179,8 +218,10 @@ export const idlFactory = ({ IDL }) => {
     'deleteEvent' : IDL.Func([IDL.Nat], [IDL.Bool], []),
     'deleteGamePlayer' : IDL.Func([IDL.Text], [IDL.Bool], []),
     'deleteGameScore' : IDL.Func([IDL.Text], [IDL.Bool], []),
+    'equipSkin' : IDL.Func([IDL.Text, IDL.Text], [SkinResult], []),
     'getAllGameScores' : IDL.Func([], [IDL.Vec(GameScore)], ['query']),
     'getApplications' : IDL.Func([], [IDL.Vec(Application)], ['query']),
+    'getEquippedSkin' : IDL.Func([IDL.Text], [IDL.Opt(PlayerSkin)], ['query']),
     'getEvents' : IDL.Func([], [IDL.Vec(CalendarEvent)], ['query']),
     'getGamePlayers' : IDL.Func([], [IDL.Vec(GamePlayer)], ['query']),
     'getGrandLeaderboard' : IDL.Func(
@@ -188,11 +229,17 @@ export const idlFactory = ({ IDL }) => {
         [IDL.Vec(PlayerRank)],
         ['query'],
       ),
+    'getPlayerAchievements' : IDL.Func(
+        [IDL.Text],
+        [IDL.Vec(PlayerAchievement)],
+        ['query'],
+      ),
     'getPlayerRank' : IDL.Func(
         [IDL.Text, IDL.Text],
         [IDL.Opt(PlayerRank)],
         ['query'],
       ),
+    'getPlayerSkins' : IDL.Func([IDL.Text], [IDL.Vec(PlayerSkin)], ['query']),
     'getTopScores' : IDL.Func(
         [IDL.Text, IDL.Nat],
         [IDL.Vec(GameScore)],
@@ -210,6 +257,12 @@ export const idlFactory = ({ IDL }) => {
         [SubmitScoreResult],
         [],
       ),
+    'unlockAchievement' : IDL.Func(
+        [IDL.Text, IDL.Text],
+        [AchievementResult],
+        [],
+      ),
+    'unlockSkin' : IDL.Func([IDL.Text, IDL.Text], [SkinResult], []),
     'updateEvent' : IDL.Func([IDL.Nat, CreateEventInput], [IDL.Bool], []),
   });
 };

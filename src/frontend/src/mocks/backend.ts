@@ -1,4 +1,4 @@
-import type { backendInterface } from "../backend";
+import type { backendInterface, PlayerAchievement, PlayerSkin, SkinResult, AchievementResult } from "../backend";
 import { ApplicationStatus } from "../backend";
 
 export const mockBackend: backendInterface = {
@@ -8,6 +8,12 @@ export const mockBackend: backendInterface = {
   deleteEvent: async (_id: bigint) => true,
   deleteGamePlayer: async (_playerId: string) => true,
   deleteGameScore: async (_scoreId: string) => true,
+  equipSkin: async (_playerId: string, _skinId: string): Promise<SkinResult> => ({ __kind__: "ok", ok: true }),
+  getEquippedSkin: async (_playerId: string): Promise<PlayerSkin | null> => null,
+  getPlayerAchievements: async (_playerId: string): Promise<Array<PlayerAchievement>> => [],
+  getPlayerSkins: async (_playerId: string): Promise<Array<PlayerSkin>> => [],
+  unlockAchievement: async (_playerId: string, _achievementId: string): Promise<AchievementResult> => ({ __kind__: "ok", ok: true }),
+  unlockSkin: async (_playerId: string, _skinId: string): Promise<SkinResult> => ({ __kind__: "ok", ok: true }),
   getAllGameScores: async () => [
     {
       playerId: "player-001",

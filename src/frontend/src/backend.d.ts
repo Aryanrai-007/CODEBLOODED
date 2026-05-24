@@ -15,6 +15,44 @@ export type SubmitResult = {
     err: string;
 };
 export type Timestamp = bigint;
+export type SkinResult = {
+    __kind__: "ok";
+    ok: boolean;
+} | {
+    __kind__: "err";
+    err: string;
+};
+export interface Application {
+    id: bigint;
+    status: ApplicationStatus;
+    reasonForJoining: string;
+    name: string;
+    submittedAt: Timestamp;
+    email: string;
+    phone: string;
+    department: string;
+    priorExperience: string;
+    yearOfStudy: string;
+}
+export interface GamePlayer {
+    username: string;
+    playerId: string;
+    createdAt: Timestamp;
+    passwordHash: string;
+}
+export type AchievementResult = {
+    __kind__: "ok";
+    ok: boolean;
+} | {
+    __kind__: "err";
+    err: string;
+};
+export interface PlayerRank {
+    username: string;
+    playerId: string;
+    rank: bigint;
+    score: bigint;
+}
 export type RegisterResult = {
     __kind__: "ok";
     ok: string;
@@ -38,14 +76,10 @@ export interface CalendarEvent {
     description: string;
     category: string;
 }
-export interface GameScore {
+export interface PlayerAchievement {
+    achievementId: string;
+    unlockedAt: bigint;
     playerId: string;
-    achievedAt: Timestamp;
-    gameId: string;
-    wavesCleared: bigint;
-    scoreId: string;
-    score: bigint;
-    killedEnemies: bigint;
 }
 export type SubmitScoreResult = {
     __kind__: "ok";
@@ -54,11 +88,11 @@ export type SubmitScoreResult = {
     __kind__: "err";
     err: string;
 };
-export interface GamePlayer {
-    username: string;
+export interface PlayerSkin {
+    unlockedAt: bigint;
     playerId: string;
-    createdAt: Timestamp;
-    passwordHash: string;
+    equipped: boolean;
+    skinId: string;
 }
 export type LoginResult = {
     __kind__: "ok";
@@ -67,23 +101,14 @@ export type LoginResult = {
     __kind__: "err";
     err: string;
 };
-export interface Application {
-    id: bigint;
-    status: ApplicationStatus;
-    reasonForJoining: string;
-    name: string;
-    submittedAt: Timestamp;
-    email: string;
-    phone: string;
-    department: string;
-    priorExperience: string;
-    yearOfStudy: string;
-}
-export interface PlayerRank {
-    username: string;
+export interface GameScore {
     playerId: string;
-    rank: bigint;
+    achievedAt: Timestamp;
+    gameId: string;
+    wavesCleared: bigint;
+    scoreId: string;
     score: bigint;
+    killedEnemies: bigint;
 }
 export enum ApplicationStatus {
     pending = "pending",
@@ -96,16 +121,22 @@ export interface backendInterface {
     deleteEvent(id: bigint): Promise<boolean>;
     deleteGamePlayer(playerId: string): Promise<boolean>;
     deleteGameScore(scoreId: string): Promise<boolean>;
+    equipSkin(playerId: string, skinId: string): Promise<SkinResult>;
     getAllGameScores(): Promise<Array<GameScore>>;
     getApplications(): Promise<Array<Application>>;
+    getEquippedSkin(playerId: string): Promise<PlayerSkin | null>;
     getEvents(): Promise<Array<CalendarEvent>>;
     getGamePlayers(): Promise<Array<GamePlayer>>;
     getGrandLeaderboard(limit: bigint): Promise<Array<PlayerRank>>;
+    getPlayerAchievements(playerId: string): Promise<Array<PlayerAchievement>>;
     getPlayerRank(gameId: string, playerId: string): Promise<PlayerRank | null>;
+    getPlayerSkins(playerId: string): Promise<Array<PlayerSkin>>;
     getTopScores(gameId: string, limit: bigint): Promise<Array<GameScore>>;
     loginGamePlayer(username: string, password: string): Promise<LoginResult>;
     registerGamePlayer(username: string, password: string): Promise<RegisterResult>;
     submitApplication(name: string, email: string, phone: string, yearOfStudy: string, department: string, reasonForJoining: string, priorExperience: string): Promise<SubmitResult>;
     submitGameScore(playerId: string, gameId: string, score: bigint, kills: bigint, waves: bigint): Promise<SubmitScoreResult>;
+    unlockAchievement(playerId: string, achievementId: string): Promise<AchievementResult>;
+    unlockSkin(playerId: string, skinId: string): Promise<SkinResult>;
     updateEvent(id: bigint, input: CreateEventInput): Promise<boolean>;
 }

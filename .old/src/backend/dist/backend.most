@@ -23,6 +23,8 @@ type CalendarEvent__338973844 =
     subject : Text;
     time : Text
   };
+type Data__791452850<K, V> =
+  {var count : Nat__490723111; kvs : [var ?(K, V)]};
 type GamePlayer__969158341 =
   {
     createdAt : Timestamp__93733298;
@@ -40,8 +42,17 @@ type GameScore__189294243 =
     scoreId : Text;
     wavesCleared : Nat
   };
+type Internal__8484328<K, V> =
+  {children : [var ?Node__46230540<K, V>]; data : Data__791452850<K, V>};
+type Leaf__809889148<K, V> = {data : Data__791452850<K, V>};
 type Nat__490723111 = Nat__920180692;
 type Nat__920180692 = Nat;
+type Node__46230540<K, V> =
+  {#internal : Internal__8484328<K, V>; #leaf : Leaf__809889148<K, V>};
+type PlayerAchievement__835424681 =
+  {achievementId : Text; playerId : Text; unlockedAt : Int};
+type PlayerSkin__1028348120 =
+  {equipped : Bool; playerId : Text; skinId : Text; unlockedAt : Int};
 type Timestamp__281302580 = Timestamp__301639476;
 type Timestamp__301639476 = Int;
 type Timestamp__675676713 = Timestamp__301639476;
@@ -60,6 +71,11 @@ actor {
       var blocks : [var [var ?CalendarEvent__338973844]];
       var elementIndex : Nat__490723111
     };
+  stable gameAchievements :
+    {
+      var root : Node__46230540<Text, PlayerAchievement__835424681>;
+      var size : Nat__490723111
+    };
   stable gamePlayers :
     {
       var blockIndex : Nat__490723111;
@@ -71,6 +87,11 @@ actor {
       var blockIndex : Nat__490723111;
       var blocks : [var [var ?GameScore__189294243]];
       var elementIndex : Nat__490723111
+    };
+  stable gameSkins :
+    {
+      var root : Node__46230540<Text, PlayerSkin__1028348120>;
+      var size : Nat__490723111
     };
   stable var nextId : Nat
 };

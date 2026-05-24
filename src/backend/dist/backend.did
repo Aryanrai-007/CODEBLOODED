@@ -9,10 +9,22 @@ type SubmitResult =
    err: text;
    ok: nat;
  };
+type SkinResult = 
+ variant {
+   err: text;
+   ok: bool;
+ };
 type RegisterResult = 
  variant {
    err: text;
    ok: text;
+ };
+type PlayerSkin = 
+ record {
+   equipped: bool;
+   playerId: text;
+   skinId: text;
+   unlockedAt: int;
  };
 type PlayerRank = 
  record {
@@ -20,6 +32,12 @@ type PlayerRank =
    rank: nat;
    score: nat;
    username: text;
+ };
+type PlayerAchievement = 
+ record {
+   achievementId: text;
+   playerId: text;
+   unlockedAt: int;
  };
 type LoginResult = 
  variant {
@@ -79,6 +97,11 @@ type Application =
    submittedAt: Timestamp;
    yearOfStudy: text;
  };
+type AchievementResult = 
+ variant {
+   err: text;
+   ok: bool;
+ };
 service : {
   approveApplication: (id: nat) -> (bool);
   createEvent: (input: CreateEventInput) -> (nat);
@@ -86,12 +109,16 @@ service : {
   deleteEvent: (id: nat) -> (bool);
   deleteGamePlayer: (playerId: text) -> (bool);
   deleteGameScore: (scoreId: text) -> (bool);
+  equipSkin: (playerId: text, skinId: text) -> (SkinResult);
   getAllGameScores: () -> (vec GameScore) query;
   getApplications: () -> (vec Application) query;
+  getEquippedSkin: (playerId: text) -> (opt PlayerSkin) query;
   getEvents: () -> (vec CalendarEvent) query;
   getGamePlayers: () -> (vec GamePlayer) query;
   getGrandLeaderboard: (limit: nat) -> (vec PlayerRank) query;
+  getPlayerAchievements: (playerId: text) -> (vec PlayerAchievement) query;
   getPlayerRank: (gameId: text, playerId: text) -> (opt PlayerRank) query;
+  getPlayerSkins: (playerId: text) -> (vec PlayerSkin) query;
   getTopScores: (gameId: text, limit: nat) -> (vec GameScore) query;
   loginGamePlayer: (username: text, password: text) -> (LoginResult);
   registerGamePlayer: (username: text, password: text) -> (RegisterResult);
@@ -100,5 +127,8 @@ service : {
    (SubmitResult);
   submitGameScore: (playerId: text, gameId: text, score: nat, kills: 
    nat, waves: nat) -> (SubmitScoreResult);
+  unlockAchievement: (playerId: text, achievementId: text) ->
+   (AchievementResult);
+  unlockSkin: (playerId: text, skinId: text) -> (SkinResult);
   updateEvent: (id: nat, input: CreateEventInput) -> (bool);
 }

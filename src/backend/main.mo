@@ -5,6 +5,7 @@ import EventMixin "mixins/event-api";
 import List "mo:core/List";
 import GameTypes "types/game";
 import GameMixin "mixins/game-api";
+import Map "mo:core/Map";
 
 actor {
   let applications = List.empty<AppTypes.Application>();
@@ -13,8 +14,10 @@ actor {
 
   let gamePlayers = List.empty<GameTypes.GamePlayer>();
   let gameScores = List.empty<GameTypes.GameScore>();
+  let gameAchievements = Map.empty<Text, GameTypes.PlayerAchievement>();
+  let gameSkins = Map.empty<Text, GameTypes.PlayerSkin>();
 
   include ApplicationMixin(applications);
   include EventMixin(events, eventState);
-  include GameMixin(gamePlayers, gameScores);
+  include GameMixin(gamePlayers, gameScores, gameAchievements, gameSkins);
 };

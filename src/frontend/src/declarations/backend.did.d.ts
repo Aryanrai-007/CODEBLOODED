@@ -10,6 +10,8 @@ import type { ActorMethod } from '@icp-sdk/core/agent';
 import type { IDL } from '@icp-sdk/core/candid';
 import type { Principal } from '@icp-sdk/core/principal';
 
+export type AchievementResult = { 'ok' : boolean } |
+  { 'err' : string };
 export interface Application {
   'id' : bigint,
   'status' : ApplicationStatus,
@@ -57,13 +59,26 @@ export interface GameScore {
 }
 export type LoginResult = { 'ok' : GamePlayer } |
   { 'err' : string };
+export interface PlayerAchievement {
+  'achievementId' : string,
+  'unlockedAt' : bigint,
+  'playerId' : string,
+}
 export interface PlayerRank {
   'username' : string,
   'playerId' : string,
   'rank' : bigint,
   'score' : bigint,
 }
+export interface PlayerSkin {
+  'unlockedAt' : bigint,
+  'playerId' : string,
+  'equipped' : boolean,
+  'skinId' : string,
+}
 export type RegisterResult = { 'ok' : string } |
+  { 'err' : string };
+export type SkinResult = { 'ok' : boolean } |
   { 'err' : string };
 export type SubmitResult = { 'ok' : bigint } |
   { 'err' : string };
@@ -77,12 +92,16 @@ export interface _SERVICE {
   'deleteEvent' : ActorMethod<[bigint], boolean>,
   'deleteGamePlayer' : ActorMethod<[string], boolean>,
   'deleteGameScore' : ActorMethod<[string], boolean>,
+  'equipSkin' : ActorMethod<[string, string], SkinResult>,
   'getAllGameScores' : ActorMethod<[], Array<GameScore>>,
   'getApplications' : ActorMethod<[], Array<Application>>,
+  'getEquippedSkin' : ActorMethod<[string], [] | [PlayerSkin]>,
   'getEvents' : ActorMethod<[], Array<CalendarEvent>>,
   'getGamePlayers' : ActorMethod<[], Array<GamePlayer>>,
   'getGrandLeaderboard' : ActorMethod<[bigint], Array<PlayerRank>>,
+  'getPlayerAchievements' : ActorMethod<[string], Array<PlayerAchievement>>,
   'getPlayerRank' : ActorMethod<[string, string], [] | [PlayerRank]>,
+  'getPlayerSkins' : ActorMethod<[string], Array<PlayerSkin>>,
   'getTopScores' : ActorMethod<[string, bigint], Array<GameScore>>,
   'loginGamePlayer' : ActorMethod<[string, string], LoginResult>,
   'registerGamePlayer' : ActorMethod<[string, string], RegisterResult>,
@@ -94,6 +113,8 @@ export interface _SERVICE {
     [string, string, bigint, bigint, bigint],
     SubmitScoreResult
   >,
+  'unlockAchievement' : ActorMethod<[string, string], AchievementResult>,
+  'unlockSkin' : ActorMethod<[string, string], SkinResult>,
   'updateEvent' : ActorMethod<[bigint, CreateEventInput], boolean>,
 }
 export declare const idlService: IDL.ServiceClass;

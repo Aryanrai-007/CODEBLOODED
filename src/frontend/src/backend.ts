@@ -97,6 +97,44 @@ export type SubmitResult = {
     err: string;
 };
 export type Timestamp = bigint;
+export type SkinResult = {
+    __kind__: "ok";
+    ok: boolean;
+} | {
+    __kind__: "err";
+    err: string;
+};
+export interface Application {
+    id: bigint;
+    status: ApplicationStatus;
+    reasonForJoining: string;
+    name: string;
+    submittedAt: Timestamp;
+    email: string;
+    phone: string;
+    department: string;
+    priorExperience: string;
+    yearOfStudy: string;
+}
+export interface GamePlayer {
+    username: string;
+    playerId: string;
+    createdAt: Timestamp;
+    passwordHash: string;
+}
+export type AchievementResult = {
+    __kind__: "ok";
+    ok: boolean;
+} | {
+    __kind__: "err";
+    err: string;
+};
+export interface PlayerRank {
+    username: string;
+    playerId: string;
+    rank: bigint;
+    score: bigint;
+}
 export type RegisterResult = {
     __kind__: "ok";
     ok: string;
@@ -120,14 +158,10 @@ export interface CalendarEvent {
     description: string;
     category: string;
 }
-export interface GameScore {
+export interface PlayerAchievement {
+    achievementId: string;
+    unlockedAt: bigint;
     playerId: string;
-    achievedAt: Timestamp;
-    gameId: string;
-    wavesCleared: bigint;
-    scoreId: string;
-    score: bigint;
-    killedEnemies: bigint;
 }
 export type SubmitScoreResult = {
     __kind__: "ok";
@@ -136,11 +170,11 @@ export type SubmitScoreResult = {
     __kind__: "err";
     err: string;
 };
-export interface GamePlayer {
-    username: string;
+export interface PlayerSkin {
+    unlockedAt: bigint;
     playerId: string;
-    createdAt: Timestamp;
-    passwordHash: string;
+    equipped: boolean;
+    skinId: string;
 }
 export type LoginResult = {
     __kind__: "ok";
@@ -149,23 +183,14 @@ export type LoginResult = {
     __kind__: "err";
     err: string;
 };
-export interface Application {
-    id: bigint;
-    status: ApplicationStatus;
-    reasonForJoining: string;
-    name: string;
-    submittedAt: Timestamp;
-    email: string;
-    phone: string;
-    department: string;
-    priorExperience: string;
-    yearOfStudy: string;
-}
-export interface PlayerRank {
-    username: string;
+export interface GameScore {
     playerId: string;
-    rank: bigint;
+    achievedAt: Timestamp;
+    gameId: string;
+    wavesCleared: bigint;
+    scoreId: string;
     score: bigint;
+    killedEnemies: bigint;
 }
 export enum ApplicationStatus {
     pending = "pending",
@@ -178,20 +203,26 @@ export interface backendInterface {
     deleteEvent(id: bigint): Promise<boolean>;
     deleteGamePlayer(playerId: string): Promise<boolean>;
     deleteGameScore(scoreId: string): Promise<boolean>;
+    equipSkin(playerId: string, skinId: string): Promise<SkinResult>;
     getAllGameScores(): Promise<Array<GameScore>>;
     getApplications(): Promise<Array<Application>>;
+    getEquippedSkin(playerId: string): Promise<PlayerSkin | null>;
     getEvents(): Promise<Array<CalendarEvent>>;
     getGamePlayers(): Promise<Array<GamePlayer>>;
     getGrandLeaderboard(limit: bigint): Promise<Array<PlayerRank>>;
+    getPlayerAchievements(playerId: string): Promise<Array<PlayerAchievement>>;
     getPlayerRank(gameId: string, playerId: string): Promise<PlayerRank | null>;
+    getPlayerSkins(playerId: string): Promise<Array<PlayerSkin>>;
     getTopScores(gameId: string, limit: bigint): Promise<Array<GameScore>>;
     loginGamePlayer(username: string, password: string): Promise<LoginResult>;
     registerGamePlayer(username: string, password: string): Promise<RegisterResult>;
     submitApplication(name: string, email: string, phone: string, yearOfStudy: string, department: string, reasonForJoining: string, priorExperience: string): Promise<SubmitResult>;
     submitGameScore(playerId: string, gameId: string, score: bigint, kills: bigint, waves: bigint): Promise<SubmitScoreResult>;
+    unlockAchievement(playerId: string, achievementId: string): Promise<AchievementResult>;
+    unlockSkin(playerId: string, skinId: string): Promise<SkinResult>;
     updateEvent(id: bigint, input: CreateEventInput): Promise<boolean>;
 }
-import type { Application as _Application, ApplicationStatus as _ApplicationStatus, GamePlayer as _GamePlayer, LoginResult as _LoginResult, PlayerRank as _PlayerRank, RegisterResult as _RegisterResult, SubmitResult as _SubmitResult, SubmitScoreResult as _SubmitScoreResult, Timestamp as _Timestamp } from "./declarations/backend.did.d.ts";
+import type { AchievementResult as _AchievementResult, Application as _Application, ApplicationStatus as _ApplicationStatus, GamePlayer as _GamePlayer, LoginResult as _LoginResult, PlayerRank as _PlayerRank, PlayerSkin as _PlayerSkin, RegisterResult as _RegisterResult, SkinResult as _SkinResult, SubmitResult as _SubmitResult, SubmitScoreResult as _SubmitScoreResult, Timestamp as _Timestamp } from "./declarations/backend.did.d.ts";
 export class Backend implements backendInterface {
     constructor(private actor: ActorSubclass<_SERVICE>, private _uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, private _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, private processError?: (error: unknown) => never){}
     async approveApplication(arg0: bigint): Promise<boolean> {
@@ -278,6 +309,20 @@ export class Backend implements backendInterface {
             return result;
         }
     }
+    async equipSkin(arg0: string, arg1: string): Promise<SkinResult> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.equipSkin(arg0, arg1);
+                return from_candid_SkinResult_n1(this._uploadFile, this._downloadFile, result);
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.equipSkin(arg0, arg1);
+            return from_candid_SkinResult_n1(this._uploadFile, this._downloadFile, result);
+        }
+    }
     async getAllGameScores(): Promise<Array<GameScore>> {
         if (this.processError) {
             try {
@@ -296,14 +341,28 @@ export class Backend implements backendInterface {
         if (this.processError) {
             try {
                 const result = await this.actor.getApplications();
-                return from_candid_vec_n1(this._uploadFile, this._downloadFile, result);
+                return from_candid_vec_n3(this._uploadFile, this._downloadFile, result);
             } catch (e) {
                 this.processError(e);
                 throw new Error("unreachable");
             }
         } else {
             const result = await this.actor.getApplications();
-            return from_candid_vec_n1(this._uploadFile, this._downloadFile, result);
+            return from_candid_vec_n3(this._uploadFile, this._downloadFile, result);
+        }
+    }
+    async getEquippedSkin(arg0: string): Promise<PlayerSkin | null> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getEquippedSkin(arg0);
+                return from_candid_opt_n8(this._uploadFile, this._downloadFile, result);
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getEquippedSkin(arg0);
+            return from_candid_opt_n8(this._uploadFile, this._downloadFile, result);
         }
     }
     async getEvents(): Promise<Array<CalendarEvent>> {
@@ -348,18 +407,46 @@ export class Backend implements backendInterface {
             return result;
         }
     }
+    async getPlayerAchievements(arg0: string): Promise<Array<PlayerAchievement>> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getPlayerAchievements(arg0);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getPlayerAchievements(arg0);
+            return result;
+        }
+    }
     async getPlayerRank(arg0: string, arg1: string): Promise<PlayerRank | null> {
         if (this.processError) {
             try {
                 const result = await this.actor.getPlayerRank(arg0, arg1);
-                return from_candid_opt_n6(this._uploadFile, this._downloadFile, result);
+                return from_candid_opt_n9(this._uploadFile, this._downloadFile, result);
             } catch (e) {
                 this.processError(e);
                 throw new Error("unreachable");
             }
         } else {
             const result = await this.actor.getPlayerRank(arg0, arg1);
-            return from_candid_opt_n6(this._uploadFile, this._downloadFile, result);
+            return from_candid_opt_n9(this._uploadFile, this._downloadFile, result);
+        }
+    }
+    async getPlayerSkins(arg0: string): Promise<Array<PlayerSkin>> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getPlayerSkins(arg0);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getPlayerSkins(arg0);
+            return result;
         }
     }
     async getTopScores(arg0: string, arg1: bigint): Promise<Array<GameScore>> {
@@ -380,56 +467,84 @@ export class Backend implements backendInterface {
         if (this.processError) {
             try {
                 const result = await this.actor.loginGamePlayer(arg0, arg1);
-                return from_candid_LoginResult_n7(this._uploadFile, this._downloadFile, result);
+                return from_candid_LoginResult_n10(this._uploadFile, this._downloadFile, result);
             } catch (e) {
                 this.processError(e);
                 throw new Error("unreachable");
             }
         } else {
             const result = await this.actor.loginGamePlayer(arg0, arg1);
-            return from_candid_LoginResult_n7(this._uploadFile, this._downloadFile, result);
+            return from_candid_LoginResult_n10(this._uploadFile, this._downloadFile, result);
         }
     }
     async registerGamePlayer(arg0: string, arg1: string): Promise<RegisterResult> {
         if (this.processError) {
             try {
                 const result = await this.actor.registerGamePlayer(arg0, arg1);
-                return from_candid_RegisterResult_n9(this._uploadFile, this._downloadFile, result);
+                return from_candid_RegisterResult_n12(this._uploadFile, this._downloadFile, result);
             } catch (e) {
                 this.processError(e);
                 throw new Error("unreachable");
             }
         } else {
             const result = await this.actor.registerGamePlayer(arg0, arg1);
-            return from_candid_RegisterResult_n9(this._uploadFile, this._downloadFile, result);
+            return from_candid_RegisterResult_n12(this._uploadFile, this._downloadFile, result);
         }
     }
     async submitApplication(arg0: string, arg1: string, arg2: string, arg3: string, arg4: string, arg5: string, arg6: string): Promise<SubmitResult> {
         if (this.processError) {
             try {
                 const result = await this.actor.submitApplication(arg0, arg1, arg2, arg3, arg4, arg5, arg6);
-                return from_candid_SubmitResult_n11(this._uploadFile, this._downloadFile, result);
+                return from_candid_SubmitResult_n14(this._uploadFile, this._downloadFile, result);
             } catch (e) {
                 this.processError(e);
                 throw new Error("unreachable");
             }
         } else {
             const result = await this.actor.submitApplication(arg0, arg1, arg2, arg3, arg4, arg5, arg6);
-            return from_candid_SubmitResult_n11(this._uploadFile, this._downloadFile, result);
+            return from_candid_SubmitResult_n14(this._uploadFile, this._downloadFile, result);
         }
     }
     async submitGameScore(arg0: string, arg1: string, arg2: bigint, arg3: bigint, arg4: bigint): Promise<SubmitScoreResult> {
         if (this.processError) {
             try {
                 const result = await this.actor.submitGameScore(arg0, arg1, arg2, arg3, arg4);
-                return from_candid_SubmitScoreResult_n13(this._uploadFile, this._downloadFile, result);
+                return from_candid_SubmitScoreResult_n16(this._uploadFile, this._downloadFile, result);
             } catch (e) {
                 this.processError(e);
                 throw new Error("unreachable");
             }
         } else {
             const result = await this.actor.submitGameScore(arg0, arg1, arg2, arg3, arg4);
-            return from_candid_SubmitScoreResult_n13(this._uploadFile, this._downloadFile, result);
+            return from_candid_SubmitScoreResult_n16(this._uploadFile, this._downloadFile, result);
+        }
+    }
+    async unlockAchievement(arg0: string, arg1: string): Promise<AchievementResult> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.unlockAchievement(arg0, arg1);
+                return from_candid_AchievementResult_n17(this._uploadFile, this._downloadFile, result);
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.unlockAchievement(arg0, arg1);
+            return from_candid_AchievementResult_n17(this._uploadFile, this._downloadFile, result);
+        }
+    }
+    async unlockSkin(arg0: string, arg1: string): Promise<SkinResult> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.unlockSkin(arg0, arg1);
+                return from_candid_SkinResult_n1(this._uploadFile, this._downloadFile, result);
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.unlockSkin(arg0, arg1);
+            return from_candid_SkinResult_n1(this._uploadFile, this._downloadFile, result);
         }
     }
     async updateEvent(arg0: bigint, arg1: CreateEventInput): Promise<boolean> {
@@ -447,28 +562,37 @@ export class Backend implements backendInterface {
         }
     }
 }
-function from_candid_ApplicationStatus_n4(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: _ApplicationStatus): ApplicationStatus {
-    return from_candid_variant_n5(_uploadFile, _downloadFile, value);
+function from_candid_AchievementResult_n17(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: _AchievementResult): AchievementResult {
+    return from_candid_variant_n2(_uploadFile, _downloadFile, value);
 }
-function from_candid_Application_n2(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: _Application): Application {
-    return from_candid_record_n3(_uploadFile, _downloadFile, value);
+function from_candid_ApplicationStatus_n6(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: _ApplicationStatus): ApplicationStatus {
+    return from_candid_variant_n7(_uploadFile, _downloadFile, value);
 }
-function from_candid_LoginResult_n7(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: _LoginResult): LoginResult {
-    return from_candid_variant_n8(_uploadFile, _downloadFile, value);
+function from_candid_Application_n4(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: _Application): Application {
+    return from_candid_record_n5(_uploadFile, _downloadFile, value);
 }
-function from_candid_RegisterResult_n9(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: _RegisterResult): RegisterResult {
-    return from_candid_variant_n10(_uploadFile, _downloadFile, value);
+function from_candid_LoginResult_n10(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: _LoginResult): LoginResult {
+    return from_candid_variant_n11(_uploadFile, _downloadFile, value);
 }
-function from_candid_SubmitResult_n11(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: _SubmitResult): SubmitResult {
-    return from_candid_variant_n12(_uploadFile, _downloadFile, value);
+function from_candid_RegisterResult_n12(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: _RegisterResult): RegisterResult {
+    return from_candid_variant_n13(_uploadFile, _downloadFile, value);
 }
-function from_candid_SubmitScoreResult_n13(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: _SubmitScoreResult): SubmitScoreResult {
-    return from_candid_variant_n10(_uploadFile, _downloadFile, value);
+function from_candid_SkinResult_n1(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: _SkinResult): SkinResult {
+    return from_candid_variant_n2(_uploadFile, _downloadFile, value);
 }
-function from_candid_opt_n6(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: [] | [_PlayerRank]): PlayerRank | null {
+function from_candid_SubmitResult_n14(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: _SubmitResult): SubmitResult {
+    return from_candid_variant_n15(_uploadFile, _downloadFile, value);
+}
+function from_candid_SubmitScoreResult_n16(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: _SubmitScoreResult): SubmitScoreResult {
+    return from_candid_variant_n13(_uploadFile, _downloadFile, value);
+}
+function from_candid_opt_n8(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: [] | [_PlayerSkin]): PlayerSkin | null {
     return value.length === 0 ? null : value[0];
 }
-function from_candid_record_n3(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
+function from_candid_opt_n9(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: [] | [_PlayerRank]): PlayerRank | null {
+    return value.length === 0 ? null : value[0];
+}
+function from_candid_record_n5(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
     id: bigint;
     status: _ApplicationStatus;
     reasonForJoining: string;
@@ -493,7 +617,7 @@ function from_candid_record_n3(_uploadFile: (file: ExternalBlob) => Promise<Uint
 } {
     return {
         id: value.id,
-        status: from_candid_ApplicationStatus_n4(_uploadFile, _downloadFile, value.status),
+        status: from_candid_ApplicationStatus_n6(_uploadFile, _downloadFile, value.status),
         reasonForJoining: value.reasonForJoining,
         name: value.name,
         submittedAt: value.submittedAt,
@@ -504,52 +628,7 @@ function from_candid_record_n3(_uploadFile: (file: ExternalBlob) => Promise<Uint
         yearOfStudy: value.yearOfStudy
     };
 }
-function from_candid_variant_n10(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
-    ok: string;
-} | {
-    err: string;
-}): {
-    __kind__: "ok";
-    ok: string;
-} | {
-    __kind__: "err";
-    err: string;
-} {
-    return "ok" in value ? {
-        __kind__: "ok",
-        ok: value.ok
-    } : "err" in value ? {
-        __kind__: "err",
-        err: value.err
-    } : value;
-}
-function from_candid_variant_n12(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
-    ok: bigint;
-} | {
-    err: string;
-}): {
-    __kind__: "ok";
-    ok: bigint;
-} | {
-    __kind__: "err";
-    err: string;
-} {
-    return "ok" in value ? {
-        __kind__: "ok",
-        ok: value.ok
-    } : "err" in value ? {
-        __kind__: "err",
-        err: value.err
-    } : value;
-}
-function from_candid_variant_n5(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
-    pending: null;
-} | {
-    approved: null;
-}): ApplicationStatus {
-    return "pending" in value ? ApplicationStatus.pending : "approved" in value ? ApplicationStatus.approved : value;
-}
-function from_candid_variant_n8(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
+function from_candid_variant_n11(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
     ok: _GamePlayer;
 } | {
     err: string;
@@ -568,8 +647,72 @@ function from_candid_variant_n8(_uploadFile: (file: ExternalBlob) => Promise<Uin
         err: value.err
     } : value;
 }
-function from_candid_vec_n1(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: Array<_Application>): Array<Application> {
-    return value.map((x)=>from_candid_Application_n2(_uploadFile, _downloadFile, x));
+function from_candid_variant_n13(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
+    ok: string;
+} | {
+    err: string;
+}): {
+    __kind__: "ok";
+    ok: string;
+} | {
+    __kind__: "err";
+    err: string;
+} {
+    return "ok" in value ? {
+        __kind__: "ok",
+        ok: value.ok
+    } : "err" in value ? {
+        __kind__: "err",
+        err: value.err
+    } : value;
+}
+function from_candid_variant_n15(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
+    ok: bigint;
+} | {
+    err: string;
+}): {
+    __kind__: "ok";
+    ok: bigint;
+} | {
+    __kind__: "err";
+    err: string;
+} {
+    return "ok" in value ? {
+        __kind__: "ok",
+        ok: value.ok
+    } : "err" in value ? {
+        __kind__: "err",
+        err: value.err
+    } : value;
+}
+function from_candid_variant_n2(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
+    ok: boolean;
+} | {
+    err: string;
+}): {
+    __kind__: "ok";
+    ok: boolean;
+} | {
+    __kind__: "err";
+    err: string;
+} {
+    return "ok" in value ? {
+        __kind__: "ok",
+        ok: value.ok
+    } : "err" in value ? {
+        __kind__: "err",
+        err: value.err
+    } : value;
+}
+function from_candid_variant_n7(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
+    pending: null;
+} | {
+    approved: null;
+}): ApplicationStatus {
+    return "pending" in value ? ApplicationStatus.pending : "approved" in value ? ApplicationStatus.approved : value;
+}
+function from_candid_vec_n3(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: Array<_Application>): Array<Application> {
+    return value.map((x)=>from_candid_Application_n4(_uploadFile, _downloadFile, x));
 }
 export interface CreateActorOptions {
     agent?: Agent;

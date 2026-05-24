@@ -41,4 +41,27 @@ module {
     score : Nat;
     rank : Nat;
   };
+
+  public type PlayerAchievement = {
+    achievementId : Text;
+    playerId : Text;
+    unlockedAt : Int;
+  };
+
+  public type PlayerSkin = {
+    skinId : Text;
+    playerId : Text;
+    unlockedAt : Int;
+    equipped : Bool;
+  };
+
+  public type AchievementResult = {
+    #ok : Bool;
+    #err : Text;
+  };
+
+  public type SkinResult = {
+    #ok : Bool;
+    #err : Text;
+  };
 };

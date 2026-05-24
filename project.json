@@ -1,23 +1,28 @@
 {
-  "overview": "A hackathon club website with member registration, a public calendar, a games arcade hub with a space shooter game, and an admin portal for managing members, events, and game data.",
+  "overview": "A hackathon club website with member registration, event calendar, and a neon cyberpunk arcade hub with a fully playable space shooter game featuring achievements, skins, and leaderboards.",
   "features": [
-    "Games arcade hub with separate player login and signup",
-    "Fast-paced neon cyberpunk space shooter game",
-    "Public leaderboard showing top 10 scores and player rank",
-    "Admin tabs for managing game player IDs and leaderboard scores",
-    "Member registration with application management",
-    "Public calendar with event highlights",
-    "Dark and light mode toggle"
+    "Member registration form with admin dashboard and approve/delete controls",
+    "Admin portal with passcode protection",
+    "Public event calendar with clickable event popups and glassy aesthetic",
+    "NEXUS ARENA games hub with separate player login/signup",
+    "Space Shooter game with waves, bosses, weapon upgrades, power-ups, and combos",
+    "12-achievement system with mid-game popup notifications and 2 legendary super-rare badges",
+    "6 unlockable spaceship skins including 2 legendary designs",
+    "Synthesized sound effects and EDM background music with mute toggle",
+    "Global leaderboard with Grand Arena Ranking across all games",
+    "Admin tabs for player ID management and leaderboard moderation",
+    "Dark/light mode toggle via header brand text"
   ],
   "category": "club-website",
   "tags": [
     "hackathon",
-    "games",
-    "arcade",
-    "space-shooter",
     "club",
-    "admin-portal",
-    "leaderboard"
+    "games",
+    "space-shooter",
+    "achievements",
+    "leaderboard",
+    "neon",
+    "cyberpunk"
   ],
-  "last_updated": "2026-05-23T07:53:20.270Z"
+  "last_updated": "2026-05-23T11:08:39.991Z"
 }

@@ -1,7 +1,9 @@
 import { SpaceShooterGame } from "@/components/SpaceShooterGame";
 import { useGamePlayers } from "@/hooks/useAdminGames";
 import { useGameAuth } from "@/hooks/useGameAuth";
+import { useEquippedSkin } from "@/hooks/useGameQueries";
 import { useGrandLeaderboard } from "@/hooks/useGameScores";
+import CyberDriftRacerGame from "@/pages/CyberDriftRacerGame";
 import { Eye, EyeOff, Gamepad2, LogOut, Rocket, Trophy } from "lucide-react";
 import { useState } from "react";
 
@@ -310,7 +312,9 @@ function GameHub({
   player: { username: string; playerId: string };
   onLogout: () => void;
 }) {
-  const [activeGame, setActiveGame] = useState<"space-shooter" | null>(null);
+  const [activeGame, setActiveGame] = useState<
+    "space-shooter" | "cyber-drift" | null
+  >(null);
   const { data: grandRankings = [] } = useGrandLeaderboard(10);
   const { data: gamePlayers = [] } = useGamePlayers();
   const playerMap: Record<string, string> = {};
@@ -318,13 +322,20 @@ function GameHub({
     playerMap[p.playerId.toString()] = p.username;
   }
 
+  const { data: equippedSkinId } = useEquippedSkin(player.playerId);
+
   // When a game is active, render it fullscreen inline
+  if (activeGame === "cyber-drift") {
+    return <CyberDriftRacerGame onExit={() => setActiveGame(null)} />;
+  }
+
   if (activeGame === "space-shooter") {
     return (
       <SpaceShooterGame
         playerId={player.playerId}
         username={player.username}
         onExit={() => setActiveGame(null)}
+        equippedSkinId={equippedSkinId?.skinId || undefined}
       />
     );
   }
@@ -498,22 +509,125 @@ function GameHub({
             </div>
           </div>
 
-          {/* Coming soon card */}
+          {/* Cyber Drift Racer Card */}
           <div
-            className="rounded-2xl border flex flex-col items-center justify-center h-72 gap-3"
+            className="rounded-2xl overflow-hidden border transition-all duration-300 cursor-pointer group"
             style={{
-              background: "rgba(15,15,30,0.3)",
-              borderColor: "rgba(255,255,255,0.05)",
-              backdropFilter: "blur(8px)",
+              background: "rgba(15,15,30,0.7)",
+              backdropFilter: "blur(12px)",
+              borderColor: "rgba(236,72,153,0.3)",
+              boxShadow: "0 0 30px rgba(236,72,153,0.1)",
             }}
+            data-ocid="games-hub-cyber-drift-card"
           >
-            <div className="text-3xl opacity-30">🎮</div>
-            <p
-              className="text-xs tracking-widest font-mono"
-              style={{ color: "#4b5563" }}
+            {/* Thumbnail */}
+            <div
+              className="relative h-44 flex items-center justify-center overflow-hidden"
+              style={{
+                background:
+                  "linear-gradient(135deg, #1a0033 0%, #0d001a 50%, #001a0d 100%)",
+              }}
             >
-              COMING SOON
-            </p>
+              <div
+                className="absolute inset-0"
+                style={{
+                  background:
+                    "radial-gradient(circle at 50% 60%, rgba(0,255,255,0.25) 0%, rgba(255,0,170,0.15) 50%, transparent 70%)",
+                }}
+              />
+              {/* Neon road lines */}
+              <svg
+                className="absolute inset-0 w-full h-full"
+                viewBox="0 0 200 176"
+                preserveAspectRatio="none"
+                aria-hidden="true"
+              >
+                <line
+                  x1="100"
+                  y1="30"
+                  x2="20"
+                  y2="176"
+                  stroke="#00ffff"
+                  strokeWidth="1"
+                  opacity="0.4"
+                />
+                <line
+                  x1="100"
+                  y1="30"
+                  x2="180"
+                  y2="176"
+                  stroke="#00ffff"
+                  strokeWidth="1"
+                  opacity="0.4"
+                />
+                <line
+                  x1="100"
+                  y1="30"
+                  x2="60"
+                  y2="176"
+                  stroke="#ff00aa"
+                  strokeWidth="0.5"
+                  opacity="0.3"
+                  strokeDasharray="6 8"
+                />
+                <line
+                  x1="100"
+                  y1="30"
+                  x2="140"
+                  y2="176"
+                  stroke="#ff00aa"
+                  strokeWidth="0.5"
+                  opacity="0.3"
+                  strokeDasharray="6 8"
+                />
+              </svg>
+              {/* Car icon */}
+              <div
+                className="relative z-10 transition-transform duration-300 group-hover:scale-110 text-5xl"
+                style={{
+                  filter:
+                    "drop-shadow(0 0 16px #00ffff) drop-shadow(0 0 32px #ff00aa)",
+                }}
+              >
+                🚗
+              </div>
+              <div
+                className="absolute bottom-2 right-3 text-xs font-mono px-2 py-0.5 rounded"
+                style={{
+                  background: "rgba(255,0,170,0.2)",
+                  color: "#ff00aa",
+                  border: "1px solid rgba(255,0,170,0.3)",
+                }}
+              >
+                DRIFT
+              </div>
+            </div>
+
+            {/* Card body */}
+            <div className="p-5">
+              <h3
+                className="font-black text-lg tracking-wider mb-1"
+                style={{ color: "#e2d9f3" }}
+              >
+                CYBER DRIFT RACER
+              </h3>
+              <p className="text-xs mb-4" style={{ color: "#6b7280" }}>
+                Neon roads · Lane drift · Boosts · Obstacles
+              </p>
+              <button
+                type="button"
+                onClick={() => setActiveGame("cyber-drift")}
+                className="w-full py-2.5 rounded-lg font-bold text-sm tracking-widest flex items-center justify-center gap-2 transition-all duration-200 group-hover:shadow-lg"
+                style={{
+                  background: "linear-gradient(135deg, #ec4899, #06b6d4)",
+                  color: "#fff",
+                  boxShadow: "0 0 15px rgba(236,72,153,0.3)",
+                }}
+                data-ocid="games-launch-cyber-drift-button"
+              >
+                PLAY NOW
+              </button>
+            </div>
           </div>
 
           <div

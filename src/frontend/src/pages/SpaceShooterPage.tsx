@@ -5,6 +5,7 @@ import {
   useSubmitGameScore,
   useTopScores,
 } from "@/hooks/useGameScores";
+
 import { useNavigate } from "@tanstack/react-router";
 import { ArrowLeft, Heart, Trophy, X, Zap } from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";

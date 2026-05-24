@@ -1,11 +1,29 @@
+import { AchievementShowcase } from "@/components/AchievementShowcase";
+import { SkinSelector } from "@/components/SkinSelector";
 import { useGamePlayers } from "@/hooks/useAdminGames";
+import {
+  usePlayerAchievements,
+  useUnlockAchievement,
+} from "@/hooks/useGameQueries";
 import {
   useGrandLeaderboard,
   usePlayerRank,
   useSubmitGameScore,
   useTopScores,
 } from "@/hooks/useGameScores";
-import { ArrowLeft, Heart, Trophy, X, Zap } from "lucide-react";
+import { SoundEffects, useSoundEffects } from "@/hooks/useSoundEffects";
+import { ACHIEVEMENTS, type Achievement, SKINS } from "@/types/game";
+import {
+  ArrowLeft,
+  Award,
+  Crosshair,
+  Heart,
+  Trophy,
+  Volume2,
+  VolumeX,
+  X,
+  Zap,
+} from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 const GAME_ID = "space-shooter";
@@ -416,12 +434,12 @@ function fireWeapon(g: GState) {
         x,
         y: y - 10,
         vx: 0,
-        vy: -5,
+        vy: -10,
         type: "player",
         color: "#f97316",
-        w: 22,
-        h: 8,
-        dmg: 20,
+        w: 32,
+        h: 14,
+        dmg: 45,
         life: 12,
       });
       break;
@@ -448,12 +466,16 @@ interface SpaceShooterGameProps {
   playerId: string;
   username: string;
   onExit: () => void;
+  equippedSkinId?: string;
+  unlockedAchievements?: string[];
 }
 
 export function SpaceShooterGame({
   playerId,
   username,
   onExit,
+  equippedSkinId,
+  unlockedAchievements,
 }: SpaceShooterGameProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const stateRef = useRef<GState>(initState());
@@ -464,6 +486,10 @@ export function SpaceShooterGame({
     left: false,
     right: false,
   });
+  const pausedRef = useRef(false);
+  const [localEquippedSkin, setLocalEquippedSkin] = useState(
+    equippedSkinId || "default",
+  );
 
   const [uiScore, setUiScore] = useState(0);
   const [uiWave, setUiWave] = useState(1);
@@ -474,6 +500,9 @@ export function SpaceShooterGame({
   const [uiLevel, setUiLevel] = useState(1);
   const [uiShield, setUiShield] = useState(false);
   const [showLb, setShowLb] = useState(false);
+  const [showPanel, setShowPanel] = useState<"skins" | "achievements" | null>(
+    null,
+  );
   const [gameOver, setGameOver] = useState<{
     score: number;
     kills: number;
@@ -481,7 +510,40 @@ export function SpaceShooterGame({
   } | null>(null);
   const [submitted, setSubmitted] = useState(false);
 
+  // Achievement & sound system
+  const { muted, toggleMute } = useSoundEffects();
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const musicPendingRef = useRef(true);
+  const bossesDefeatedRef = useRef(0);
+  const achievementsUnlockedRef = useRef<Set<string>>(
+    new Set(unlockedAchievements || []),
+  );
+  const [achievementQueue, setAchievementQueue] = useState<Achievement[]>([]);
+  const [currentAchievement, setCurrentAchievement] =
+    useState<Achievement | null>(null);
+  const achievementTimerRef = useRef<ReturnType<typeof setTimeout> | null>(
+    null,
+  );
+  const firstKillRef = useRef(false);
+  const combo5Ref = useRef(false);
+
   const submitScore = useSubmitGameScore();
+  const unlockAchievementMutation = useUnlockAchievement();
+  const playerIdRef = useRef(playerId);
+  playerIdRef.current = playerId;
+  const unlockMutateRef = useRef(unlockAchievementMutation.mutate);
+  unlockMutateRef.current = unlockAchievementMutation.mutate;
+
+  // Load already-earned achievements from backend at mount
+  const { data: playerAchievementsData } = usePlayerAchievements(playerId);
+  useEffect(() => {
+    if (!playerAchievementsData) return;
+    for (const ua of playerAchievementsData) {
+      if (ua.achievementId) {
+        achievementsUnlockedRef.current.add(ua.achievementId);
+      }
+    }
+  }, [playerAchievementsData]);
   const { data: topScores } = useTopScores(GAME_ID, 10);
   const { data: playerRank } = usePlayerRank(GAME_ID, playerId);
   const { data: grandRankings = [] } = useGrandLeaderboard(10);
@@ -492,6 +554,82 @@ export function SpaceShooterGame({
     for (const p of gamePlayers ?? []) map[p.playerId] = p.username;
     return map;
   }, [gamePlayers]);
+
+  // Achievement queue processor — dequeue next when slot is free
+  useEffect(() => {
+    if (currentAchievement || achievementQueue.length === 0) return;
+    const next = achievementQueue[0];
+    setCurrentAchievement(next);
+    setAchievementQueue((q) => q.slice(1));
+  }, [achievementQueue, currentAchievement]);
+
+  // Achievement dismiss timer — isolated from queue changes so it always fires
+  useEffect(() => {
+    if (!currentAchievement) return;
+    if (achievementTimerRef.current) {
+      clearTimeout(achievementTimerRef.current);
+    }
+    achievementTimerRef.current = setTimeout(() => {
+      setCurrentAchievement(null);
+      achievementTimerRef.current = null;
+    }, 4000);
+    return () => {
+      if (achievementTimerRef.current) {
+        clearTimeout(achievementTimerRef.current);
+        achievementTimerRef.current = null;
+      }
+    };
+  }, [currentAchievement]);
+
+  // Sync localEquippedSkin with prop when it changes externally
+  useEffect(() => {
+    if (equippedSkinId) {
+      setLocalEquippedSkin(equippedSkinId);
+    }
+  }, [equippedSkinId]);
+
+  // Background music control
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    audio.muted = muted;
+  }, [muted]);
+
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    if (gameOver) {
+      audio.pause();
+      SoundEffects.gameOver();
+    }
+  }, [gameOver]);
+
+  // Achievement unlocking — one-time enforcement via ref + backend sync
+  const tryUnlockAchievement = useCallback((achievementId: string) => {
+    if (achievementsUnlockedRef.current.has(achievementId)) return;
+    achievementsUnlockedRef.current.add(achievementId);
+    unlockMutateRef.current({ playerId: playerIdRef.current, achievementId });
+    const ach = ACHIEVEMENTS.find((a) => a.id === achievementId);
+    if (!ach) return;
+    setAchievementQueue((q) => [...q, ach]);
+    if (ach.rarity === "legendary") {
+      SoundEffects.achievement();
+      SoundEffects.levelUp();
+    } else {
+      SoundEffects.achievement();
+    }
+  }, []);
+
+  // Track games played for veteran_pilot
+  useEffect(() => {
+    if (!playerId) return;
+    const key = `gamesPlayed_${playerId}`;
+    const count = Number.parseInt(localStorage.getItem(key) || "0", 10) + 1;
+    localStorage.setItem(key, String(count));
+    if (count >= 10) {
+      tryUnlockAchievement("veteran_pilot");
+    }
+  }, [playerId, tryUnlockAchievement]);
 
   const ctxRef = useRef<CanvasRenderingContext2D | null>(null);
   const lastTsRef = useRef<number>(-1);
@@ -510,6 +648,8 @@ export function SpaceShooterGame({
   }, []);
 
   const resetGame = useCallback(() => {
+    pausedRef.current = false;
+    setShowPanel(null);
     if (rafRef.current) cancelAnimationFrame(rafRef.current);
     rafRef.current = 0;
     gameRunningRef.current = false;
@@ -527,7 +667,27 @@ export function SpaceShooterGame({
     setSubmitted(false);
     startLoop();
     canvasRef.current?.focus();
+    const audio = audioRef.current;
+    if (audio) {
+      audio.play().catch(() => {});
+    }
   }, [startLoop]);
+
+  const closePanel = useCallback(() => {
+    pausedRef.current = false;
+    setShowPanel(null);
+  }, []);
+
+  // Close modal on Escape
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      if (e.code === "Escape" && showPanel) {
+        closePanel();
+      }
+    }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [showPanel, closePanel]);
 
   const handleSubmit = useCallback(() => {
     if (!gameOver || submitted) return;
@@ -540,6 +700,16 @@ export function SpaceShooterGame({
       waves: gameOver.waves,
     });
   }, [gameOver, submitted, submitScore, playerId]);
+
+  // Skin color helper
+  const getSkinColor = useCallback(() => {
+    const skin = SKINS.find((s) => s.id === localEquippedSkin);
+    if (!skin) return "#00ffff";
+    if (skin.id === "omega") {
+      return `hsl(${(Date.now() / 20) % 360}, 100%, 60%)`;
+    }
+    return skin.color;
+  }, [localEquippedSkin]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -556,6 +726,16 @@ export function SpaceShooterGame({
       )
         e.preventDefault();
       if (e.type === "keydown") {
+        if (musicPendingRef.current) {
+          const a = audioRef.current;
+          if (a) {
+            a.play()
+              .then(() => {
+                musicPendingRef.current = false;
+              })
+              .catch(() => {});
+          }
+        }
         keysRef.current.add(e.code);
         if (e.code === "KeyL") setShowLb((v) => !v);
       } else {
@@ -577,432 +757,482 @@ export function SpaceShooterGame({
         return;
       }
 
-      // Input
-      const spd = 4.5;
-      if (
-        keysRef.current.has("ArrowLeft") ||
-        keysRef.current.has("KeyA") ||
-        touchRef.current.left
-      )
-        g.player.x -= spd * dt;
-      if (
-        keysRef.current.has("ArrowRight") ||
-        keysRef.current.has("KeyD") ||
-        touchRef.current.right
-      )
-        g.player.x += spd * dt;
-      g.player.x = Math.max(18, Math.min(W - 18, g.player.x));
+      if (!pausedRef.current) {
+        // Input
+        const spd = 4.5;
+        if (
+          keysRef.current.has("ArrowLeft") ||
+          keysRef.current.has("KeyA") ||
+          touchRef.current.left
+        )
+          g.player.x -= spd * dt;
+        if (
+          keysRef.current.has("ArrowRight") ||
+          keysRef.current.has("KeyD") ||
+          touchRef.current.right
+        )
+          g.player.x += spd * dt;
+        g.player.x = Math.max(18, Math.min(W - 18, g.player.x));
 
-      // Auto-fire
-      const fireRate = g.rapidFire ? 5 : 12;
-      g.shootTimer += dt;
-      if (g.shootTimer >= fireRate) {
-        g.shootTimer = 0;
-        fireWeapon(g);
-      }
+        // Auto-fire
+        const fireRate = g.rapidFire ? 5 : 12;
+        g.shootTimer += dt;
+        if (g.shootTimer >= fireRate) {
+          g.shootTimer = 0;
+          fireWeapon(g);
+          SoundEffects.shoot();
+        }
 
-      // Timers
-      if (g.invTimer > 0) g.invTimer -= dt;
-      if (g.shield) {
-        g.shieldTimer -= dt;
-        if (g.shieldTimer <= 0) {
-          g.shield = false;
-          setUiShield(false);
-        }
-      }
-      if (g.rapidFire) {
-        g.rapidFireTimer -= dt;
-        if (g.rapidFireTimer <= 0) g.rapidFire = false;
-      }
-      if (g.multiplier) {
-        g.multiplierTimer -= dt;
-        if (g.multiplierTimer <= 0) g.multiplier = false;
-      }
-      if (g.weaponTimer > 0) {
-        g.weaponTimer -= dt;
-        if (g.weaponTimer <= 0) {
-          g.weapon = "single";
-          setUiWeapon("single");
-        }
-      }
-      if (g.comboTimer > 0) {
-        g.comboTimer -= dt;
-        if (g.comboTimer <= 0) {
-          g.combo = 0;
-          setUiCombo(0);
-        }
-      }
-      if (g.levelUpAnim > 0) g.levelUpAnim -= dt;
-
-      // Wave spawning
-      if (g.enemies.length === 0 && !g.bossAlive) {
-        if (g.waveDelay > 0) {
-          g.waveDelay -= dt;
-        } else {
-          if (g.waveEnemiesLeft > 0) {
-            g.wave++;
-            setUiWave(g.wave);
+        // Timers
+        if (g.invTimer > 0) g.invTimer -= dt;
+        if (g.shield) {
+          g.shieldTimer -= dt;
+          if (g.shieldTimer <= 0) {
+            g.shield = false;
+            setUiShield(false);
           }
-          spawnWave(g);
         }
-      }
+        if (g.rapidFire) {
+          g.rapidFireTimer -= dt;
+          if (g.rapidFireTimer <= 0) g.rapidFire = false;
+        }
+        if (g.multiplier) {
+          g.multiplierTimer -= dt;
+          if (g.multiplierTimer <= 0) g.multiplier = false;
+        }
+        if (g.weaponTimer > 0) {
+          g.weaponTimer -= dt;
+          if (g.weaponTimer <= 0) {
+            g.weapon = "single";
+            setUiWeapon("single");
+          }
+        }
+        if (g.comboTimer > 0) {
+          g.comboTimer -= dt;
+          if (g.comboTimer <= 0) {
+            g.combo = 0;
+            setUiCombo(0);
+          }
+        }
+        if (g.levelUpAnim > 0) g.levelUpAnim -= dt;
 
-      // Boss cleared
-      if (g.bossAlive && !g.enemies.some((e) => e.type === "boss")) {
-        g.bossAlive = false;
-        g.wave++;
-        setUiWave(g.wave);
-        g.waveDelay = 90;
-      }
-
-      // Move bullets
-      for (const b of g.bullets) {
-        if (b.targetId !== undefined) {
-          const t = g.enemies.find((e) => e.id === b.targetId);
-          if (t) {
-            const a = Math.atan2(t.y - b.y, t.x - b.x);
-            b.vx += Math.cos(a) * 0.6;
-            b.vy += Math.sin(a) * 0.6;
-            const m = Math.hypot(b.vx, b.vy);
-            if (m > 10) {
-              b.vx = (b.vx / m) * 10;
-              b.vy = (b.vy / m) * 10;
+        // Wave spawning
+        if (g.enemies.length === 0 && !g.bossAlive) {
+          if (g.waveDelay > 0) {
+            g.waveDelay -= dt;
+          } else {
+            if (g.waveEnemiesLeft > 0) {
+              g.wave++;
+              setUiWave(g.wave);
+              // Wave achievements
+              if (g.wave >= 10) tryUnlockAchievement("wave_5");
+              if (g.wave >= 20) tryUnlockAchievement("wave_10");
+              if (g.wave >= 30) tryUnlockAchievement("wave_15");
+              if (g.wave >= 20) tryUnlockAchievement("phantom_void");
             }
+            spawnWave(g);
+            if (g.wave % 5 === 0) SoundEffects.bossWarning();
           }
         }
-        b.x += b.vx * dt;
-        b.y += b.vy * dt;
-        if (b.life !== undefined) b.life -= dt;
-      }
-      g.bullets = g.bullets.filter(
-        (b) =>
-          b.y > -30 &&
-          b.y < H + 30 &&
-          b.x > -30 &&
-          b.x < W + 30 &&
-          (b.life === undefined || b.life > 0),
-      );
 
-      // Move enemies
-      for (const e of g.enemies) {
-        if (e.type === "boss") {
-          e.x += e.xDir * 1.5 * dt;
-          if (e.x > W - 60 || e.x < 60) e.xDir = -e.xDir;
-          e.y = Math.min(e.y + e.speed * 0.3 * dt, 100);
-          e.fireTimer -= dt;
-          if (e.fireTimer <= 0) {
-            e.fireTimer = 35;
-            for (let i = -2; i <= 2; i++)
-              g.bullets.push({
-                id: nextId(g),
-                x: e.x + i * 18,
-                y: e.y + 35,
-                vx: i * 1.0,
-                vy: 5,
-                type: "enemy",
-                color: "#f43f5e",
-                w: 5,
-                h: 12,
-                dmg: 15,
-              });
-          }
-        } else if (e.type === "kamikaze") {
-          const dx = g.player.x - e.x;
-          const dy = g.player.y - e.y;
-          const dist = Math.hypot(dx, dy) || 1;
-          e.x += (dx / dist) * e.speed * 1.5 * dt;
-          e.y += (dy / dist) * e.speed * 1.5 * dt;
-        } else if (e.type === "drone") {
-          e.sineAngle += 0.05 * dt;
-          e.x = e.baseX + Math.sin(e.sineAngle) * 60;
-          e.y += e.speed * dt;
-        } else if (e.type === "stealth") {
-          e.stealthTimer -= dt;
-          if (e.stealthTimer <= 0) {
-            e.stealthAlpha = e.stealthAlpha > 0.5 ? 0.2 : 1.0;
-            e.stealthTimer = 60 + Math.random() * 60;
-          }
-          e.y += e.speed * dt;
-        } else {
-          e.y += e.speed * dt;
-          e.fireTimer -= dt;
-          if (e.fireTimer <= 0) {
-            e.fireTimer = 90 + Math.random() * 60;
-            g.bullets.push({
-              id: nextId(g),
-              x: e.x,
-              y: e.y + e.h / 2,
-              vx: 0,
-              vy: 4,
-              type: "enemy",
-              color: "#f43f5e",
-              w: 4,
-              h: 10,
-              dmg: 12,
-            });
+        // Boss cleared
+        if (g.bossAlive && !g.enemies.some((e) => e.type === "boss")) {
+          g.bossAlive = false;
+          g.wave++;
+          setUiWave(g.wave);
+          g.waveDelay = 90;
+          bossesDefeatedRef.current++;
+          if (bossesDefeatedRef.current >= 3) {
+            tryUnlockAchievement("boss_slayer");
+            tryUnlockAchievement("omega_apex");
           }
         }
-      }
 
-      // Player bullets hit enemies
-      const toRemoveBullets = new Set<number>();
-      const toRemoveEnemies = new Set<number>();
-      for (const b of g.bullets) {
-        if (b.type !== "player") continue;
-        for (const e of g.enemies) {
-          if (toRemoveEnemies.has(e.id)) continue;
-          if (
-            !overlap(
-              b.x - b.w / 2,
-              b.y - b.h / 2,
-              b.w,
-              b.h,
-              e.x - e.w / 2,
-              e.y - e.h / 2,
-              e.w,
-              e.h,
-            )
-          )
-            continue;
-          if (b.life === undefined) toRemoveBullets.add(b.id);
-          e.hp -= b.dmg;
-          addParticles(g, b.x, b.y, e.color, 5);
-          if (b.color === "#fbbf24") {
-            for (const e2 of g.enemies) {
-              if (e2.id !== e.id && Math.hypot(e2.x - e.x, e2.y - e.y) < 80) {
-                e2.hp -= b.dmg * 0.6;
-                addParticles(g, e2.x, e2.y, "#fbbf24", 4);
+        // Move bullets
+        for (const b of g.bullets) {
+          if (b.targetId !== undefined) {
+            const t = g.enemies.find((e) => e.id === b.targetId);
+            if (t) {
+              const a = Math.atan2(t.y - b.y, t.x - b.x);
+              b.vx += Math.cos(a) * 0.6;
+              b.vy += Math.sin(a) * 0.6;
+              const m = Math.hypot(b.vx, b.vy);
+              if (m > 10) {
+                b.vx = (b.vx / m) * 10;
+                b.vy = (b.vy / m) * 10;
               }
             }
           }
-          if (e.hp <= 0) {
-            toRemoveEnemies.add(e.id);
-            addParticles(g, e.x, e.y, e.color, e.type === "boss" ? 40 : 14);
-            g.screenShake = e.type === "boss" ? 18 : 6;
-            g.kills++;
-            g.combo = Math.min(g.combo + 1, 20);
-            g.comboTimer = 180;
-            const cm = Math.min(Math.floor(g.combo / 4) + 1, 5);
-            setUiCombo(g.combo);
-            const baseScores: Record<EnemyType, number> = {
-              fighter: 20,
-              kamikaze: 25,
-              tank: 60,
-              stealth: 40,
-              drone: 35,
-              boss: 500,
-            };
-            const scored = baseScores[e.type] * cm * (g.multiplier ? 2 : 1);
-            g.score += scored;
-            setUiScore(g.score);
-            addFloat(g, e.x, e.y - 20, `+${scored}`, "#fbbf24");
-            const xpGain = e.type === "boss" ? 50 : e.type === "tank" ? 12 : 5;
-            g.xp += xpGain;
-            g.coins += Math.floor(Math.random() * 3) + 1;
-            if (g.xp >= g.xpToNext) {
-              g.xp -= g.xpToNext;
-              g.level++;
-              g.xpToNext = XP_PER_LEVEL + g.level * 20;
-              g.levelUpAnim = 90;
-              setUiLevel(g.level);
+          b.x += b.vx * dt;
+          b.y += b.vy * dt;
+          if (b.life !== undefined) b.life -= dt;
+        }
+        g.bullets = g.bullets.filter(
+          (b) =>
+            b.y > -30 &&
+            b.y < H + 30 &&
+            b.x > -30 &&
+            b.x < W + 30 &&
+            (b.life === undefined || b.life > 0),
+        );
+
+        // Move enemies
+        for (const e of g.enemies) {
+          if (e.type === "boss") {
+            e.x += e.xDir * 1.5 * dt;
+            if (e.x > W - 60 || e.x < 60) e.xDir = -e.xDir;
+            e.y = Math.min(e.y + e.speed * 0.3 * dt, 100);
+            e.fireTimer -= dt;
+            if (e.fireTimer <= 0) {
+              e.fireTimer = 35;
+              for (let i = -2; i <= 2; i++)
+                g.bullets.push({
+                  id: nextId(g),
+                  x: e.x + i * 18,
+                  y: e.y + 35,
+                  vx: i * 1.0,
+                  vy: 5,
+                  type: "enemy",
+                  color: "#f43f5e",
+                  w: 5,
+                  h: 12,
+                  dmg: 15,
+                });
             }
-            setUiXp(g.xp);
-            if (e.type === "boss") {
-              g.bossAlive = false;
-              g.wave++;
-              setUiWave(g.wave);
-              g.waveDelay = 90;
+          } else if (e.type === "kamikaze") {
+            const dx = g.player.x - e.x;
+            const dy = g.player.y - e.y;
+            const dist = Math.hypot(dx, dy) || 1;
+            e.x += (dx / dist) * e.speed * 1.5 * dt;
+            e.y += (dy / dist) * e.speed * 1.5 * dt;
+          } else if (e.type === "drone") {
+            e.sineAngle += 0.05 * dt;
+            e.x = e.baseX + Math.sin(e.sineAngle) * 60;
+            e.y += e.speed * dt;
+          } else if (e.type === "stealth") {
+            e.stealthTimer -= dt;
+            if (e.stealthTimer <= 0) {
+              e.stealthAlpha = e.stealthAlpha > 0.5 ? 0.2 : 1.0;
+              e.stealthTimer = 60 + Math.random() * 60;
             }
-            const roll = Math.random();
-            let pType: PowerUpType | null = null;
-            let wType: WeaponType | undefined;
-            if (roll < 0.06) pType = "health";
-            else if (roll < 0.12) pType = "shield";
-            else if (roll < 0.18) pType = "rapidfire";
-            else if (roll < 0.22) pType = "multiplier";
-            else if (roll < 0.32) {
-              pType = "weapon";
-              wType =
-                WEAPON_DROPS[Math.floor(Math.random() * WEAPON_DROPS.length)];
-            }
-            if (pType)
-              g.powerUps.push({
+            e.y += e.speed * dt;
+          } else {
+            e.y += e.speed * dt;
+            e.fireTimer -= dt;
+            if (e.fireTimer <= 0) {
+              e.fireTimer = 90 + Math.random() * 60;
+              g.bullets.push({
                 id: nextId(g),
                 x: e.x,
-                y: e.y,
-                vy: 1.5,
-                type: pType,
-                weaponType: wType,
+                y: e.y + e.h / 2,
+                vx: 0,
+                vy: 4,
+                type: "enemy",
+                color: "#f43f5e",
+                w: 4,
+                h: 10,
+                dmg: 12,
               });
+            }
           }
-          break;
         }
-      }
-      g.bullets = g.bullets.filter((b) => !toRemoveBullets.has(b.id));
-      g.enemies = g.enemies.filter(
-        (e) => !toRemoveEnemies.has(e.id) && e.y < H + 60,
-      );
 
-      // Enemy bullets + kamikaze hit player
-      if (g.invTimer <= 0) {
-        if (g.shield) {
-          g.bullets = g.bullets.filter((b) => {
-            if (b.type !== "enemy") return true;
+        // Player bullets hit enemies
+        const toRemoveBullets = new Set<number>();
+        const toRemoveEnemies = new Set<number>();
+        for (const b of g.bullets) {
+          if (b.type !== "player") continue;
+          for (const e of g.enemies) {
+            if (toRemoveEnemies.has(e.id)) continue;
             if (
-              overlap(
+              !overlap(
                 b.x - b.w / 2,
                 b.y - b.h / 2,
                 b.w,
                 b.h,
-                g.player.x - 38,
-                g.player.y - 38,
-                76,
-                76,
-              )
-            ) {
-              addParticles(g, b.x, b.y, "#06b6d4", 5);
-              return false;
-            }
-            return true;
-          });
-        } else {
-          g.bullets = g.bullets.filter((b) => {
-            if (b.type !== "enemy") return true;
-            if (
-              overlap(
-                b.x - b.w / 2,
-                b.y - b.h / 2,
-                b.w,
-                b.h,
-                g.player.x - PLAYER_W / 2,
-                g.player.y - PLAYER_H / 2,
-                PLAYER_W,
-                PLAYER_H,
-              )
-            ) {
-              g.lives--;
-              setUiLives(g.lives);
-              g.invTimer = 60;
-              g.screenShake = 8;
-              g.combo = 0;
-              setUiCombo(0);
-              addParticles(g, g.player.x, g.player.y, "#f43f5e", 8);
-              addFloat(g, g.player.x, g.player.y - 30, "HIT!", "#f43f5e");
-              return false;
-            }
-            return true;
-          });
-          g.enemies = g.enemies.filter((e) => {
-            if (e.type !== "kamikaze") return true;
-            if (
-              overlap(
                 e.x - e.w / 2,
                 e.y - e.h / 2,
                 e.w,
                 e.h,
-                g.player.x - PLAYER_W / 2,
-                g.player.y - PLAYER_H / 2,
-                PLAYER_W,
-                PLAYER_H,
               )
-            ) {
-              g.lives--;
-              setUiLives(g.lives);
-              g.invTimer = 60;
-              g.screenShake = 10;
-              addParticles(g, e.x, e.y, "#f97316", 16);
-              return false;
+            )
+              continue;
+            if (b.life === undefined) toRemoveBullets.add(b.id);
+            e.hp -= b.dmg;
+            addParticles(g, b.x, b.y, e.color, 5);
+            if (b.color === "#fbbf24") {
+              for (const e2 of g.enemies) {
+                if (e2.id !== e.id && Math.hypot(e2.x - e.x, e2.y - e.y) < 80) {
+                  e2.hp -= b.dmg * 0.6;
+                  addParticles(g, e2.x, e2.y, "#fbbf24", 4);
+                }
+              }
             }
-            return true;
-          });
-        }
-      }
-
-      // Power-up collection
-      for (const p of g.powerUps) {
-        p.y += p.vy * dt;
-        if (
-          overlap(
-            p.x - 14,
-            p.y - 14,
-            28,
-            28,
-            g.player.x - 24,
-            g.player.y - 24,
-            48,
-            48,
-          )
-        ) {
-          p.vy = 9999;
-          addParticles(g, p.x, p.y, POWERUP_COLORS[p.type], 10);
-          if (p.type === "health") {
-            g.lives = Math.min(g.lives + 1, 5);
-            setUiLives(g.lives);
-            addFloat(g, p.x, p.y - 20, "+LIFE", "#22c55e");
-          } else if (p.type === "shield") {
-            g.shield = true;
-            g.shieldTimer = 120;
-            setUiShield(true);
-            addFloat(g, p.x, p.y - 20, "SHIELD!", "#06b6d4");
-          } else if (p.type === "rapidfire") {
-            g.rapidFire = true;
-            g.rapidFireTimer = 300;
-            addFloat(g, p.x, p.y - 20, "RAPID!", "#f59e0b");
-          } else if (p.type === "multiplier") {
-            g.multiplier = true;
-            g.multiplierTimer = 600;
-            addFloat(g, p.x, p.y - 20, "x2 SCORE!", "#ec4899");
-          } else if (p.type === "weapon" && p.weaponType) {
-            g.weapon = p.weaponType;
-            g.weaponTimer = 600;
-            setUiWeapon(p.weaponType);
-            addFloat(
-              g,
-              p.x,
-              p.y - 20,
-              `${WEAPON_NAMES[p.weaponType]}!`,
-              "#a855f7",
-            );
+            if (e.hp <= 0) {
+              toRemoveEnemies.add(e.id);
+              addParticles(g, e.x, e.y, e.color, e.type === "boss" ? 40 : 14);
+              g.screenShake = e.type === "boss" ? 18 : 6;
+              g.kills++;
+              g.combo = Math.min(g.combo + 1, 20);
+              g.comboTimer = 180;
+              const cm = Math.min(Math.floor(g.combo / 4) + 1, 5);
+              setUiCombo(g.combo);
+              // Combo achievement
+              if (g.combo >= 10 && !combo5Ref.current) {
+                combo5Ref.current = true;
+                tryUnlockAchievement("combo_master");
+              }
+              const baseScores: Record<EnemyType, number> = {
+                fighter: 20,
+                kamikaze: 25,
+                tank: 60,
+                stealth: 40,
+                drone: 35,
+                boss: 500,
+              };
+              const scored = baseScores[e.type] * cm * (g.multiplier ? 2 : 1);
+              g.score += scored;
+              setUiScore(g.score);
+              // Score achievements
+              if (g.score >= 5000) tryUnlockAchievement("score_1000");
+              if (g.score >= 25000) tryUnlockAchievement("score_5000");
+              if (g.score >= 100000) tryUnlockAchievement("score_10000");
+              addFloat(g, e.x, e.y - 20, `+${scored}`, "#fbbf24");
+              const xpGain =
+                e.type === "boss" ? 50 : e.type === "tank" ? 12 : 5;
+              g.xp += xpGain;
+              g.coins += Math.floor(Math.random() * 3) + 1;
+              if (g.xp >= g.xpToNext) {
+                g.xp -= g.xpToNext;
+                g.level++;
+                g.xpToNext = XP_PER_LEVEL + g.level * 20;
+                g.levelUpAnim = 90;
+                setUiLevel(g.level);
+                SoundEffects.levelUp();
+              }
+              setUiXp(g.xp);
+              // First kill achievement
+              if (!firstKillRef.current) {
+                firstKillRef.current = true;
+                tryUnlockAchievement("first_blood");
+              }
+              // Explosion sound by enemy type
+              if (e.type === "boss") {
+                SoundEffects.explosionBoss();
+              } else if (e.type === "tank") {
+                SoundEffects.explosionBig();
+              } else if (e.type === "kamikaze" || e.type === "drone") {
+                SoundEffects.explosionSmall();
+              } else if (e.type === "stealth") {
+                SoundEffects.explosionElectric();
+              } else {
+                SoundEffects.explosion();
+              }
+              if (e.type === "boss") {
+                g.bossAlive = false;
+                g.wave++;
+                setUiWave(g.wave);
+                g.waveDelay = 90;
+                bossesDefeatedRef.current++;
+                if (bossesDefeatedRef.current >= 3) {
+                  tryUnlockAchievement("boss_slayer");
+                  tryUnlockAchievement("omega_apex");
+                }
+              }
+              const roll = Math.random();
+              let pType: PowerUpType | null = null;
+              let wType: WeaponType | undefined;
+              if (roll < 0.06) pType = "health";
+              else if (roll < 0.12) pType = "shield";
+              else if (roll < 0.18) pType = "rapidfire";
+              else if (roll < 0.22) pType = "multiplier";
+              else if (roll < 0.32) {
+                pType = "weapon";
+                wType =
+                  WEAPON_DROPS[Math.floor(Math.random() * WEAPON_DROPS.length)];
+              }
+              if (pType)
+                g.powerUps.push({
+                  id: nextId(g),
+                  x: e.x,
+                  y: e.y,
+                  vy: 1.5,
+                  type: pType,
+                  weaponType: wType,
+                });
+            }
+            break;
           }
         }
-      }
-      g.powerUps = g.powerUps.filter((p) => p.vy !== 9999 && p.y < H + 60);
+        g.bullets = g.bullets.filter((b) => !toRemoveBullets.has(b.id));
+        g.enemies = g.enemies.filter(
+          (e) => !toRemoveEnemies.has(e.id) && e.y < H + 60,
+        );
 
-      // Particles & float texts
-      for (const p of g.particles) {
-        p.x += p.vx * dt;
-        p.y += p.vy * dt;
-        p.vy += 0.07 * dt;
-        p.life -= dt;
-      }
-      g.particles = g.particles.filter((p) => p.life > 0);
-      for (const f of g.floatTexts) {
-        f.y += f.vy * dt;
-        f.life -= dt;
-      }
-      g.floatTexts = g.floatTexts.filter((f) => f.life > 0);
+        // Enemy bullets + kamikaze hit player
+        if (g.invTimer <= 0) {
+          if (g.shield) {
+            g.bullets = g.bullets.filter((b) => {
+              if (b.type !== "enemy") return true;
+              if (
+                overlap(
+                  b.x - b.w / 2,
+                  b.y - b.h / 2,
+                  b.w,
+                  b.h,
+                  g.player.x - 38,
+                  g.player.y - 38,
+                  76,
+                  76,
+                )
+              ) {
+                addParticles(g, b.x, b.y, "#06b6d4", 5);
+                return false;
+              }
+              return true;
+            });
+          } else {
+            g.bullets = g.bullets.filter((b) => {
+              if (b.type !== "enemy") return true;
+              if (
+                overlap(
+                  b.x - b.w / 2,
+                  b.y - b.h / 2,
+                  b.w,
+                  b.h,
+                  g.player.x - PLAYER_W / 2,
+                  g.player.y - PLAYER_H / 2,
+                  PLAYER_W,
+                  PLAYER_H,
+                )
+              ) {
+                g.lives--;
+                setUiLives(g.lives);
+                g.invTimer = 60;
+                g.screenShake = 8;
+                g.combo = 0;
+                setUiCombo(0);
+                addParticles(g, g.player.x, g.player.y, "#f43f5e", 8);
+                addFloat(g, g.player.x, g.player.y - 30, "HIT!", "#f43f5e");
+                return false;
+              }
+              return true;
+            });
+            g.enemies = g.enemies.filter((e) => {
+              if (e.type !== "kamikaze") return true;
+              if (
+                overlap(
+                  e.x - e.w / 2,
+                  e.y - e.h / 2,
+                  e.w,
+                  e.h,
+                  g.player.x - PLAYER_W / 2,
+                  g.player.y - PLAYER_H / 2,
+                  PLAYER_W,
+                  PLAYER_H,
+                )
+              ) {
+                g.lives--;
+                setUiLives(g.lives);
+                g.invTimer = 60;
+                g.screenShake = 10;
+                addParticles(g, e.x, e.y, "#f97316", 16);
+                return false;
+              }
+              return true;
+            });
+          }
+        }
 
-      // Stars parallax
-      for (const s of g.stars1) {
-        s.y += s.vy * dt;
-        if (s.y > H + 2) s.y = -2;
-      }
-      for (const s of g.stars2) {
-        s.y += s.vy * dt;
-        if (s.y > H + 2) s.y = -2;
-      }
-      for (const s of g.stars3) {
-        s.y += s.vy * dt;
-        if (s.y > H + 2) s.y = -2;
-      }
+        // Power-up collection
+        for (const p of g.powerUps) {
+          p.y += p.vy * dt;
+          if (
+            overlap(
+              p.x - 14,
+              p.y - 14,
+              28,
+              28,
+              g.player.x - 24,
+              g.player.y - 24,
+              48,
+              48,
+            )
+          ) {
+            p.vy = 9999;
+            addParticles(g, p.x, p.y, POWERUP_COLORS[p.type], 10);
+            SoundEffects.powerUp();
+            if (p.type === "health") {
+              g.lives = Math.min(g.lives + 1, 5);
+              setUiLives(g.lives);
+              addFloat(g, p.x, p.y - 20, "+LIFE", "#22c55e");
+            } else if (p.type === "shield") {
+              g.shield = true;
+              g.shieldTimer = 120;
+              setUiShield(true);
+              addFloat(g, p.x, p.y - 20, "SHIELD!", "#06b6d4");
+            } else if (p.type === "rapidfire") {
+              g.rapidFire = true;
+              g.rapidFireTimer = 300;
+              addFloat(g, p.x, p.y - 20, "RAPID!", "#f59e0b");
+            } else if (p.type === "multiplier") {
+              g.multiplier = true;
+              g.multiplierTimer = 600;
+              addFloat(g, p.x, p.y - 20, "x2 SCORE!", "#ec4899");
+            } else if (p.type === "weapon" && p.weaponType) {
+              g.weapon = p.weaponType;
+              g.weaponTimer = 600;
+              setUiWeapon(p.weaponType);
+              addFloat(
+                g,
+                p.x,
+                p.y - 20,
+                `${WEAPON_NAMES[p.weaponType]}!`,
+                "#a855f7",
+              );
+            }
+          }
+        }
+        g.powerUps = g.powerUps.filter((p) => p.vy !== 9999 && p.y < H + 60);
 
-      if (g.screenShake > 0) g.screenShake = Math.max(0, g.screenShake - dt);
+        // Particles & float texts
+        for (const p of g.particles) {
+          p.x += p.vx * dt;
+          p.y += p.vy * dt;
+          p.vy += 0.07 * dt;
+          p.life -= dt;
+        }
+        g.particles = g.particles.filter((p) => p.life > 0);
+        for (const f of g.floatTexts) {
+          f.y += f.vy * dt;
+          f.life -= dt;
+        }
+        g.floatTexts = g.floatTexts.filter((f) => f.life > 0);
 
-      // Game over check
-      if (g.lives <= 0) {
-        g.gameOver = true;
-        setGameOver({ score: g.score, kills: g.kills, waves: g.wave });
-        return;
+        // Stars parallax
+        for (const s of g.stars1) {
+          s.y += s.vy * dt;
+          if (s.y > H + 2) s.y = -2;
+        }
+        for (const s of g.stars2) {
+          s.y += s.vy * dt;
+          if (s.y > H + 2) s.y = -2;
+        }
+        for (const s of g.stars3) {
+          s.y += s.vy * dt;
+          if (s.y > H + 2) s.y = -2;
+        }
+
+        if (g.screenShake > 0) g.screenShake = Math.max(0, g.screenShake - dt);
+
+        // Game over check
+        if (g.lives <= 0) {
+          g.gameOver = true;
+          setGameOver({ score: g.score, kills: g.kills, waves: g.wave });
+          const audio = audioRef.current;
+          if (audio) audio.pause();
+          return;
+        }
       }
 
       // ── DRAW ──
@@ -1165,19 +1395,23 @@ export function SpaceShooterGame({
         ctx.restore();
       }
 
-      // Player ship
+      // Player ship with skin
       const drawPlayer =
         g.invTimer <= 0 || Math.floor(g.invTimer / 8) % 2 === 0;
       if (drawPlayer) {
         ctx.save();
-        ctx.shadowColor = "#06b6d4";
-        ctx.shadowBlur = 18;
-        ctx.fillStyle = "#06b6d4";
+        const skinColor = getSkinColor();
+        const isDarkSkin =
+          localEquippedSkin === "phantom" ||
+          localEquippedSkin === "night_shade";
+        ctx.shadowColor = isDarkSkin ? "#fff" : skinColor;
+        ctx.shadowBlur = isDarkSkin ? 20 : 18;
+        ctx.fillStyle = skinColor;
         ctx.beginPath();
         ctx.arc(g.player.x, g.player.y + 15, 5, 0, Math.PI * 2);
         ctx.fill();
-        ctx.fillStyle = "#06b6d4";
-        ctx.strokeStyle = "#67e8f9";
+        ctx.fillStyle = skinColor;
+        ctx.strokeStyle = isDarkSkin ? "#c084fc" : "#67e8f9";
         ctx.lineWidth = 1;
         ctx.beginPath();
         ctx.moveTo(g.player.x, g.player.y - 22);
@@ -1221,6 +1455,19 @@ export function SpaceShooterGame({
       rafRef.current = requestAnimationFrame(fn);
     }
 
+    // Try to start background music (may fail due to autoplay policy)
+    const audio = audioRef.current;
+    if (audio && musicPendingRef.current) {
+      audio
+        .play()
+        .then(() => {
+          musicPendingRef.current = false;
+        })
+        .catch(() => {
+          // Will retry on first user interaction
+        });
+    }
+
     return () => {
       cancelAnimationFrame(rafRef.current);
       rafRef.current = 0;
@@ -1229,7 +1476,7 @@ export function SpaceShooterGame({
       window.removeEventListener("keydown", onKey);
       window.removeEventListener("keyup", onKey);
     };
-  }, []);
+  }, [getSkinColor, tryUnlockAchievement, localEquippedSkin]);
 
   const xpPct = Math.min((uiXp / (XP_PER_LEVEL + uiLevel * 20)) * 100, 100);
   const comboMul = Math.min(Math.floor(uiCombo / 4) + 1, 5);
@@ -1239,6 +1486,21 @@ export function SpaceShooterGame({
       className="w-full flex flex-col items-center py-4 px-2"
       style={{ background: "#050510", minHeight: "100vh" }}
     >
+      {/* Background music */}
+      <audio
+        ref={audioRef}
+        src="/assets/audio/game-music.mp3"
+        loop
+        preload="auto"
+      >
+        <track kind="captions" />
+      </audio>
+      <style>{`
+        @keyframes slideDown {
+          from { transform: translate(-50%, -20px); opacity: 0; }
+          to { transform: translate(-50%, 0); opacity: 1; }
+        }
+      `}</style>
       {/* Top bar */}
       <div className="w-full max-w-3xl flex items-center justify-between mb-3 px-1">
         <button
@@ -1272,6 +1534,48 @@ export function SpaceShooterGame({
           }}
         >
           <Trophy className="w-4 h-4" /> SCORES
+        </button>
+      </div>
+
+      {/* Panel toggles */}
+      <div className="w-full max-w-3xl flex gap-2 mb-3 px-1">
+        <button
+          type="button"
+          onClick={() => {
+            pausedRef.current = true;
+            setShowPanel("skins");
+          }}
+          data-ocid="space-shooter.skins_toggle"
+          className="flex items-center gap-1.5 text-xs font-mono px-3 py-1.5 rounded-lg transition-colors"
+          style={{
+            background:
+              showPanel === "skins"
+                ? "rgba(6,182,212,0.25)"
+                : "rgba(6,182,212,0.08)",
+            color: "#06b6d4",
+            border: "1px solid rgba(6,182,212,0.35)",
+          }}
+        >
+          <Crosshair className="w-3.5 h-3.5" /> SHIP ARSENAL
+        </button>
+        <button
+          type="button"
+          onClick={() => {
+            pausedRef.current = true;
+            setShowPanel("achievements");
+          }}
+          data-ocid="space-shooter.achievements_toggle"
+          className="flex items-center gap-1.5 text-xs font-mono px-3 py-1.5 rounded-lg transition-colors"
+          style={{
+            background:
+              showPanel === "achievements"
+                ? "rgba(251,191,36,0.2)"
+                : "rgba(251,191,36,0.08)",
+            color: "#fbbf24",
+            border: "1px solid rgba(251,191,36,0.35)",
+          }}
+        >
+          <Award className="w-3.5 h-3.5" /> ACHIEVEMENTS
         </button>
       </div>
 
@@ -1461,6 +1765,100 @@ export function SpaceShooterGame({
 
         {/* Canvas */}
         <div className="relative flex-1">
+          {/* Mute button */}
+          <button
+            type="button"
+            onClick={toggleMute}
+            data-ocid="space-shooter.mute_button"
+            className="absolute top-2 right-2 z-20 w-8 h-8 rounded-lg flex items-center justify-center transition-all"
+            style={{
+              background: "rgba(0,0,0,0.5)",
+              border: "1px solid rgba(6,182,212,0.4)",
+              color: "#06b6d4",
+            }}
+          >
+            {muted ? (
+              <VolumeX className="w-4 h-4" />
+            ) : (
+              <Volume2 className="w-4 h-4" />
+            )}
+          </button>
+
+          {/* Achievement popup */}
+          {currentAchievement && (
+            <div
+              className="absolute top-4 left-1/2 -translate-x-1/2 z-50 px-5 py-3 rounded-xl"
+              style={{
+                background:
+                  currentAchievement.rarity === "legendary"
+                    ? "linear-gradient(135deg, rgba(251,191,36,0.15), rgba(245,158,11,0.1))"
+                    : "rgba(6,182,212,0.12)",
+                border:
+                  currentAchievement.rarity === "legendary"
+                    ? "2px solid rgba(251,191,36,0.6)"
+                    : "1px solid rgba(6,182,212,0.5)",
+                boxShadow:
+                  currentAchievement.rarity === "legendary"
+                    ? "0 0 30px rgba(251,191,36,0.4), inset 0 0 20px rgba(251,191,36,0.1)"
+                    : "0 0 20px rgba(6,182,212,0.3)",
+                animation: "slideDown 0.4s ease-out",
+                minWidth: 220,
+              }}
+              data-ocid="space-shooter.achievement_popup"
+            >
+              {currentAchievement.rarity === "legendary" && (
+                <div
+                  className="text-xs font-bold tracking-widest text-center mb-1"
+                  style={{ color: "#fbbf24" }}
+                >
+                  ⬡ LEGENDARY ⬡
+                </div>
+              )}
+              <div className="flex items-center gap-3">
+                <div
+                  className="text-2xl"
+                  style={{
+                    filter:
+                      currentAchievement.rarity === "legendary"
+                        ? "drop-shadow(0 0 8px rgba(251,191,36,0.8))"
+                        : "drop-shadow(0 0 6px rgba(6,182,212,0.6))",
+                  }}
+                >
+                  {currentAchievement.icon}
+                </div>
+                <div className="flex-1">
+                  <div className="flex items-center gap-2">
+                    <div
+                      className="text-sm font-bold tracking-wider"
+                      style={{
+                        color:
+                          currentAchievement.rarity === "legendary"
+                            ? "#fbbf24"
+                            : "#06b6d4",
+                      }}
+                    >
+                      {currentAchievement.name}
+                    </div>
+                    <span
+                      className="text-[10px] font-black tracking-widest px-1.5 py-0.5 rounded"
+                      style={{
+                        background: "rgba(34,197,94,0.2)",
+                        color: "#22c55e",
+                        border: "1px solid rgba(34,197,94,0.5)",
+                        boxShadow: "0 0 8px rgba(34,197,94,0.3)",
+                      }}
+                    >
+                      ✓ UNLOCKED
+                    </span>
+                  </div>
+                  <div className="text-xs" style={{ color: "#9ca3af" }}>
+                    {currentAchievement.description}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
           <canvas
             ref={canvasRef}
             width={W}
@@ -1472,6 +1870,22 @@ export function SpaceShooterGame({
               border: "1px solid rgba(168,85,247,0.2)",
               boxShadow: "0 0 40px rgba(168,85,247,0.15)",
               maxHeight: "85vh",
+            }}
+            onClick={() => {
+              const a = audioRef.current;
+              if (a && musicPendingRef.current) {
+                a.play()
+                  .then(() => {
+                    musicPendingRef.current = false;
+                  })
+                  .catch(() => {});
+              }
+              canvasRef.current?.focus();
+            }}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                canvasRef.current?.focus();
+              }
             }}
             data-ocid="space-shooter.canvas"
           />
@@ -1906,6 +2320,61 @@ export function SpaceShooterGame({
           </div>
         )}
       </div>
+
+      {/* Modal overlays for Ship Arsenal & Achievements */}
+      {showPanel && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4"
+          style={{
+            backdropFilter: "blur(8px)",
+            WebkitBackdropFilter: "blur(8px)",
+            background: "rgba(5,5,16,0.85)",
+          }}
+          data-ocid="space-shooter.modal_overlay"
+        >
+          <div
+            className="relative w-full max-w-3xl max-h-[90vh] overflow-y-auto rounded-2xl border p-6"
+            style={{
+              background: "rgba(10,10,25,0.95)",
+              borderColor:
+                showPanel === "skins"
+                  ? "rgba(6,182,212,0.4)"
+                  : "rgba(251,191,36,0.4)",
+              boxShadow:
+                showPanel === "skins"
+                  ? "0 0 40px rgba(6,182,212,0.2)"
+                  : "0 0 40px rgba(251,191,36,0.2)",
+            }}
+          >
+            <button
+              type="button"
+              onClick={closePanel}
+              data-ocid="space-shooter.modal_close_button"
+              className="absolute top-3 right-3 w-8 h-8 rounded-lg flex items-center justify-center transition-all"
+              style={{
+                background: "rgba(255,255,255,0.05)",
+                border: "1px solid rgba(255,255,255,0.1)",
+                color: "#9ca3af",
+              }}
+            >
+              <X className="w-4 h-4" />
+            </button>
+            {showPanel === "skins" && (
+              <SkinSelector
+                playerId={playerId}
+                onEquip={(id) => setLocalEquippedSkin(id)}
+              />
+            )}
+            {showPanel === "achievements" && (
+              <AchievementShowcase
+                unlockedAchievementIds={Array.from(
+                  achievementsUnlockedRef.current,
+                )}
+              />
+            )}
+          </div>
+        </div>
+      )}
 
       {/* Controls hint */}
       <div
