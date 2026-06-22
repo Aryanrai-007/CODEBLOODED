@@ -1,11 +1,8 @@
 manifest_version = "0.1.0"
 
 [project]
-id = "my-app"
-name = "my-app"
+id = "codex-lethalis"
+name = "codex-lethalis"
 
 [workspace]
-include = ["src/**"]
-
-[canisters.frontend]
-depends_on = ["backend"]
+include = ["src/frontend/**"]

@@ -4,11 +4,11 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "typecheck": "tsc --noEmit",
-    "check": "biome check src",
-    "fix": "biome check --write src"
+    "dev": "npx vite",
+    "build": "npx vite build",
+    "typecheck": "npx tsc --noEmit",
+    "check": "npx biome check src",
+    "fix": "npx biome check --write src"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.0",

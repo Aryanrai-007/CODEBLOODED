@@ -2,15 +2,13 @@
   "name": "codex-lethalis-app",
   "type": "module",
   "engines": {
-    "node": ">=16.0.0",
-    "pnpm": ">=7.0.0",
-    "npm": "please use pnpm"
+    "node": ">=16.0.0"
   },
   "scripts": {
-    "build": "pnpm -r --if-present run build",
-    "typecheck": "pnpm -r --if-present run typecheck",
-    "check": "pnpm -r --if-present run check",
-    "fix": "pnpm -r --if-present run fix"
+    "build": "cd src/frontend && npm run build",
+    "typecheck": "cd src/frontend && npm run typecheck",
+    "check": "cd src/frontend && npm run check",
+    "fix": "cd src/frontend && npm run fix"
   },
   "devDependencies": {
     "sharp": "^0.34.4"
