@@ -1,46 +1,31 @@
-import { createActor } from "@/backend";
 import type { GameScore, PlayerRank } from "@/types/game";
-import { useActor } from "@caffeineai/core-infrastructure";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { mockBackend } from "../mocks/backend";
 
 export function useTopScores(gameId: string, limit = 10) {
-  const { actor, isFetching } = useActor(createActor);
   return useQuery<GameScore[]>({
     queryKey: ["topScores", gameId, limit],
-    queryFn: async () => {
-      if (!actor) return [];
-      return actor.getTopScores(gameId, BigInt(limit));
-    },
-    enabled: !!actor && !isFetching,
+    queryFn: () => mockBackend.getTopScores(gameId, BigInt(limit)),
   });
 }
 
 export function usePlayerRank(gameId: string, playerId: string | undefined) {
-  const { actor, isFetching } = useActor(createActor);
   return useQuery<PlayerRank | null>({
     queryKey: ["playerRank", gameId, playerId],
-    queryFn: async () => {
-      if (!actor || !playerId) return null;
-      return actor.getPlayerRank(gameId, playerId);
-    },
-    enabled: !!actor && !isFetching && !!playerId,
+    queryFn: () =>
+      playerId ? mockBackend.getPlayerRank(gameId, playerId) : null,
+    enabled: !!playerId,
   });
 }
 
 export function useGrandLeaderboard(limit = 10) {
-  const { actor, isFetching } = useActor(createActor);
   return useQuery<PlayerRank[]>({
     queryKey: ["grandLeaderboard", limit],
-    queryFn: async () => {
-      if (!actor) return [];
-      return actor.getGrandLeaderboard(BigInt(limit));
-    },
-    enabled: !!actor && !isFetching,
+    queryFn: () => mockBackend.getGrandLeaderboard(BigInt(limit)),
   });
 }
 
 export function useSubmitGameScore() {
-  const { actor } = useActor(createActor);
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (params: {
@@ -50,8 +35,7 @@ export function useSubmitGameScore() {
       kills: number;
       waves: number;
     }) => {
-      if (!actor) throw new Error("Actor not available");
-      const result = await actor.submitGameScore(
+      const result = await mockBackend.submitGameScore(
         params.playerId,
         params.gameId,
         BigInt(params.score),

@@ -1,12 +1,10 @@
-import { createActor } from "@/backend";
 import type { GamePlayer } from "@/types/game";
-import { useActor } from "@caffeineai/core-infrastructure";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
+import { mockBackend } from "../mocks/backend";
 
 const STORAGE_KEY = "gamePlayer";
 
 export function useGameAuth() {
-  const { actor } = useActor(createActor);
   const [currentPlayer, setCurrentPlayer] = useState<GamePlayer | null>(() => {
     try {
       const stored = localStorage.getItem(STORAGE_KEY);
@@ -29,54 +27,54 @@ export function useGameAuth() {
 
   const register = useCallback(
     async (username: string, password: string): Promise<boolean> => {
-      if (!actor) return false;
       setIsLoading(true);
       setError(null);
       try {
-        const result = await actor.registerGamePlayer(username, password);
+        const result = await mockBackend.registerGamePlayer(username, password);
         if (result.__kind__ === "err") {
           setError(result.err);
           return false;
         }
-        // After registering, login to get player object
-        const loginResult = await actor.loginGamePlayer(username, password);
+        const loginResult = await mockBackend.loginGamePlayer(
+          username,
+          password,
+        );
         if (loginResult.__kind__ === "err") {
           setError(loginResult.err);
           return false;
         }
         persist(loginResult.ok);
         return true;
-      } catch (_e) {
+      } catch {
         setError("Registration failed. Please try again.");
         return false;
       } finally {
         setIsLoading(false);
       }
     },
-    [actor, persist],
+    [persist],
   );
 
   const login = useCallback(
     async (username: string, password: string): Promise<boolean> => {
-      if (!actor) return false;
       setIsLoading(true);
       setError(null);
       try {
-        const result = await actor.loginGamePlayer(username, password);
+        const result = await mockBackend.loginGamePlayer(username, password);
         if (result.__kind__ === "err") {
           setError(result.err);
           return false;
         }
         persist(result.ok);
         return true;
-      } catch (_e) {
+      } catch {
         setError("Login failed. Please try again.");
         return false;
       } finally {
         setIsLoading(false);
       }
     },
-    [actor, persist],
+    [persist],
   );
 
   const logout = useCallback(() => {

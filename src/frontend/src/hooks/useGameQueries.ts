@@ -1,78 +1,46 @@
-import { createActor } from "@/backend";
 import type {
   AchievementResult,
   PlayerAchievement,
   PlayerSkin,
   SkinResult,
-  backendInterface,
 } from "@/backend";
-import { useActor } from "@caffeineai/core-infrastructure";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-
-interface ExtendedBackend extends backendInterface {
-  getPlayerAchievements(playerId: string): Promise<Array<PlayerAchievement>>;
-  getPlayerSkins(playerId: string): Promise<Array<PlayerSkin>>;
-  getEquippedSkin(playerId: string): Promise<PlayerSkin | null>;
-  equipSkin(playerId: string, skinId: string): Promise<SkinResult>;
-  unlockAchievement(
-    playerId: string,
-    achievementId: string,
-  ): Promise<AchievementResult>;
-  unlockSkin(playerId: string, skinId: string): Promise<SkinResult>;
-}
+import { mockBackend } from "../mocks/backend";
 
 export function usePlayerAchievements(playerId: string | null) {
-  const { actor, isFetching } = useActor(createActor);
   return useQuery<Array<PlayerAchievement>>({
     queryKey: ["playerAchievements", playerId],
-    queryFn: async () => {
-      if (!actor || !playerId) return [];
-      return (actor as unknown as ExtendedBackend).getPlayerAchievements(
-        playerId,
-      );
-    },
-    enabled: !!actor && !isFetching && !!playerId,
+    queryFn: () =>
+      playerId ? mockBackend.getPlayerAchievements(playerId) : [],
+    enabled: !!playerId,
   });
 }
 
 export function usePlayerSkins(playerId: string | null) {
-  const { actor, isFetching } = useActor(createActor);
   return useQuery<Array<PlayerSkin>>({
     queryKey: ["playerSkins", playerId],
-    queryFn: async () => {
-      if (!actor || !playerId) return [];
-      return (actor as unknown as ExtendedBackend).getPlayerSkins(playerId);
-    },
-    enabled: !!actor && !isFetching && !!playerId,
+    queryFn: () => (playerId ? mockBackend.getPlayerSkins(playerId) : []),
+    enabled: !!playerId,
   });
 }
 
 export function useEquippedSkin(playerId: string | null) {
-  const { actor, isFetching } = useActor(createActor);
   return useQuery<PlayerSkin | null>({
     queryKey: ["equippedSkin", playerId],
-    queryFn: async () => {
-      if (!actor || !playerId) return null;
-      return (actor as unknown as ExtendedBackend).getEquippedSkin(playerId);
-    },
-    enabled: !!actor && !isFetching && !!playerId,
+    queryFn: () => (playerId ? mockBackend.getEquippedSkin(playerId) : null),
+    enabled: !!playerId,
   });
 }
 
 export function useUnlockAchievement() {
-  const { actor } = useActor(createActor);
   const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: async ({
-      playerId,
-      achievementId,
-    }: { playerId: string; achievementId: string }) => {
-      if (!actor) return false;
-      return (actor as unknown as ExtendedBackend).unlockAchievement(
-        playerId,
-        achievementId,
-      );
-    },
+  return useMutation<
+    AchievementResult,
+    Error,
+    { playerId: string; achievementId: string }
+  >({
+    mutationFn: ({ playerId, achievementId }) =>
+      mockBackend.unlockAchievement(playerId, achievementId),
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({
         queryKey: ["playerAchievements", variables.playerId],
@@ -82,16 +50,10 @@ export function useUnlockAchievement() {
 }
 
 export function useUnlockSkin() {
-  const { actor } = useActor(createActor);
   const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: async ({
-      playerId,
-      skinId,
-    }: { playerId: string; skinId: string }) => {
-      if (!actor) return false;
-      return (actor as unknown as ExtendedBackend).unlockSkin(playerId, skinId);
-    },
+  return useMutation<SkinResult, Error, { playerId: string; skinId: string }>({
+    mutationFn: ({ playerId, skinId }) =>
+      mockBackend.unlockSkin(playerId, skinId),
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({
         queryKey: ["playerSkins", variables.playerId],
@@ -101,19 +63,16 @@ export function useUnlockSkin() {
 }
 
 export function useEquipSkin() {
-  const { actor } = useActor(createActor);
   const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: async ({
-      playerId,
-      skinId,
-    }: { playerId: string; skinId: string }) => {
-      if (!actor) return false;
-      return (actor as unknown as ExtendedBackend).equipSkin(playerId, skinId);
-    },
+  return useMutation<SkinResult, Error, { playerId: string; skinId: string }>({
+    mutationFn: ({ playerId, skinId }) =>
+      mockBackend.equipSkin(playerId, skinId),
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({
         queryKey: ["equippedSkin", variables.playerId],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["playerSkins", variables.playerId],
       });
     },
   });

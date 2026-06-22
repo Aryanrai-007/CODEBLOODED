@@ -1,20 +1,50 @@
-import type { backendInterface, PlayerAchievement, PlayerSkin, SkinResult, AchievementResult } from "../backend";
+import type {
+  AchievementResult,
+  Application,
+  CalendarEvent,
+  GamePlayer,
+  GameScore,
+  LoginResult,
+  PlayerAchievement,
+  PlayerRank,
+  PlayerSkin,
+  RegisterResult,
+  SkinResult,
+  SubmitResult,
+  SubmitScoreResult,
+  backendInterface,
+} from "../backend";
 import { ApplicationStatus } from "../backend";
 
 export const mockBackend: backendInterface = {
-  approveApplication: async (_id: bigint) => true,
-  createEvent: async (_input) => BigInt(1),
-  deleteApplication: async (_id: bigint) => true,
-  deleteEvent: async (_id: bigint) => true,
-  deleteGamePlayer: async (_playerId: string) => true,
-  deleteGameScore: async (_scoreId: string) => true,
-  equipSkin: async (_playerId: string, _skinId: string): Promise<SkinResult> => ({ __kind__: "ok", ok: true }),
-  getEquippedSkin: async (_playerId: string): Promise<PlayerSkin | null> => null,
-  getPlayerAchievements: async (_playerId: string): Promise<Array<PlayerAchievement>> => [],
-  getPlayerSkins: async (_playerId: string): Promise<Array<PlayerSkin>> => [],
-  unlockAchievement: async (_playerId: string, _achievementId: string): Promise<AchievementResult> => ({ __kind__: "ok", ok: true }),
-  unlockSkin: async (_playerId: string, _skinId: string): Promise<SkinResult> => ({ __kind__: "ok", ok: true }),
-  getAllGameScores: async () => [
+  approveApplication: async (_id: bigint): Promise<boolean> => true,
+  createEvent: async (_input): Promise<bigint> => BigInt(1),
+  deleteApplication: async (_id: bigint): Promise<boolean> => true,
+  deleteEvent: async (_id: bigint): Promise<boolean> => true,
+  deleteGamePlayer: async (_playerId: string): Promise<boolean> => true,
+  deleteGameScore: async (_scoreId: string): Promise<boolean> => true,
+  equipSkin: async (
+    _playerId: string,
+    _skinId: string,
+  ): Promise<SkinResult> => ({ __kind__: "ok", ok: true }),
+  getEquippedSkin: async (
+    _playerId: string,
+  ): Promise<PlayerSkin | null> => null,
+  getPlayerAchievements: async (
+    _playerId: string,
+  ): Promise<Array<PlayerAchievement>> => [],
+  getPlayerSkins: async (
+    _playerId: string,
+  ): Promise<Array<PlayerSkin>> => [],
+  unlockAchievement: async (
+    _playerId: string,
+    _achievementId: string,
+  ): Promise<AchievementResult> => ({ __kind__: "ok", ok: true }),
+  unlockSkin: async (
+    _playerId: string,
+    _skinId: string,
+  ): Promise<SkinResult> => ({ __kind__: "ok", ok: true }),
+  getAllGameScores: async (): Promise<Array<GameScore>> => [
     {
       playerId: "player-001",
       achievedAt: BigInt(Date.now()) * BigInt(1000000),
@@ -34,7 +64,7 @@ export const mockBackend: backendInterface = {
       killedEnemies: BigInt(28),
     },
   ],
-  getApplications: async () => [
+  getApplications: async (): Promise<Array<Application>> => [
     {
       id: BigInt(1),
       status: ApplicationStatus.pending,
@@ -60,14 +90,15 @@ export const mockBackend: backendInterface = {
       yearOfStudy: "2nd Year",
     },
   ],
-  getEvents: async () => [
+  getEvents: async (): Promise<Array<CalendarEvent>> => [
     {
       id: BigInt(1),
       subject: "Hackathon Kickoff 2026",
       date: "2026-06-15",
       createdAt: BigInt(Date.now()) * BigInt(1000000),
       time: "10:00 AM",
-      description: "Annual hackathon kickoff with team formation and problem statements.",
+      description:
+        "Annual hackathon kickoff with team formation and problem statements.",
       category: "Hackathon",
     },
     {
@@ -80,7 +111,7 @@ export const mockBackend: backendInterface = {
       category: "Workshop",
     },
   ],
-  getGamePlayers: async () => [
+  getGamePlayers: async (): Promise<Array<GamePlayer>> => [
     {
       username: "CyberNova",
       playerId: "player-001",
@@ -94,7 +125,9 @@ export const mockBackend: backendInterface = {
       passwordHash: "hashed",
     },
   ],
-  getGrandLeaderboard: async (_limit: bigint) => [
+  getGrandLeaderboard: async (
+    _limit: bigint,
+  ): Promise<Array<PlayerRank>> => [
     {
       username: "CyberNova",
       playerId: "player-001",
@@ -108,13 +141,19 @@ export const mockBackend: backendInterface = {
       score: BigInt(8500),
     },
   ],
-  getPlayerRank: async (_gameId: string, _playerId: string) => ({
+  getPlayerRank: async (
+    _gameId: string,
+    _playerId: string,
+  ): Promise<PlayerRank | null> => ({
     username: "CyberNova",
     playerId: "player-001",
     rank: BigInt(1),
     score: BigInt(15000),
   }),
-  getTopScores: async (_gameId: string, _limit: bigint) => [
+  getTopScores: async (
+    _gameId: string,
+    _limit: bigint,
+  ): Promise<Array<GameScore>> => [
     {
       playerId: "player-001",
       achievedAt: BigInt(Date.now()) * BigInt(1000000),
@@ -134,7 +173,10 @@ export const mockBackend: backendInterface = {
       killedEnemies: BigInt(28),
     },
   ],
-  loginGamePlayer: async (_username: string, _password: string) => ({
+  loginGamePlayer: async (
+    _username: string,
+    _password: string,
+  ): Promise<LoginResult> => ({
     __kind__: "ok",
     ok: {
       username: "CyberNova",
@@ -143,7 +185,10 @@ export const mockBackend: backendInterface = {
       passwordHash: "hashed",
     },
   }),
-  registerGamePlayer: async (_username: string, _password: string) => ({
+  registerGamePlayer: async (
+    _username: string,
+    _password: string,
+  ): Promise<RegisterResult> => ({
     __kind__: "ok",
     ok: "player-001",
   }),
@@ -154,8 +199,8 @@ export const mockBackend: backendInterface = {
     _yearOfStudy: string,
     _department: string,
     _reasonForJoining: string,
-    _priorExperience: string
-  ) => ({
+    _priorExperience: string,
+  ): Promise<SubmitResult> => ({
     __kind__: "ok",
     ok: BigInt(3),
   }),
@@ -164,10 +209,10 @@ export const mockBackend: backendInterface = {
     _gameId: string,
     _score: bigint,
     _kills: bigint,
-    _waves: bigint
-  ) => ({
+    _waves: bigint,
+  ): Promise<SubmitScoreResult> => ({
     __kind__: "ok",
     ok: "score-003",
   }),
-  updateEvent: async (_id: bigint, _input) => true,
+  updateEvent: async (_id: bigint, _input): Promise<boolean> => true,
 };
