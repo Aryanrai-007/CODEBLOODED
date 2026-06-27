@@ -1,28 +1,22 @@
 {
-  "overview": "A hackathon club website with member registration, event calendar, and a neon cyberpunk arcade hub with a fully playable space shooter game featuring achievements, skins, and leaderboards.",
+  "overview": "A hackathon club website with a chess arena featuring 7 AI bots, member registration, calendar, and admin dashboard.",
   "features": [
-    "Member registration form with admin dashboard and approve/delete controls",
-    "Admin portal with passcode protection",
-    "Public event calendar with clickable event popups and glassy aesthetic",
-    "NEXUS ARENA games hub with separate player login/signup",
-    "Space Shooter game with waves, bosses, weapon upgrades, power-ups, and combos",
-    "12-achievement system with mid-game popup notifications and 2 legendary super-rare badges",
-    "6 unlockable spaceship skins including 2 legendary designs",
-    "Synthesized sound effects and EDM background music with mute toggle",
-    "Global leaderboard with Grand Arena Ranking across all games",
-    "Admin tabs for player ID management and leaderboard moderation",
-    "Dark/light mode toggle via header brand text"
+    "Chess arena with 7 AI bots of escalating difficulty",
+    "Bot selection UI with distinct personalities",
+    "Per-bot score tracking and leaderboard",
+    "Admin portal with member applications, calendar, chess players, and chess leaderboard",
+    "Public calendar with event highlights",
+    "Club membership registration form",
+    "Dark/light mode toggle"
   ],
-  "category": "club-website",
+  "category": "interactive",
   "tags": [
-    "hackathon",
-    "club",
+    "chess",
     "games",
-    "space-shooter",
-    "achievements",
-    "leaderboard",
-    "neon",
-    "cyberpunk"
+    "club",
+    "hackathon",
+    "admin",
+    "calendar"
   ],
-  "last_updated": "2026-05-23T11:08:39.991Z"
+  "last_updated": "2026-06-22T06:52:11.479Z"
 }

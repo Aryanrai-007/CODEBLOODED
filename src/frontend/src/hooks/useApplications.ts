@@ -1,10 +1,17 @@
+import { useActor } from "@caffeineai/core-infrastructure";
 import { useQuery } from "@tanstack/react-query";
+import { createActor } from "../backend";
 import type { Application } from "../types";
-import { mockBackend } from "../mocks/backend";
 
 export function useApplications() {
+  const { actor, isFetching } = useActor(createActor);
+
   return useQuery<Application[]>({
     queryKey: ["applications"],
-    queryFn: () => mockBackend.getApplications(),
+    queryFn: async () => {
+      if (!actor) return [];
+      return actor.getApplications();
+    },
+    enabled: !!actor && !isFetching,
   });
 }

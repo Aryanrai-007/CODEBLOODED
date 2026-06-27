@@ -1,18 +1,17 @@
-import { useCallback, useState } from "react";
+import { useInternetIdentity } from "@caffeineai/core-infrastructure";
 
 export function useAuth() {
-  const [isAuthenticated] = useState(false);
-  const [isLoading] = useState(false);
+  const { identity, loginStatus, login, clear } = useInternetIdentity();
 
-  const login = useCallback(async () => {}, []);
-  const logout = useCallback(() => {}, []);
+  const isAuthenticated = loginStatus === "success" && identity !== null;
+  const isLoading = loginStatus === "logging-in";
 
   return {
-    identity: null,
-    loginStatus: "idle" as const,
+    identity,
+    loginStatus,
     isAuthenticated,
     isLoading,
     login,
-    logout,
+    logout: clear,
   };
 }

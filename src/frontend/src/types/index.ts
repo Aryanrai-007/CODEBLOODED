@@ -1,12 +1,5 @@
 import { ApplicationStatus } from "../backend";
 export { ApplicationStatus };
-export type {
-  GamePlayer,
-  GameScore,
-  RegisterResult,
-  LoginResult,
-  PlayerRank,
-} from "./game";
 
 export interface Application {
   id: bigint;

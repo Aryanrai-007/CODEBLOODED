@@ -53,59 +53,45 @@
   }
 
   .dark {
-    /* Blood Moon Theme */
-    /* Background: near-black with a deep red undertone */
-    --background: 0.11 0.03 18;
-    --foreground: 0.92 0.04 30;
-    /* Cards: slightly lighter, warm dark crimson tint */
-    --card: 0.15 0.04 18;
-    --card-foreground: 0.92 0.04 30;
-    /* Popovers: semi-transparent smoke-red glass */
-    --popover: 0.19 0.05 18;
-    --popover-foreground: 0.92 0.04 30;
+    --background: 0.1 0 0;
+    --foreground: 0.93 0 0;
+    --card: 0.145 0 0;
+    --card-foreground: 0.93 0 0;
+    --popover: 0.18 0 0;
+    --popover-foreground: 0.93 0 0;
 
-    /* Primary: vivid blood-red / crimson */
-    --primary: 0.62 0.24 18;
-    --primary-foreground: 0.97 0.02 18;
+    --primary: 0.7 0.25 200;
+    --primary-foreground: 0.1 0 0;
 
-    /* Secondary: amber-orange ember glow */
-    --secondary: 0.55 0.18 38;
-    --secondary-foreground: 0.97 0.02 30;
+    --secondary: 0.5 0.27 270;
+    --secondary-foreground: 0.93 0 0;
+    --muted: 0.2 0 0;
+    --muted-foreground: 0.6 0 0;
 
-    --muted: 0.21 0.04 18;
-    --muted-foreground: 0.58 0.07 25;
+    --accent: 0.7 0.25 200;
+    --accent-foreground: 0.1 0 0;
 
-    /* Accent: same vivid blood-red */
-    --accent: 0.62 0.24 18;
-    --accent-foreground: 0.97 0.02 18;
+    --destructive: 0.6 0.22 25;
+    --destructive-foreground: 0.93 0 0;
 
-    --destructive: 0.52 0.28 18;
-    --destructive-foreground: 0.97 0.02 18;
+    --border: 0.22 0 0;
+    --input: 0.22 0 0;
+    --ring: 0.7 0.25 200;
 
-    /* Borders: faint crimson-tinged dark edge */
-    --border: 0.26 0.06 18;
-    --input: 0.26 0.06 18;
-    --ring: 0.62 0.24 18;
+    --chart-1: 0.7 0.25 200;
+    --chart-2: 0.5 0.27 270;
+    --chart-3: 0.65 0.2 40;
+    --chart-4: 0.75 0.22 160;
+    --chart-5: 0.55 0.25 300;
 
-    /* Charts: blood-moon palette */
-    --chart-1: 0.62 0.24 18;
-    --chart-2: 0.55 0.18 38;
-    --chart-3: 0.70 0.19 55;
-    --chart-4: 0.45 0.20 10;
-    --chart-5: 0.75 0.14 45;
-
-    /* Sidebar */
-    --sidebar: 0.13 0.04 18;
-    --sidebar-foreground: 0.92 0.04 30;
-    --sidebar-primary: 0.62 0.24 18;
-    --sidebar-primary-foreground: 0.97 0.02 18;
-    --sidebar-accent: 0.55 0.18 38;
-    --sidebar-accent-foreground: 0.97 0.02 30;
-    --sidebar-border: 0.24 0.06 18;
-    --sidebar-ring: 0.62 0.24 18;
-
-    /* Calendar event highlight: blood-red */
-    --calendar-event-highlight: 0.62 0.24 18;
+    --sidebar: 0.12 0 0;
+    --sidebar-foreground: 0.93 0 0;
+    --sidebar-primary: 0.7 0.25 200;
+    --sidebar-primary-foreground: 0.1 0 0;
+    --sidebar-accent: 0.5 0.27 270;
+    --sidebar-accent-foreground: 0.93 0 0;
+    --sidebar-border: 0.2 0 0;
+    --sidebar-ring: 0.7 0.25 200;
   }
 
   * {
@@ -121,6 +107,7 @@
   src: url("/assets/fonts/GeneralSans.woff2") format("woff2");
   font-weight: 400;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
@@ -128,6 +115,7 @@
   src: url("/assets/fonts/DMSans.woff2") format("woff2");
   font-weight: 400;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
@@ -135,6 +123,7 @@
   src: url("/assets/fonts/GeistMono.woff2") format("woff2");
   font-weight: 400;
   font-style: normal;
+  font-display: swap;
 }
 
 @layer utilities {
@@ -143,11 +132,7 @@
   }
 
   .accent-glow {
-    box-shadow: 0 0 24px oklch(var(--accent) / 0.25);
-  }
-
-  .dark .accent-glow {
-    box-shadow: 0 0 28px oklch(0.62 0.24 18 / 0.35);
+    box-shadow: 0 0 24px oklch(var(--accent) / 0.15);
   }
 
   .accent-text-gradient {
@@ -155,30 +140,6 @@
       135deg,
       oklch(var(--primary)) 0%,
       oklch(var(--secondary)) 100%
-    );
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
-
-  /* Light mode: cyan→purple gradient */
-  :root .accent-text-gradient {
-    background: linear-gradient(
-      135deg,
-      oklch(0.7 0.25 200) 0%,
-      oklch(0.5 0.27 270) 100%
-    );
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
-
-  /* Dark / blood-moon: crimson→amber gradient */
-  .dark .accent-text-gradient {
-    background: linear-gradient(
-      135deg,
-      oklch(0.72 0.26 18) 0%,
-      oklch(0.65 0.20 38) 100%
     );
     -webkit-background-clip: text;
     background-clip: text;
@@ -204,9 +165,9 @@
   }
 
   .dark .calendar-glass {
-    background: oklch(0.17 0.05 18 / 0.65);
-    backdrop-filter: blur(14px);
-    border: 1px solid oklch(0.35 0.08 18 / 0.4);
+    background: oklch(var(--popover) / 0.5);
+    backdrop-filter: blur(12px);
+    border: 1px solid oklch(var(--border) / 0.3);
   }
 
   .calendar-day-event {
@@ -228,8 +189,86 @@
   }
 
   .dark .calendar-event-tooltip {
-    background: oklch(0.20 0.06 18 / 0.75);
-    backdrop-filter: blur(18px);
-    border: 1px solid oklch(0.35 0.10 18 / 0.5);
+    background: oklch(var(--popover) / 0.6);
+    backdrop-filter: blur(16px);
+    border: 1px solid oklch(var(--border) / 0.4);
   }
+}
+
+@theme {
+  --radius: 0.625rem;
+  --font-display: "General Sans", sans-serif;
+  --font-body: "DM Sans", sans-serif;
+  --font-mono: "Geist Mono", monospace;
+}
+
+.bot-card-undead {
+  background: oklch(0.18 0.03 130 / 0.6);
+  backdrop-filter: blur(12px);
+  border: 1px solid oklch(0.65 0.18 110 / 0.4);
+}
+
+.bot-card-bull {
+  background: oklch(0.18 0.04 30 / 0.6);
+  backdrop-filter: blur(12px);
+  border: 1px solid oklch(0.6 0.22 35 / 0.4);
+}
+
+.bot-card-gargoyle {
+  background: oklch(0.18 0.02 240 / 0.6);
+  backdrop-filter: blur(12px);
+  border: 1px solid oklch(0.55 0.1 240 / 0.4);
+}
+
+.bot-card-dragon {
+  background: oklch(0.18 0.04 45 / 0.6);
+  backdrop-filter: blur(12px);
+  border: 1px solid oklch(0.65 0.2 45 / 0.4);
+}
+
+.bot-card-lostknight {
+  background: oklch(0.18 0.04 280 / 0.6);
+  backdrop-filter: blur(12px);
+  border: 1px solid oklch(0.6 0.18 280 / 0.4);
+}
+
+.bot-card-sorrowqueen {
+  background: oklch(0.18 0.04 300 / 0.6);
+  backdrop-filter: blur(12px);
+  border: 1px solid oklch(0.55 0.2 300 / 0.4);
+}
+
+.bot-card-ruinking {
+  background: oklch(0.18 0.03 80 / 0.6);
+  backdrop-filter: blur(12px);
+  border: 1px solid oklch(0.6 0.16 75 / 0.4);
+}
+
+.hud-glass {
+  background: oklch(var(--popover) / 0.7);
+  backdrop-filter: blur(16px);
+  border: 1px solid oklch(var(--border) / 0.5);
+}
+
+.result-win {
+  background: oklch(0.2 0.05 145 / 0.5);
+  border: 1px solid oklch(0.65 0.18 145 / 0.4);
+}
+
+.result-loss {
+  background: oklch(0.2 0.05 25 / 0.5);
+  border: 1px solid oklch(0.6 0.2 25 / 0.4);
+}
+
+.result-draw {
+  background: oklch(0.2 0.02 260 / 0.5);
+  border: 1px solid oklch(0.55 0.08 260 / 0.4);
+}
+
+.leaderboard-row:nth-child(even) {
+  background: oklch(var(--muted) / 0.4);
+}
+
+.leaderboard-row:hover {
+  background: oklch(var(--accent) / 0.1);
 }

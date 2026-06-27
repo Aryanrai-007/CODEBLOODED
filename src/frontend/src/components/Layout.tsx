@@ -88,15 +88,26 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 Calendar
               </Link>
               <Link
-                to="/games"
+                to="/chess"
                 className={`text-sm font-medium transition-colors duration-200 ${
-                  location.pathname.startsWith("/games")
+                  location.pathname === "/chess"
                     ? "text-primary"
                     : "text-muted-foreground hover:text-foreground"
                 }`}
-                data-ocid="nav-games-link"
+                data-ocid="nav-chess-link"
               >
-                NEXUS ARENA
+                Chess Arena
+              </Link>
+              <Link
+                to="/chessbot"
+                className={`text-sm font-medium transition-colors duration-200 ${
+                  location.pathname === "/chessbot"
+                    ? "text-primary"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+                data-ocid="nav-chessbot-link"
+              >
+                Bot Challenge
               </Link>
               <Link
                 to="/admin"
@@ -149,12 +160,20 @@ export function Layout({ children }: { children: React.ReactNode }) {
               Calendar
             </Link>
             <Link
-              to="/games"
+              to="/chess"
               className="text-sm font-medium py-2 text-foreground hover:text-primary transition-colors"
               onClick={() => setMenuOpen(false)}
-              data-ocid="nav-mobile-games-link"
+              data-ocid="nav-mobile-chess-link"
             >
-              NEXUS ARENA
+              Chess Arena
+            </Link>
+            <Link
+              to="/chessbot"
+              className="text-sm font-medium py-2 text-foreground hover:text-primary transition-colors"
+              onClick={() => setMenuOpen(false)}
+              data-ocid="nav-mobile-chessbot-link"
+            >
+              Bot Challenge
             </Link>
             <Link
               to="/admin"

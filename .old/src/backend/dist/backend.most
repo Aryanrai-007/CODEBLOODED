@@ -1,0 +1,70 @@
+// Version: 1.0.0
+type ApplicationStatus__163954182 = {#approved; #pending};
+type Application__670275444 =
+  {
+    department : Text;
+    email : Text;
+    id : Nat;
+    name : Text;
+    phone : Text;
+    priorExperience : Text;
+    reasonForJoining : Text;
+    status : ApplicationStatus__163954182;
+    submittedAt : Timestamp__281302580;
+    yearOfStudy : Text
+  };
+type CalendarEvent__338973844 =
+  {
+    category : Text;
+    createdAt : Timestamp__675676713;
+    date : Text;
+    description : Text;
+    id : Nat;
+    subject : Text;
+    time : Text
+  };
+type ChessPlayer__710145547 =
+  {createdAt : Timestamp__185166977; playerId : Text; username : Text};
+type ChessScore__422027143 =
+  {
+    botName : Text;
+    createdAt : Timestamp__185166977;
+    movesCount : Nat;
+    playerId : Text;
+    result : Text;
+    score : Nat
+  };
+type Nat__1040412405 = Nat__920180692;
+type Nat__920180692 = Nat;
+type Timestamp__185166977 = Timestamp__301639476;
+type Timestamp__281302580 = Timestamp__301639476;
+type Timestamp__301639476 = Int;
+type Timestamp__675676713 = Timestamp__301639476;
+actor {
+  stable applications :
+    {
+      var blockIndex : Nat__1040412405;
+      var blocks : [var [var ?Application__670275444]];
+      var elementIndex : Nat__1040412405
+    };
+  stable chessPlayers :
+    {
+      var blockIndex : Nat__1040412405;
+      var blocks : [var [var ?ChessPlayer__710145547]];
+      var elementIndex : Nat__1040412405
+    };
+  stable chessScores :
+    {
+      var blockIndex : Nat__1040412405;
+      var blocks : [var [var ?ChessScore__422027143]];
+      var elementIndex : Nat__1040412405
+    };
+  stable eventState : {var nextEventId : Nat};
+  stable events :
+    {
+      var blockIndex : Nat__1040412405;
+      var blocks : [var [var ?CalendarEvent__338973844]];
+      var elementIndex : Nat__1040412405
+    };
+  stable var nextId : Nat
+};

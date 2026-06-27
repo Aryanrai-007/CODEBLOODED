@@ -13,32 +13,29 @@ import {
 import {
   CalendarDays,
   CheckCircle,
-  Gamepad2,
+  Crown,
   Lock,
   LockOpen,
   Search,
   ShieldCheck,
   Terminal,
   Trash2,
-  Trophy,
   Users,
   X,
 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
+import ChessLeaderboardTab from "../components/ChessLeaderboardTab";
 import { EditCalendarTab } from "../components/EditCalendarTab";
-import {
-  useAllGameScores,
-  useDeleteGamePlayer,
-  useDeleteGameScore,
-  useGamePlayers,
-} from "../hooks/useAdminGames";
 import { useApplications } from "../hooks/useApplications";
 import { useApproveApplication } from "../hooks/useApproveApplication";
+import {
+  useChessPlayers,
+  useDeleteChessPlayer,
+} from "../hooks/useChessPlayers";
 import { useDeleteApplication } from "../hooks/useDeleteApplication";
-import { useGrandLeaderboard } from "../hooks/useGameScores";
 import { ApplicationStatus } from "../types";
 import type { Application } from "../types";
-import type { GamePlayer, GameScore } from "../types/game";
+import type { ChessPlayer } from "../types/chess";
 
 // ─── Utilities ───────────────────────────────────────────────────────────────
 
@@ -287,14 +284,15 @@ function AppRow({
   );
 }
 
-// ─── Game Players Tab ────────────────────────────────────────────────────────
+// ─── Chess Players Tab ───────────────────────────────────────────────────────
 
-const PLAYER_SKEL_IDS = ["ps-a", "ps-b", "ps-c", "ps-d"];
-const PLAYER_COL_IDS = ["p1", "p2", "p3", "p4"];
+const CHESS_SKEL_IDS = ["cp-a", "cp-b", "cp-c", "cp-d"];
+const CHESS_COL_IDS = ["c1", "c2", "c3", "c4"];
 
-function GamePlayersTab() {
-  const { data: players = [], isLoading, isError } = useGamePlayers();
-  const { mutate: deletePlayer, isPending: isDeleting } = useDeleteGamePlayer();
+function ChessPlayersTab() {
+  const { data: players = [], isLoading, isError } = useChessPlayers();
+  const { mutate: deletePlayer, isPending: isDeleting } =
+    useDeleteChessPlayer();
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
 
   function formatTs(ns: bigint): string {
@@ -306,31 +304,31 @@ function GamePlayersTab() {
     });
   }
 
-  const PLAYER_HEADERS = ["#", "Username", "Player ID", "Joined", ""];
+  const CHESS_HEADERS = ["#", "Username", "Player ID", "Joined", ""];
 
   return (
     <main
       className="max-w-screen-xl mx-auto px-4 sm:px-6 py-8"
-      data-ocid="game-players.section"
+      data-ocid="chess-players.section"
     >
       <div className="mb-6">
         <h2 className="font-display font-bold text-xl text-foreground tracking-wide flex items-center gap-2">
-          <Gamepad2 className="w-5 h-5 text-primary" />
-          Game Players
+          <Crown className="w-5 h-5 text-primary" />
+          Chess Players
         </h2>
         <p className="text-muted-foreground text-sm mt-0.5">
           {isLoading
             ? "Loading players…"
-            : `${players.length} registered players`}
+            : `${players.length} registered chess players`}
         </p>
       </div>
 
       <div className="bg-card border border-border rounded-xl overflow-hidden card-elevated">
-        <div className="overflow-x-auto" data-ocid="game-players.table">
+        <div className="overflow-x-auto" data-ocid="chess-players.table">
           <Table>
             <TableHeader>
               <TableRow className="border-border/60 bg-muted/40">
-                {PLAYER_HEADERS.map((col) => (
+                {CHESS_HEADERS.map((col) => (
                   <TableHead
                     key={col}
                     className="text-muted-foreground font-display text-xs tracking-widest uppercase whitespace-nowrap py-3"
@@ -343,9 +341,9 @@ function GamePlayersTab() {
             <TableBody>
               {isLoading ? (
                 <>
-                  {PLAYER_SKEL_IDS.map((rowId) => (
+                  {CHESS_SKEL_IDS.map((rowId) => (
                     <TableRow key={rowId} className="border-border/40">
-                      {PLAYER_COL_IDS.map((colId) => (
+                      {CHESS_COL_IDS.map((colId) => (
                         <TableCell key={`${rowId}-${colId}`}>
                           <Skeleton className="h-4 w-full" />
                         </TableCell>
@@ -358,9 +356,9 @@ function GamePlayersTab() {
                   <TableCell
                     colSpan={5}
                     className="h-32 text-center text-destructive text-sm"
-                    data-ocid="game-players.error_state"
+                    data-ocid="chess-players.error_state"
                   >
-                    Failed to load game players. Please try again.
+                    Failed to load chess players. Please try again.
                   </TableCell>
                 </TableRow>
               ) : players.length === 0 ? (
@@ -368,30 +366,30 @@ function GamePlayersTab() {
                   <TableCell
                     colSpan={5}
                     className="h-48 text-center"
-                    data-ocid="game-players.empty_state"
+                    data-ocid="chess-players.empty_state"
                   >
                     <div className="flex flex-col items-center gap-3 py-8">
                       <div className="w-12 h-12 rounded-lg flex items-center justify-center bg-muted/50">
-                        <Gamepad2 className="w-6 h-6 text-muted-foreground" />
+                        <Crown className="w-6 h-6 text-muted-foreground" />
                       </div>
                       <div>
                         <p className="font-display font-semibold text-foreground">
-                          No players yet
+                          No chess players yet
                         </p>
                         <p className="text-muted-foreground text-sm mt-1">
                           Players will appear here once they register in the
-                          Games Hub.
+                          Chess Arena.
                         </p>
                       </div>
                     </div>
                   </TableCell>
                 </TableRow>
               ) : (
-                players.map((player: GamePlayer, i: number) => (
+                players.map((player: ChessPlayer, i: number) => (
                   <TableRow
                     key={player.playerId}
                     className="border-border/40 hover:bg-muted/20 transition-colors"
-                    data-ocid={`game-players.item.${i + 1}`}
+                    data-ocid={`chess-players.item.${i + 1}`}
                   >
                     <TableCell className="text-muted-foreground font-mono text-xs w-10">
                       {i + 1}
@@ -413,7 +411,7 @@ function GamePlayersTab() {
                           </span>
                           <button
                             type="button"
-                            data-ocid={`game-players.cancel_button.${i + 1}`}
+                            data-ocid={`chess-players.cancel_button.${i + 1}`}
                             onClick={() => setConfirmDeleteId(null)}
                             className="text-[10px] px-2 py-1 rounded border border-border text-muted-foreground hover:text-foreground transition-colors"
                           >
@@ -421,7 +419,7 @@ function GamePlayersTab() {
                           </button>
                           <button
                             type="button"
-                            data-ocid={`game-players.confirm_button.${i + 1}`}
+                            data-ocid={`chess-players.confirm_button.${i + 1}`}
                             disabled={isDeleting}
                             onClick={() =>
                               deletePlayer(player.playerId, {
@@ -437,8 +435,8 @@ function GamePlayersTab() {
                       ) : (
                         <button
                           type="button"
-                          data-ocid={`game-players.delete_button.${i + 1}`}
-                          aria-label={`Delete player ${player.username}`}
+                          data-ocid={`chess-players.delete_button.${i + 1}`}
+                          aria-label={`Delete chess player ${player.username}`}
                           onClick={() => setConfirmDeleteId(player.playerId)}
                           className="p-1.5 rounded-md text-muted-foreground/50 hover:text-destructive hover:bg-destructive/10 transition-colors"
                         >
@@ -457,336 +455,6 @@ function GamePlayersTab() {
   );
 }
 
-// ─── Game Leaderboards Tab ────────────────────────────────────────────────────
-
-const LB_SKEL_IDS = ["lb-a", "lb-b", "lb-c", "lb-d", "lb-e"];
-const LB_COL_IDS = ["l1", "l2", "l3", "l4", "l5", "l6", "l7"];
-
-function GameLeaderboardsTab() {
-  const {
-    data: scores = [],
-    isLoading: scoresLoading,
-    isError: scoresError,
-  } = useAllGameScores();
-  const { data: players = [], isLoading: playersLoading } = useGamePlayers();
-  const { mutate: deleteScore, isPending: isDeletingScore } =
-    useDeleteGameScore();
-  const [confirmDeleteScoreId, setConfirmDeleteScoreId] = useState<
-    string | null
-  >(null);
-
-  const isLoading = scoresLoading || playersLoading;
-
-  const playerMap = useMemo(() => {
-    const m: Record<string, string> = {};
-    for (const p of players) {
-      m[p.playerId] = p.username;
-    }
-    return m;
-  }, [players]);
-
-  const spaceShooterTop10 = useMemo(() => {
-    return [...scores]
-      .filter((s: GameScore) => s.gameId === "space-shooter")
-      .sort((a: GameScore, b: GameScore) => Number(b.score - a.score))
-      .slice(0, 10);
-  }, [scores]);
-
-  const { data: grandRankings = [] } = useGrandLeaderboard(20);
-
-  function formatDate(ns: bigint): string {
-    const ms = Number(ns / 1_000_000n);
-    return new Date(ms).toLocaleString("en-US", {
-      month: "short",
-      day: "numeric",
-      year: "numeric",
-    });
-  }
-
-  const LB_HEADERS = [
-    "Rank",
-    "Username",
-    "Score",
-    "Enemies Killed",
-    "Waves",
-    "Date",
-    "",
-  ];
-
-  return (
-    <main
-      className="max-w-screen-xl mx-auto px-4 sm:px-6 py-8"
-      data-ocid="game-leaderboards.section"
-    >
-      <div className="mb-6">
-        <h2 className="font-display font-bold text-xl text-foreground tracking-wide flex items-center gap-2">
-          <Trophy className="w-5 h-5 text-primary" />
-          Game Leaderboards
-        </h2>
-        <p className="text-muted-foreground text-sm mt-0.5">
-          Top 10 scores per game. Delete any score with confirmation.
-        </p>
-      </div>
-
-      {/* Space Shooter Section */}
-      <div>
-        <div className="flex items-center gap-3 mb-4">
-          <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-primary/12">
-            <Gamepad2 className="w-4 h-4 text-primary" />
-          </div>
-          <div>
-            <h3 className="font-display font-semibold text-foreground tracking-wide text-base">
-              Space Shooter Leaderboard
-            </h3>
-            <p className="text-muted-foreground text-xs font-mono">
-              game-id: space-shooter
-            </p>
-          </div>
-          <Badge
-            variant="outline"
-            className="ml-auto text-xs font-mono bg-primary/8 text-primary border-primary/30"
-          >
-            Top {Math.min(spaceShooterTop10.length, 10)}
-          </Badge>
-        </div>
-
-        <div className="bg-card border border-border rounded-xl overflow-hidden card-elevated">
-          <div className="overflow-x-auto" data-ocid="game-leaderboards.table">
-            <Table>
-              <TableHeader>
-                <TableRow className="border-border/60 bg-muted/40">
-                  {LB_HEADERS.map((col) => (
-                    <TableHead
-                      key={col}
-                      className="text-muted-foreground font-display text-xs tracking-widest uppercase whitespace-nowrap py-3"
-                    >
-                      {col}
-                    </TableHead>
-                  ))}
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {isLoading ? (
-                  <>
-                    {LB_SKEL_IDS.map((rowId) => (
-                      <TableRow key={rowId} className="border-border/40">
-                        {LB_COL_IDS.map((colId) => (
-                          <TableCell key={`${rowId}-${colId}`}>
-                            <Skeleton className="h-4 w-full" />
-                          </TableCell>
-                        ))}
-                      </TableRow>
-                    ))}
-                  </>
-                ) : scoresError ? (
-                  <TableRow>
-                    <TableCell
-                      colSpan={7}
-                      className="h-32 text-center text-destructive text-sm"
-                      data-ocid="game-leaderboards.error_state"
-                    >
-                      Failed to load scores. Please try again.
-                    </TableCell>
-                  </TableRow>
-                ) : spaceShooterTop10.length === 0 ? (
-                  <TableRow>
-                    <TableCell
-                      colSpan={7}
-                      className="h-48 text-center"
-                      data-ocid="game-leaderboards.empty_state"
-                    >
-                      <div className="flex flex-col items-center gap-3 py-8">
-                        <div className="w-12 h-12 rounded-lg flex items-center justify-center bg-muted/50">
-                          <Trophy className="w-6 h-6 text-muted-foreground" />
-                        </div>
-                        <div>
-                          <p className="font-display font-semibold text-foreground">
-                            No scores yet
-                          </p>
-                          <p className="text-muted-foreground text-sm mt-1">
-                            Scores will appear here once players finish a game.
-                          </p>
-                        </div>
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                ) : (
-                  spaceShooterTop10.map((score: GameScore, i: number) => (
-                    <TableRow
-                      key={score.scoreId}
-                      className="border-border/40 hover:bg-muted/20 transition-colors"
-                      data-ocid={`game-leaderboards.item.${i + 1}`}
-                    >
-                      <TableCell className="font-mono text-sm w-12">
-                        <span
-                          className={`font-bold ${
-                            i === 0
-                              ? "text-yellow-500"
-                              : i === 1
-                                ? "text-slate-400"
-                                : i === 2
-                                  ? "text-amber-600"
-                                  : "text-muted-foreground"
-                          }`}
-                        >
-                          #{i + 1}
-                        </span>
-                      </TableCell>
-                      <TableCell className="font-medium text-foreground">
-                        {playerMap[score.playerId] ?? score.playerId}
-                      </TableCell>
-                      <TableCell className="font-mono font-bold text-primary tabular-nums">
-                        {Number(score.score).toLocaleString()}
-                      </TableCell>
-                      <TableCell className="font-mono text-sm text-foreground tabular-nums">
-                        {Number(score.killedEnemies).toLocaleString()}
-                      </TableCell>
-                      <TableCell className="font-mono text-sm text-foreground tabular-nums">
-                        {Number(score.wavesCleared)}
-                      </TableCell>
-                      <TableCell className="text-muted-foreground text-sm whitespace-nowrap">
-                        {formatDate(score.achievedAt)}
-                      </TableCell>
-                      <TableCell>
-                        {confirmDeleteScoreId === score.scoreId ? (
-                          <div className="flex items-center gap-2">
-                            <span className="text-[10px] text-destructive font-mono whitespace-nowrap">
-                              Are you sure?
-                            </span>
-                            <button
-                              type="button"
-                              data-ocid={`game-leaderboards.cancel_button.${i + 1}`}
-                              onClick={() => setConfirmDeleteScoreId(null)}
-                              className="text-[10px] px-2 py-1 rounded border border-border text-muted-foreground hover:text-foreground transition-colors"
-                            >
-                              No
-                            </button>
-                            <button
-                              type="button"
-                              data-ocid={`game-leaderboards.confirm_button.${i + 1}`}
-                              disabled={isDeletingScore}
-                              onClick={() =>
-                                deleteScore(score.scoreId, {
-                                  onSuccess: () =>
-                                    setConfirmDeleteScoreId(null),
-                                })
-                              }
-                              className="text-[10px] px-2 py-1 rounded bg-destructive text-destructive-foreground hover:bg-destructive/90 transition-colors flex items-center gap-1 disabled:opacity-60"
-                            >
-                              <Trash2 className="w-2.5 h-2.5" />
-                              {isDeletingScore ? "…" : "Yes"}
-                            </button>
-                          </div>
-                        ) : (
-                          <button
-                            type="button"
-                            data-ocid={`game-leaderboards.delete_button.${i + 1}`}
-                            aria-label={`Delete score from ${playerMap[score.playerId] ?? score.playerId}`}
-                            onClick={() =>
-                              setConfirmDeleteScoreId(score.scoreId)
-                            }
-                            className="p-1.5 rounded-md text-muted-foreground/50 hover:text-destructive hover:bg-destructive/10 transition-colors"
-                          >
-                            <Trash2 className="w-3.5 h-3.5" />
-                          </button>
-                        )}
-                      </TableCell>
-                    </TableRow>
-                  ))
-                )}
-              </TableBody>
-            </Table>
-          </div>
-        </div>
-      </div>
-
-      {/* Grand Arena Rankings */}
-      <div className="mt-10">
-        <div className="mb-4">
-          <h3 className="font-display font-bold text-lg text-foreground tracking-wide flex items-center gap-2">
-            <Trophy className="w-5 h-5 text-yellow-500" />
-            Grand Arena Rankings
-          </h3>
-          <p className="text-muted-foreground text-sm mt-0.5">
-            Cumulative total scores across all games — top 20 players.
-          </p>
-        </div>
-
-        <div className="bg-card border border-border rounded-xl overflow-hidden card-elevated">
-          <div
-            className="overflow-x-auto"
-            data-ocid="admin.grand-rankings.table"
-          >
-            <Table>
-              <TableHeader>
-                <TableRow className="border-border/60 bg-muted/40">
-                  {["Rank", "Username", "Grand Score"].map((col) => (
-                    <TableHead
-                      key={col}
-                      className="text-muted-foreground font-display text-xs tracking-widest uppercase whitespace-nowrap py-3"
-                    >
-                      {col}
-                    </TableHead>
-                  ))}
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {grandRankings.length === 0 ? (
-                  <TableRow>
-                    <TableCell
-                      colSpan={3}
-                      className="h-32 text-center"
-                      data-ocid="admin.grand-rankings.empty_state"
-                    >
-                      <div className="flex flex-col items-center gap-2 py-6">
-                        <Trophy className="w-8 h-8 text-muted-foreground opacity-40" />
-                        <p className="text-muted-foreground text-sm">
-                          No grand rankings yet — scores appear once players
-                          submit.
-                        </p>
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                ) : (
-                  grandRankings.map((gr) => (
-                    <TableRow
-                      key={`admin-gr-${Number(gr.rank)}`}
-                      className="border-border/40 hover:bg-muted/20 transition-colors"
-                      data-ocid={`admin.grand-rankings.item.${Number(gr.rank)}`}
-                    >
-                      <TableCell className="font-mono text-sm w-16">
-                        <span
-                          className={`font-bold ${
-                            Number(gr.rank) === 1
-                              ? "text-yellow-500"
-                              : Number(gr.rank) === 2
-                                ? "text-slate-400"
-                                : Number(gr.rank) === 3
-                                  ? "text-amber-600"
-                                  : "text-muted-foreground"
-                          }`}
-                        >
-                          #{Number(gr.rank)}
-                        </span>
-                      </TableCell>
-                      <TableCell className="font-medium text-foreground">
-                        {gr.username}
-                      </TableCell>
-                      <TableCell className="font-mono font-bold text-primary tabular-nums">
-                        {Number(gr.score).toLocaleString()}
-                      </TableCell>
-                    </TableRow>
-                  ))
-                )}
-              </TableBody>
-            </Table>
-          </div>
-        </div>
-      </div>
-    </main>
-  );
-}
-
 // ─── Dashboard ────────────────────────────────────────────────────────────────
 
 function Dashboard({ onLock }: { onLock: () => void }) {
@@ -797,7 +465,7 @@ function Dashboard({ onLock }: { onLock: () => void }) {
     useApproveApplication();
   const [search, setSearch] = useState("");
   const [activeTab, setActiveTab] = useState<
-    "applications" | "calendar" | "game-players" | "game-leaderboards"
+    "applications" | "calendar" | "chess-players" | "chess-leaderboard"
   >("applications");
   const [selectedApplication, setSelectedApplication] =
     useState<Application | null>(null);
@@ -919,29 +587,29 @@ function Dashboard({ onLock }: { onLock: () => void }) {
             </button>
             <button
               type="button"
-              onClick={() => setActiveTab("game-players")}
-              data-ocid="admin-tab.game-players"
+              onClick={() => setActiveTab("chess-players")}
+              data-ocid="admin-tab.chess-players"
               className={`flex items-center gap-2 px-4 py-3 text-sm font-display font-semibold border-b-2 transition-colors ${
-                activeTab === "game-players"
+                activeTab === "chess-players"
                   ? "border-primary text-primary"
                   : "border-transparent text-muted-foreground hover:text-foreground"
               }`}
             >
-              <Gamepad2 className="w-4 h-4" />
-              Game Players
+              <Crown className="w-4 h-4" />
+              Chess Players
             </button>
             <button
               type="button"
-              onClick={() => setActiveTab("game-leaderboards")}
-              data-ocid="admin-tab.game-leaderboards"
+              onClick={() => setActiveTab("chess-leaderboard")}
+              data-ocid="admin-tab.chess-leaderboard"
               className={`flex items-center gap-2 px-4 py-3 text-sm font-display font-semibold border-b-2 transition-colors ${
-                activeTab === "game-leaderboards"
+                activeTab === "chess-leaderboard"
                   ? "border-primary text-primary"
                   : "border-transparent text-muted-foreground hover:text-foreground"
               }`}
             >
-              <Trophy className="w-4 h-4" />
-              Game Leaderboards
+              <Crown className="w-4 h-4" />
+              Chess Leaderboard
             </button>
           </div>
         </div>
@@ -950,10 +618,10 @@ function Dashboard({ onLock }: { onLock: () => void }) {
       {/* Main content */}
       {activeTab === "calendar" ? (
         <EditCalendarTab />
-      ) : activeTab === "game-players" ? (
-        <GamePlayersTab />
-      ) : activeTab === "game-leaderboards" ? (
-        <GameLeaderboardsTab />
+      ) : activeTab === "chess-players" ? (
+        <ChessPlayersTab />
+      ) : activeTab === "chess-leaderboard" ? (
+        <ChessLeaderboardTab />
       ) : (
         <main className="max-w-screen-xl mx-auto px-4 sm:px-6 py-8">
           {/* Toolbar */}
