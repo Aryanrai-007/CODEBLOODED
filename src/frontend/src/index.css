@@ -7,39 +7,27 @@
     --font-display: "General Sans";
     --font-body: "DM Sans";
     --font-mono: "Geist Mono";
-    --radius: 0.625rem;
+    --radius: 0.75rem;
 
     --background: 0.99 0 0;
     --foreground: 0.15 0 0;
-    --card: 1.0 0 0;
+    --card: 1 0 0;
     --card-foreground: 0.15 0 0;
-    --popover: 1.0 0 0;
+    --popover: 1 0 0;
     --popover-foreground: 0.15 0 0;
-
     --primary: 0.35 0 0;
     --primary-foreground: 0.98 0 0;
-
     --secondary: 0.95 0 0;
     --secondary-foreground: 0.25 0 0;
     --muted: 0.95 0 0;
     --muted-foreground: 0.5 0 0;
-
     --accent: 0.35 0 0;
     --accent-foreground: 0.98 0 0;
-
     --destructive: 0.55 0.22 25;
     --destructive-foreground: 0.98 0 0;
-
     --border: 0.9 0 0;
     --input: 0.9 0 0;
     --ring: 0.35 0 0;
-
-    --chart-1: 0.65 0.22 40;
-    --chart-2: 0.6 0.12 185;
-    --chart-3: 0.4 0.07 227;
-    --chart-4: 0.83 0.19 84;
-    --chart-5: 0.77 0.19 70;
-
     --sidebar: 0.98 0 0;
     --sidebar-foreground: 0.15 0 0;
     --sidebar-primary: 0.35 0 0;
@@ -48,7 +36,6 @@
     --sidebar-accent-foreground: 0.25 0 0;
     --sidebar-border: 0.9 0 0;
     --sidebar-ring: 0.35 0 0;
-
     --calendar-event-highlight: 0.7 0.25 200;
   }
 
@@ -59,31 +46,19 @@
     --card-foreground: 0.93 0 0;
     --popover: 0.18 0 0;
     --popover-foreground: 0.93 0 0;
-
     --primary: 0.7 0.25 200;
     --primary-foreground: 0.1 0 0;
-
     --secondary: 0.5 0.27 270;
     --secondary-foreground: 0.93 0 0;
     --muted: 0.2 0 0;
     --muted-foreground: 0.6 0 0;
-
     --accent: 0.7 0.25 200;
     --accent-foreground: 0.1 0 0;
-
     --destructive: 0.6 0.22 25;
     --destructive-foreground: 0.93 0 0;
-
     --border: 0.22 0 0;
     --input: 0.22 0 0;
     --ring: 0.7 0.25 200;
-
-    --chart-1: 0.7 0.25 200;
-    --chart-2: 0.5 0.27 270;
-    --chart-3: 0.65 0.2 40;
-    --chart-4: 0.75 0.22 160;
-    --chart-5: 0.55 0.25 300;
-
     --sidebar: 0.12 0 0;
     --sidebar-foreground: 0.93 0 0;
     --sidebar-primary: 0.7 0.25 200;
@@ -94,181 +69,51 @@
     --sidebar-ring: 0.7 0.25 200;
   }
 
-  * {
-    @apply border-border;
-  }
+  * { @apply border-border; }
+  html { scroll-behavior: smooth; }
   body {
     @apply bg-background text-foreground font-body antialiased;
+    background-image:
+      radial-gradient(circle at 20% 0%, oklch(var(--primary) / 0.055), transparent 30%),
+      radial-gradient(circle at 85% 20%, oklch(var(--secondary) / 0.045), transparent 28%);
   }
+  ::selection { background: oklch(var(--primary) / 0.75); color: oklch(var(--primary-foreground)); }
 }
 
-@font-face {
-  font-family: "General Sans";
-  src: url("/assets/fonts/GeneralSans.woff2") format("woff2");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "DM Sans";
-  src: url("/assets/fonts/DMSans.woff2") format("woff2");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Geist Mono";
-  src: url("/assets/fonts/GeistMono.woff2") format("woff2");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
+@font-face { font-family: "General Sans"; src: url("/assets/fonts/GeneralSans.woff2") format("woff2"); font-weight: 400 900; font-display: swap; }
+@font-face { font-family: "DM Sans"; src: url("/assets/fonts/DMSans.woff2") format("woff2"); font-weight: 400 800; font-display: swap; }
+@font-face { font-family: "Geist Mono"; src: url("/assets/fonts/GeistMono.woff2") format("woff2"); font-weight: 400 700; font-display: swap; }
 
 @layer utilities {
-  .transition-smooth {
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  }
+  .font-display { font-family: var(--font-display); }
+  .font-body { font-family: var(--font-body); }
+  .font-mono { font-family: var(--font-mono); }
+  .text-balance { text-wrap: balance; }
+  .transition-smooth { transition: all 0.45s cubic-bezier(0.22, 1, 0.36, 1); }
+  .accent-glow { box-shadow: 0 0 34px oklch(var(--accent) / 0.16); }
+  .accent-text-gradient { background: linear-gradient(120deg, oklch(var(--primary)) 0%, oklch(var(--secondary)) 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+  .card-elevated { box-shadow: 0 18px 60px oklch(0 0 0 / 0.12); }
+  .btn-primary { @apply rounded-xl bg-primary px-6 py-3 font-semibold text-primary-foreground transition-smooth hover:-translate-y-0.5 hover:opacity-95 active:scale-95; }
+  .btn-secondary { @apply rounded-xl bg-secondary px-6 py-3 font-semibold text-secondary-foreground transition-smooth hover:-translate-y-0.5 hover:opacity-95 active:scale-95; }
+  .calendar-glass { background: oklch(var(--popover) / 0.56); backdrop-filter: blur(16px); border: 1px solid oklch(var(--border) / 0.42); }
+  .calendar-day-event { background: oklch(var(--accent) / 0.14); border: 1px solid oklch(var(--accent) / 0.3); @apply rounded-lg transition-smooth; }
+  .calendar-day-event:hover { background: oklch(var(--accent) / 0.24); border-color: oklch(var(--accent) / 0.52); transform: translateY(-2px); }
+  .calendar-event-tooltip { background: oklch(var(--popover) / 0.72); backdrop-filter: blur(18px); border: 1px solid oklch(var(--border) / 0.5); @apply rounded-xl p-4 shadow-2xl; }
+  .editorial-rule { background: linear-gradient(90deg, transparent, oklch(var(--border)), transparent); height: 1px; }
+  .noise-overlay { position: relative; }
+  .noise-overlay::after { content: ""; position: absolute; inset: 0; pointer-events: none; opacity: 0.045; mix-blend-mode: overlay; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 140 140' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.92' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+  .marquee-track { animation: marquee 24s linear infinite; }
+  @keyframes marquee { to { transform: translateX(-50%); } }
+}
 
-  .accent-glow {
-    box-shadow: 0 0 24px oklch(var(--accent) / 0.15);
-  }
-
-  .accent-text-gradient {
-    background: linear-gradient(
-      135deg,
-      oklch(var(--primary)) 0%,
-      oklch(var(--secondary)) 100%
-    );
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
-
-  .card-elevated {
-    box-shadow: 0 4px 16px oklch(0 0 0 / 0.12);
-  }
-
-  .btn-primary {
-    @apply px-6 py-3 rounded-lg font-semibold bg-primary text-primary-foreground transition-smooth hover:opacity-90 active:scale-95;
-  }
-
-  .btn-secondary {
-    @apply px-6 py-3 rounded-lg font-semibold bg-secondary text-secondary-foreground transition-smooth hover:opacity-90 active:scale-95;
-  }
-
-  .calendar-glass {
-    background: oklch(var(--popover) / 0.6);
-    backdrop-filter: blur(12px);
-    border: 1px solid oklch(var(--border) / 0.4);
-  }
-
-  .dark .calendar-glass {
-    background: oklch(var(--popover) / 0.5);
-    backdrop-filter: blur(12px);
-    border: 1px solid oklch(var(--border) / 0.3);
-  }
-
-  .calendar-day-event {
-    background: oklch(var(--accent) / 0.15);
-    border: 1px solid oklch(var(--accent) / 0.3);
-    @apply rounded-md transition-smooth;
-  }
-
-  .calendar-day-event:hover {
-    background: oklch(var(--accent) / 0.25);
-    border-color: oklch(var(--accent) / 0.5);
-  }
-
-  .calendar-event-tooltip {
-    background: oklch(var(--popover) / 0.7);
-    backdrop-filter: blur(16px);
-    border: 1px solid oklch(var(--border) / 0.5);
-    @apply rounded-lg p-4 shadow-lg;
-  }
-
-  .dark .calendar-event-tooltip {
-    background: oklch(var(--popover) / 0.6);
-    backdrop-filter: blur(16px);
-    border: 1px solid oklch(var(--border) / 0.4);
-  }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
 }
 
 @theme {
-  --radius: 0.625rem;
+  --radius: 0.75rem;
   --font-display: "General Sans", sans-serif;
   --font-body: "DM Sans", sans-serif;
   --font-mono: "Geist Mono", monospace;
-}
-
-.bot-card-undead {
-  background: oklch(0.18 0.03 130 / 0.6);
-  backdrop-filter: blur(12px);
-  border: 1px solid oklch(0.65 0.18 110 / 0.4);
-}
-
-.bot-card-bull {
-  background: oklch(0.18 0.04 30 / 0.6);
-  backdrop-filter: blur(12px);
-  border: 1px solid oklch(0.6 0.22 35 / 0.4);
-}
-
-.bot-card-gargoyle {
-  background: oklch(0.18 0.02 240 / 0.6);
-  backdrop-filter: blur(12px);
-  border: 1px solid oklch(0.55 0.1 240 / 0.4);
-}
-
-.bot-card-dragon {
-  background: oklch(0.18 0.04 45 / 0.6);
-  backdrop-filter: blur(12px);
-  border: 1px solid oklch(0.65 0.2 45 / 0.4);
-}
-
-.bot-card-lostknight {
-  background: oklch(0.18 0.04 280 / 0.6);
-  backdrop-filter: blur(12px);
-  border: 1px solid oklch(0.6 0.18 280 / 0.4);
-}
-
-.bot-card-sorrowqueen {
-  background: oklch(0.18 0.04 300 / 0.6);
-  backdrop-filter: blur(12px);
-  border: 1px solid oklch(0.55 0.2 300 / 0.4);
-}
-
-.bot-card-ruinking {
-  background: oklch(0.18 0.03 80 / 0.6);
-  backdrop-filter: blur(12px);
-  border: 1px solid oklch(0.6 0.16 75 / 0.4);
-}
-
-.hud-glass {
-  background: oklch(var(--popover) / 0.7);
-  backdrop-filter: blur(16px);
-  border: 1px solid oklch(var(--border) / 0.5);
-}
-
-.result-win {
-  background: oklch(0.2 0.05 145 / 0.5);
-  border: 1px solid oklch(0.65 0.18 145 / 0.4);
-}
-
-.result-loss {
-  background: oklch(0.2 0.05 25 / 0.5);
-  border: 1px solid oklch(0.6 0.2 25 / 0.4);
-}
-
-.result-draw {
-  background: oklch(0.2 0.02 260 / 0.5);
-  border: 1px solid oklch(0.55 0.08 260 / 0.4);
-}
-
-.leaderboard-row:nth-child(even) {
-  background: oklch(var(--muted) / 0.4);
-}
-
-.leaderboard-row:hover {
-  background: oklch(var(--accent) / 0.1);
 }
