@@ -3,9 +3,9 @@ import { Route as rootRoute } from "./__root";
 import { useAuth } from "../contexts/AuthContext";
 import { Card, CardContent } from "../components/ui/card";
 import { Button } from "../components/ui/button";
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { CalendarDays, Crown, Shield, Swords, Users, LogOut } from "lucide-react";
-import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
+import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../lib/firebase";
 
 export const Route = createRoute({
@@ -44,13 +44,9 @@ function Dashboard() {
       setMemberCount(roster.size);
 
       const events = await getDocs(
-        query(
-          collection(db, "events"),
-          where("houseId", "==", userData.houseId),
-          orderBy("date", "asc"),
-        ),
+        query(collection(db, "events"), where("houseId", "==", userData.houseId)),
       );
-      setNextEvent(events.docs[0]?.data() || null);
+      setNextEvent(events.docs.map((doc) => doc.data()).sort((x: any, y: any) => String(x.date || "").localeCompare(String(y.date || "")))[0] || null);
     }
 
     loadRealm().catch(console.error);
@@ -132,7 +128,7 @@ function Dashboard() {
   );
 }
 
-function Stat({ icon, label, value }: { icon: React.ReactNode; label: string; value: string }) {
+function Stat({ icon, label, value }: { icon: ReactNode; label: string; value: string }) {
   return (
     <div className="rounded-xl border border-white/10 bg-white/[0.035] p-4">
       <div className="flex items-center gap-2 text-primary">{icon}<span className="font-mono text-[10px] uppercase tracking-widest">{label}</span></div>
