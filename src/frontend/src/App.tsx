@@ -1,19 +1,19 @@
 import { RouterProvider, createRouter } from "@tanstack/react-router";
 import { Route as rootRoute } from "./routes/__root";
-import { Route as adminRoute } from "./routes/admin";
-import { Route as calendarRoute } from "./routes/calendar";
-import { Route as chessRoute } from "./routes/chess";
-import { Route as chessbotRoute } from "./routes/chessbot";
 import { Route as indexRoute } from "./routes/index";
-import { Route as joinRoute } from "./routes/join";
+import { Route as loginRoute } from "./routes/login";
+import { Route as houseSelectRoute } from "./routes/house-select";
+import { Route as charSelectRoute } from "./routes/character-select";
+import { Route as adminRoute } from "./routes/admin";
+import { Route as dashboardRoute } from "./routes/dashboard";
 
 const routeTree = rootRoute.addChildren([
   indexRoute,
-  joinRoute,
+  loginRoute,
+  houseSelectRoute,
+  charSelectRoute,
   adminRoute,
-  calendarRoute,
-  chessRoute,
-  chessbotRoute,
+  dashboardRoute,
 ]);
 
 const router = createRouter({ routeTree });

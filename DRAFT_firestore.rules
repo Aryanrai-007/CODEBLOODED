@@ -1,0 +1,84 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function isSignedIn() {
+      return request.auth != null && request.auth.token.email_verified == true;
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isAdmin() {
+      return isSignedIn() && existing().role == 'admin'; // Basic check on the user doc itself? No, need exists()
+    }
+
+    function isGlobalAdmin() {
+      return isSignedIn() && exists(/databases/$(database)/documents/admins/$(request.auth.uid));
+    }
+
+    // Since I don't have a pre-populated admins list, I'll allow users to create their own user document.
+    // To prevent privilege escalation, role must be 'member' on create, unless they are an admin.
+    function isValidUser(data) {
+      return data.keys().hasAll(['email', 'name', 'role', 'createdAt', 'updatedAt'])
+        && data.email is string && data.email.size() > 0 && data.email.size() <= 200
+        && data.name is string && data.name.size() > 0 && data.name.size() <= 200
+        && data.role in ['admin', 'member']
+        && data.createdAt == request.time
+        && data.updatedAt == request.time;
+    }
+
+    function isValidUserUpdate(data) {
+      return data.updatedAt == request.time;
+    }
+
+    match /users/{userId} {
+      allow get: if isSignedIn() && (request.auth.uid == userId || isGlobalAdmin());
+      allow list: if isSignedIn() && (request.auth.uid == userId || isGlobalAdmin());
+      
+      allow create: if isSignedIn() 
+        && request.auth.uid == userId
+        && isValidUser(incoming())
+        && (incoming().role == 'member' || isGlobalAdmin());
+
+      allow update: if isSignedIn()
+        && request.auth.uid == userId
+        && isValidUserUpdate(incoming())
+        && incoming().diff(existing()).affectedKeys().hasAny(['houseId', 'gender', 'characterClass', 'updatedAt', 'name'])
+        && (!('role' in incoming().diff(existing()).affectedKeys())) // users cannot change their own role
+        && incoming().createdAt == existing().createdAt;
+    }
+
+    function isValidHouse(data) {
+      return data.keys().hasAll(['name', 'lord', 'slogan', 'theme', 'updatedAt'])
+        && data.name is string && data.name.size() > 0 && data.name.size() <= 100
+        && data.lord is string && data.lord.size() > 0 && data.lord.size() <= 100
+        && data.slogan is string && data.slogan.size() >= 0 && data.slogan.size() <= 500
+        && data.theme is string && data.theme.size() > 0 && data.theme.size() <= 50
+        && data.updatedAt == request.time;
+    }
+
+    match /houses/{houseId} {
+      // Anyone can read houses
+      allow read: if isSignedIn();
+      
+      // Only admins can update their house
+      allow update: if isSignedIn()
+        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin'
+        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.houseId == houseId
+        && isValidHouse(incoming());
+    }
+
+    match /admins/{adminId} {
+      allow read: if false; // System only or secure read
+    }
+  }
+}

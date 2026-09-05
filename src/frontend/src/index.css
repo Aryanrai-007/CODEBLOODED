@@ -4,8 +4,8 @@
 
 @layer base {
   :root {
-    --font-display: "General Sans";
-    --font-body: "DM Sans";
+    --font-display: "Cinzel Decorative", "General Sans";
+    --font-body: "MedievalSharp", "DM Sans";
     --font-mono: "Geist Mono";
     --radius: 0.625rem;
 
@@ -92,6 +92,38 @@
     --sidebar-accent-foreground: 0.93 0 0;
     --sidebar-border: 0.2 0 0;
     --sidebar-ring: 0.7 0.25 200;
+  }
+
+  .theme-targaryen {
+    --primary: 0.5 0.22 25; /* Red */
+    --primary-foreground: 0.98 0 0;
+    --background: 0.05 0 0;
+    --card: 0.1 0 0;
+  }
+  .theme-stark {
+    --primary: 0.7 0.05 250; /* Ice Grey/Blue */
+    --primary-foreground: 0.1 0 0;
+    --background: 0.1 0 0;
+    --card: 0.15 0 0;
+  }
+  .theme-baratheon {
+    --primary: 0.8 0.18 90; /* Yellow */
+    --primary-foreground: 0.1 0 0;
+    --background: 0.05 0.05 90;
+    --card: 0.1 0.05 90;
+  }
+  .theme-greyjoy {
+    --primary: 0.4 0.1 200; /* Deep teal/iron */
+    --primary-foreground: 0.98 0 0;
+    --background: 0.05 0.05 200;
+    --card: 0.1 0.05 200;
+  }
+  .theme-lannister {
+    --primary: 0.4 0.2 30; /* Crimson */
+    --primary-foreground: 0.98 0 0;
+    --secondary: 0.8 0.18 90; /* Gold */
+    --background: 0.1 0.05 30;
+    --card: 0.15 0.05 30;
   }
 
   * {
@@ -197,8 +229,8 @@
 
 @theme {
   --radius: 0.625rem;
-  --font-display: "General Sans", sans-serif;
-  --font-body: "DM Sans", sans-serif;
+  --font-display: "Cinzel Decorative", serif;
+  --font-body: "MedievalSharp", serif;
   --font-mono: "Geist Mono", monospace;
 }
 

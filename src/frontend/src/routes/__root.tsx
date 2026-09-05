@@ -1,10 +1,10 @@
 import { Outlet, createRootRoute } from "@tanstack/react-router";
-import { Layout } from "../components/Layout";
+import { GotLayout } from "../components/GotLayout";
 
 export const Route = createRootRoute({
   component: () => (
-    <Layout>
+    <GotLayout>
       <Outlet />
-    </Layout>
+    </GotLayout>
   ),
 });

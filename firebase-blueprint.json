@@ -1,0 +1,76 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User profile with their selected house and character.",
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "role": {
+          "type": "string",
+          "enum": ["admin", "member"]
+        },
+        "houseId": {
+          "type": "string"
+        },
+        "gender": {
+          "type": "string",
+          "enum": ["male", "female", "none"]
+        },
+        "characterClass": {
+          "type": "string",
+          "enum": ["warrior", "archer", "knight", "mage", "none"]
+        },
+        "createdAt": {
+          "type": "string"
+        },
+        "updatedAt": {
+          "type": "string"
+        }
+      },
+      "required": ["email", "name", "role", "createdAt", "updatedAt"]
+    },
+    "House": {
+      "title": "House",
+      "description": "Information about a house.",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "lord": {
+          "type": "string"
+        },
+        "slogan": {
+          "type": "string"
+        },
+        "theme": {
+          "type": "string"
+        },
+        "updatedAt": {
+          "type": "string"
+        }
+      },
+      "required": ["name", "lord", "slogan", "theme"]
+    }
+  },
+  "firestore": {
+    "users/{userId}": {
+      "schema": {
+        "$ref": "#/entities/User"
+      },
+      "description": "Stores user profiles."
+    },
+    "houses/{houseId}": {
+      "schema": {
+        "$ref": "#/entities/House"
+      },
+      "description": "Stores house configurations and slogans."
+    }
+  }
+}

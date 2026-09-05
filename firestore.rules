@@ -1,0 +1,67 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isHardcodedAdmin() {
+      return request.auth.token.email in [
+        'aryanraiavengers@gmail.com',
+        'harsh@codeblooded.com',
+        'ishant@codeblooded.com',
+        'suraj@codeblooded.com',
+        'mridul@codeblooded.com'
+      ];
+    }
+
+    function isValidUser(data) {
+      return data.keys().hasAll(['email', 'name', 'role', 'houseId', 'gender', 'characterClass', 'createdAt', 'updatedAt'])
+        && data.email is string && data.email.size() >= 0 && data.email.size() <= 200
+        && data.name is string && data.name.size() >= 0 && data.name.size() <= 200
+        && data.role in ['admin', 'member']
+        && data.houseId is string && data.houseId.size() <= 100
+        && data.gender in ['male', 'female', 'none']
+        && data.characterClass in ['warrior', 'archer', 'knight', 'mage', 'none']
+        && data.createdAt == request.time
+        && data.updatedAt == request.time;
+    }
+
+    function isValidUserUpdate(data) {
+      return data.updatedAt == request.time;
+    }
+
+    match /users/{userId} {
+      allow get: if isSignedIn() && (request.auth.uid == userId || isHardcodedAdmin());
+      allow list: if isSignedIn() && isHardcodedAdmin();
+      
+      allow create: if isSignedIn() 
+        && request.auth.uid == userId
+        && isValidUser(incoming())
+        && (incoming().role == 'member' || (incoming().role == 'admin' && isHardcodedAdmin()));
+
+      allow update: if isSignedIn()
+        && request.auth.uid == userId
+        && isValidUserUpdate(incoming())
+        && incoming().diff(existing()).affectedKeys().hasOnly(['houseId', 'gender', 'characterClass', 'updatedAt', 'name'])
+        && (!('role' in incoming().diff(existing()).affectedKeys())) // users cannot change their own role
+        && incoming().createdAt == existing().createdAt;
+    }
+
+    match /houses/{houseId} {
+      allow read: if isSignedIn();
+    }
+  }
+}
