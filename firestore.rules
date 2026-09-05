@@ -15,6 +15,10 @@ service cloud.firestore {
       ];
     }
 
+    function ownProfile() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+    }
+
     function validUser(data) {
       return data.keys().hasAll([
         'email', 'name', 'role', 'houseId',
@@ -38,10 +42,7 @@ service cloud.firestore {
         && request.resource.data.email == request.auth.token.email
         && (
           request.resource.data.role == 'member'
-          || (
-            request.resource.data.role == 'admin'
-            && isLord()
-          )
+          || (request.resource.data.role == 'admin' && isLord())
         );
 
       allow update: if signedIn()
@@ -59,8 +60,11 @@ service cloud.firestore {
 
     match /events/{eventId} {
       allow read: if signedIn();
-      allow create, update, delete: if isLord()
-        && request.resource.data.houseId is string;
+      allow create: if isLord()
+        && request.resource.data.houseId == ownProfile().houseId
+        && request.resource.data.createdBy == request.auth.token.email;
+      allow update, delete: if isLord()
+        && resource.data.houseId == ownProfile().houseId;
     }
 
     match /houses/{houseId} {
