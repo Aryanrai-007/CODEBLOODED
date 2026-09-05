@@ -496,17 +496,8 @@ export interface CreateActorOptions {
     actorOptions?: ActorConfig;
     processError?: (error: unknown) => never;
 }
-export function createActor(canisterId: string, _uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, options: CreateActorOptions = {}): Backend {
-    const agent = options.agent || HttpAgent.createSync({
-        ...options.agentOptions
-    });
-    if (options.agent && options.agentOptions) {
-        console.warn("Detected both agent and agentOptions passed to createActor. Ignoring agentOptions and proceeding with the provided agent.");
-    }
-    const actor = Actor.createActor<_SERVICE>(idlFactory, {
-        agent,
-        canisterId: canisterId,
-        ...options.actorOptions
-    });
-    return new Backend(actor, _uploadFile, _downloadFile, options.processError);
+import { mockBackend } from './mocks/backend';
+
+export function createActor(canisterId: string, _uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, options: CreateActorOptions = {}): backendInterface {
+    return mockBackend;
 }
