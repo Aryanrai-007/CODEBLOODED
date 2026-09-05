@@ -3,8 +3,8 @@ import { Route as rootRoute } from "./__root";
 import { useAuth } from "../contexts/AuthContext";
 import { Card, CardContent } from "../components/ui/card";
 import { Button } from "../components/ui/button";
-import { useEffect, useMemo, useState } from "react";
-import { collection, addDoc, getDocs, orderBy, query, where } from "firebase/firestore";
+import { useEffect, useMemo, useState, type ReactNode } from "react";
+import { collection, addDoc, getDocs, query, where } from "firebase/firestore";
 import { db } from "../lib/firebase";
 import { CalendarPlus, Crown, LogOut, ShieldCheck, Swords, Users } from "lucide-react";
 
@@ -40,13 +40,9 @@ function AdminDashboard() {
     setMembers(roster.docs.map((d) => ({ id: d.id, ...d.data() })));
 
     const eventDocs = await getDocs(
-      query(
-        collection(db, "events"),
-        where("houseId", "==", userData.houseId),
-        orderBy("date", "asc"),
-      ),
+      query(collection(db, "events"), where("houseId", "==", userData.houseId)),
     );
-    setEvents(eventDocs.docs.map((d) => ({ id: d.id, ...d.data() })));
+    setEvents(eventDocs.docs.map((d) => ({ id: d.id, ...d.data() })).sort((x: any, y: any) => String(x.date || "").localeCompare(String(y.date || ""))));
   };
 
   useEffect(() => {
@@ -183,7 +179,7 @@ function AdminDashboard() {
   );
 }
 
-function Metric({ icon, label, value }: { icon: React.ReactNode; label: string; value: number }) {
+function Metric({ icon, label, value }: { icon: ReactNode; label: string; value: number }) {
   return (
     <Card className="border-white/10 bg-black/55 backdrop-blur-xl">
       <CardContent className="p-5">
